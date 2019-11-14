@@ -1,6 +1,6 @@
 .idea
 alf_data_dev
-alfresco.log
-solr.log
+alfresco.log*
+solr.log*
 target
 

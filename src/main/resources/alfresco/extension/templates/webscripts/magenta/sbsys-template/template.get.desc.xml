@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Get SBSYS templates</shortname>
+    <description>Returns a list of template names and IDs to SBSYS</description>
+    <url>/template</url>
+    <authentication>user</authentication>
+    <format default="json"></format>
+    <!--lifecycle>sample</lifecycle-->
+</webscript>

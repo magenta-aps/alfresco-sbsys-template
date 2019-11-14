@@ -23,4 +23,11 @@
 		  class="dk.magenta.alfresco.sbsys.template.platformsample.HelloWorldWebScript"
 		  parent="webscript">
 	</bean>
+	<bean id="webscript.magenta.sbsys-template.template.get"
+		  class="dk.magenta.alfresco.sbsys.template.Template"
+		  parent="webscript">
+		<property name="fileFolderService" ref="FileFolderService" />
+		<property name="searchService" ref="SearchService" />
+		<property name="siteService" ref="SiteService" />
+	</bean>
 </beans>
