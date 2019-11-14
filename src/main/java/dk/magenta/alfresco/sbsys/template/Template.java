@@ -7,7 +7,6 @@ import org.alfresco.query.PagingResults;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.search.SearchService;
 import org.alfresco.service.cmr.site.SiteService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -17,18 +16,18 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class Template extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(Template.class);
 
     private FileFolderService fileFolderService;
-    private SearchService searchService;
+
+    private Properties properties;
     private SiteService siteService;
 
-    // TODO: get the siteShortName from alfresco-global.properties
     private static final String CONTAINER = "documentLibrary";
-    private static final String SITE_SHORT_NAME = "swsdp";
 
     @Override
     public void execute(WebScriptRequest request, WebScriptResponse response) {
@@ -37,8 +36,8 @@ public class Template extends AbstractWebScript {
 
         // Get the document library NodeRef of the relevant site
         PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
-        PagingResults<FileInfo> containers = siteService.listContainers(SITE_SHORT_NAME, pagingRequest);
-        NodeRef docLib = siteService.getContainer(SITE_SHORT_NAME, CONTAINER);
+        PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
+        NodeRef docLib = siteService.getContainer(getSite(), CONTAINER);
 
         // Get the templates (files) in the docLib
         List<FileInfo> template_files = fileFolderService.listFiles(docLib);
@@ -59,12 +58,20 @@ public class Template extends AbstractWebScript {
         }
     }
 
+    /**
+     * Get site short name from alfresco-global.properties
+     * @return
+     */
+    private String getSite() {
+        return properties.getProperty("sbsys.template.site");
+    }
+
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
     }
 
-    public void setSearchService(SearchService searchService) {
-        this.searchService = searchService;
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 
     public void setSiteService(SiteService siteService) {

@@ -27,7 +27,9 @@
 		  class="dk.magenta.alfresco.sbsys.template.Template"
 		  parent="webscript">
 		<property name="fileFolderService" ref="FileFolderService" />
-		<property name="searchService" ref="SearchService" />
+		<property name="properties">
+			<ref bean="global-properties" />
+		</property>
 		<property name="siteService" ref="SiteService" />
 	</bean>
 </beans>
