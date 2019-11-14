@@ -60,7 +60,7 @@ public class Template extends AbstractWebScript {
 
     /**
      * Get site short name from alfresco-global.properties
-     * @return
+     * @return Site short name
      */
     private String getSite() {
         return properties.getProperty("sbsys.template.site");
