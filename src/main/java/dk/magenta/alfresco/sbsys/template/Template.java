@@ -32,6 +32,7 @@ public class Template extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest request, WebScriptResponse response) {
 
+        // TODO: add debug log messages
         // TODO: catch exceptions if site does not exists
 
         // Get the document library NodeRef of the relevant site

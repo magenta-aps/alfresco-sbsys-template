@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Merge SBSYS metadata into templates</shortname>
+    <description>Merge metadata from an SBSYS case into the provided template and return editor URL</description>
+    <url>/template/merge</url>
+    <authentication>user</authentication>
+    <format default="json"></format>
+    <!--lifecycle>sample</lifecycle-->
+</webscript>
