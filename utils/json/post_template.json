@@ -1,0 +1,21 @@
+{
+  "id": "458514b2-692c-4aff-b75a-8d667ba111f5",
+  "kladde": {
+    "SagID": "6",
+    "Navn": "testtitel"
+  },
+  "urls": {
+    "opretkladde": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde",
+    "part": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/part/person?id=1",
+    "sag": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/12344",
+    "redirect": "https://<server:port>/p-sag/v1/#/sager/12344/kladder/{kladdeId}"
+  },
+  "token": {
+    "refreshToken": "eyJhbGciOiJSUzI1NiIs...nXM4Yd5hg",
+    "toker": "token",
+    "exp": 1558515632,
+    "refreshurl": "https://<server:port>/auth/realms/sbsip/protocol/openid-connect/token",
+    "refreshuser": "username",
+    "refreshpwd": "pwd"
+  }
+}
