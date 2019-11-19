@@ -89,7 +89,7 @@ public class MergeData extends AbstractWebScript {
 
         try {
             // TODO: fix hardcoded URL
-            HttpGet httpGet = new HttpGet("https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/6");
+            HttpGet httpGet = new HttpGet("https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.kladde.get("SagID"));
             httpGet.addHeader(AUTHORIZATION, "Bearer " + req.token.get(TOKEN));
             logger.debug(httpGet.toString());
 
@@ -114,6 +114,9 @@ public class MergeData extends AbstractWebScript {
             String response = httpClient.execute(httpGet, responseHandler);
             logger.debug(response);
 
+            Case sbsysCase = gson.fromJson(response, Case.class);
+
+            System.out.println("hurra");
         } finally {
             httpClient.close();
         }
