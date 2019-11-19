@@ -35,10 +35,12 @@
 	<bean id="webscript.magenta.sbsys-template.mergedata.post"
 		  class="dk.magenta.alfresco.sbsys.template.MergeData"
 		  parent="webscript">
-		<!--property name="fileFolderService" ref="FileFolderService" />
+		<!--property name="fileFolderService" ref="FileFolderService" /-->
+		<property name="contentService" ref="ContentService" />
+		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="properties">
 			<ref bean="global-properties" />
 		</property>
-		<property name="siteService" ref="SiteService" /-->
+		<property name="siteService" ref="SiteService" />
 	</bean>
 </beans>

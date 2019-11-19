@@ -27,6 +27,7 @@ public class Template extends AbstractWebScript {
     private Properties properties;
     private SiteService siteService;
 
+    // TODO: move this string to common class
     private static final String CONTAINER = "documentLibrary";
 
     @Override
@@ -36,6 +37,7 @@ public class Template extends AbstractWebScript {
         // TODO: catch exceptions if site does not exists
 
         // Get the document library NodeRef of the relevant site
+        // TODO: make common method as this is also used in MergeData
         PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
         PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
         NodeRef docLib = siteService.getContainer(getSite(), CONTAINER);

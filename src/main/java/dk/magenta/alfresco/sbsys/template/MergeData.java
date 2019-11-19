@@ -2,6 +2,16 @@ package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.Gson;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.model.ContentModel;
+import org.alfresco.query.PagingRequest;
+import org.alfresco.query.PagingResults;
+import org.alfresco.service.cmr.model.FileFolderService;
+import org.alfresco.service.cmr.model.FileInfo;
+import org.alfresco.service.cmr.repository.ContentReader;
+import org.alfresco.service.cmr.repository.ContentService;
+import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.site.SiteService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -12,40 +22,54 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
+import org.wickedsource.docxstamper.DocxStamper;
+import org.wickedsource.docxstamper.DocxStamperConfiguration;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
+import java.util.Collections;
+import java.util.List;
+import java.util.Properties;
+import java.util.stream.Collectors;
 
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
 
+    private ContentService contentService;
+    private FileFolderService fileFolderService;
+    private Properties properties;
+    private SiteService siteService;
+
     private static final String AUTHORIZATION = "Authorization";
     private static final String TOKEN = "token";
+
+    // TODO: move this string to common class
+    private static final String CONTAINER = "documentLibrary";
+
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
         Gson gson = new Gson();
 
-        // Get POSTed JSON as string from request and deserialize into POJO
+        //////////////////  Get POSTed JSON as string from request and deserialize into POJO ///////////////////
         TemplateReceiveModel req = gson.fromJson(
                 webScriptRequest.getContent().getContent(),
                 TemplateReceiveModel.class
         );
         logger.debug(req.token.get(TOKEN));
+
+        ////////////////////// Call SBSYS to get case metadata ////////////////////////////////////
 
         // SSL
 //        SSLContext sslContext = SSLContexts.custom()
@@ -116,6 +140,51 @@ public class MergeData extends AbstractWebScript {
 
             Case sbsysCase = gson.fromJson(response, Case.class);
 
+            ///////////////////////// Get template and merge case data ///////////////////////////
+
+            // The NodeRef should be constructed in a better way
+            ContentReader contentReader = contentService.getReader(
+                    new NodeRef("workspace://SpacesStore/" + req.id),
+                    ContentModel.PROP_CONTENT
+            );
+
+            // Get the pre-upload folder
+            PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
+            PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
+            NodeRef docLib = siteService.getContainer(getSite(), CONTAINER);
+            List<FileInfo> docLibFolders = fileFolderService.listFolders(docLib);
+            FileInfo preUpload = docLibFolders.stream()
+                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals("pre-upload"))
+                    .findFirst()
+                    .get();
+
+            // Create the merged document
+            FileInfo mergedDoc = fileFolderService.create(
+                    preUpload.getNodeRef(),
+                    "mergedDocument.docx",
+                    ContentModel.TYPE_CONTENT
+            );
+
+            ContentWriter contentWriter = contentService.getWriter(
+                    mergedDoc.getNodeRef(),
+                    ContentModel.PROP_CONTENT,
+                    true
+            );
+            contentWriter.setMimetype("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+
+            // Merge data into template
+            OutputStream outputStream = contentWriter.getContentOutputStream();
+            DocxStamper stamper = new DocxStamperConfiguration().build();
+            stamper.stamp(
+                    contentReader.getContentInputStream(),
+                    sbsysCase,
+                    outputStream
+            );
+            outputStream.close();
+
+
+
+
             System.out.println("hurra");
         } finally {
             httpClient.close();
@@ -123,5 +192,48 @@ public class MergeData extends AbstractWebScript {
 
 
         logger.debug("Working!!!");
+    }
+
+    /**
+     * Get site short name from alfresco-global.properties
+     * @return Site short name
+     */
+    private String getSite() {
+        return properties.getProperty("sbsys.template.site");
+    }
+
+
+    ////////////////////// Getters and setters /////////////////////////
+
+    public ContentService getContentService() {
+        return contentService;
+    }
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    public FileFolderService getFileFolderService() {
+        return fileFolderService;
+    }
+
+    public void setFileFolderService(FileFolderService fileFolderService) {
+        this.fileFolderService = fileFolderService;
+    }
+
+    public Properties getProperties() {
+        return properties;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
+    }
+
+    public SiteService getSiteService() {
+        return siteService;
+    }
+
+    public void setSiteService(SiteService siteService) {
+        this.siteService = siteService;
     }
 }

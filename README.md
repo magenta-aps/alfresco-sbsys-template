@@ -27,3 +27,12 @@ JAVA_HOME="/opt/jdk8u181-b13" MAVEN_OPTS="-Xms256m -Xmx2G
 ```
 
 This seems to work!
+
+# Remote debugging
+
+Use the `debug.sh` file instead of the `run.sh` (or modify this file 
+accordingly). Make a new "Run configuration" in IntelliJ (choose the type 
+"Remote") from the list. Change the port from 5005 to 8000. Fire up the 
+system using the `debug.sh/run.sh` and then start the debugger in IntelliJ. 
+Note that the development environment will be hanging until the remote debugger 
+is started from the IDE.
