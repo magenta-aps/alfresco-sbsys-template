@@ -31,16 +31,14 @@ import org.wickedsource.docxstamper.DocxStamperConfiguration;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
-import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
@@ -147,6 +145,7 @@ public class MergeData extends AbstractWebScript {
                     new NodeRef("workspace://SpacesStore/" + req.id),
                     ContentModel.PROP_CONTENT
             );
+            InputStream inputStream = contentReader.getContentInputStream();
 
             // Get the pre-upload folder
             PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
@@ -170,20 +169,16 @@ public class MergeData extends AbstractWebScript {
                     ContentModel.PROP_CONTENT,
                     true
             );
+            // TODO: remove magic value
             contentWriter.setMimetype("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
+            OutputStream outputStream = contentWriter.getContentOutputStream();
 
             // Merge data into template
-            OutputStream outputStream = contentWriter.getContentOutputStream();
             DocxStamper stamper = new DocxStamperConfiguration().build();
-            stamper.stamp(
-                    contentReader.getContentInputStream(),
-                    sbsysCase,
-                    outputStream
-            );
+            stamper.stamp(inputStream, sbsysCase, outputStream);
+
+            inputStream.close();
             outputStream.close();
-
-
-
 
             System.out.println("hurra");
         } finally {
