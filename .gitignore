@@ -3,6 +3,7 @@ alf_data_dev
 alfresco.log*
 solr.log*
 target
+
 utils/venv
 utils/headers.txt
-
+utils/json/post_template_temp.json

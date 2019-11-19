@@ -12,7 +12,7 @@
   },
   "token": {
     "refreshToken": "eyJhbGciOiJSUzI1NiIs...nXM4Yd5hg",
-    "toker": "token",
+    "token": "token",
     "exp": 1558515632,
     "refreshurl": "https://<server:port>/auth/realms/sbsip/protocol/openid-connect/token",
     "refreshuser": "username",
