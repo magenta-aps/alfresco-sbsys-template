@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template.platformsample;
+package dk.magenta.alfresco.sbsys.template.sandbox;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLPeerUnverifiedException;

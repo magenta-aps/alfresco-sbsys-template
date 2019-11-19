@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template.platformsample;
+package dk.magenta.alfresco.sbsys.template.sandbox;
 
 import com.google.gson.Gson;
 import dk.magenta.alfresco.sbsys.template.TemplateReceiveModel;
