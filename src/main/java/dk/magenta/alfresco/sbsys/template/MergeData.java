@@ -38,7 +38,9 @@ import java.io.OutputStream;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 public class MergeData extends AbstractWebScript {
@@ -160,10 +162,10 @@ public class MergeData extends AbstractWebScript {
                     .get();
 
             // Create the merged document
-            String preUploadId = GUID.generate();
+            String preUploadFilename = GUID.generate();
             FileInfo mergedDoc = fileFolderService.create(
                     preUpload.getNodeRef(),
-                    preUploadId + ".docx",
+                    preUploadFilename + ".docx",
                     ContentModel.TYPE_CONTENT
             );
 
@@ -182,6 +184,21 @@ public class MergeData extends AbstractWebScript {
 
             inputStream.close();
             outputStream.close();
+
+            /////////////////////// Build response /////////////////////////
+            Map<String, String> resp = new HashMap<>();
+            // TODO: remove magic keys/values
+            resp.put("pre-upload-id", mergedDoc.getNodeRef().toString());
+            resp.put("pre-upload-filename", preUploadFilename);
+            resp.put("url", "https://alfrescoskabelon.magenta.dk/share/page/site/swsdp/onlyoffice-edit?nodeRef=" + mergedDoc.getNodeRef().toString());
+
+            String result = gson.toJson(resp);
+
+            try {
+                webScriptResponse.getWriter().write(result);
+            } catch (IOException e) {
+                throw new AlfrescoRuntimeException(e.getMessage());
+            }
 
             System.out.println("hurra");
         } finally {
