@@ -12,6 +12,7 @@ import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.util.GUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
@@ -148,6 +149,7 @@ public class MergeData extends AbstractWebScript {
             InputStream inputStream = contentReader.getContentInputStream();
 
             // Get the pre-upload folder
+            // TODO: remove magic pre-upload
             PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
             PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
             NodeRef docLib = siteService.getContainer(getSite(), CONTAINER);
@@ -158,9 +160,10 @@ public class MergeData extends AbstractWebScript {
                     .get();
 
             // Create the merged document
+            String preUploadId = GUID.generate();
             FileInfo mergedDoc = fileFolderService.create(
                     preUpload.getNodeRef(),
-                    "mergedDocument.docx",
+                    preUploadId + ".docx",
                     ContentModel.TYPE_CONTENT
             );
 
@@ -182,6 +185,7 @@ public class MergeData extends AbstractWebScript {
 
             System.out.println("hurra");
         } finally {
+            // TODO: close the try block earlier
             httpClient.close();
         }
 
