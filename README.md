@@ -36,3 +36,5 @@ accordingly). Make a new "Run configuration" in IntelliJ (choose the type
 system using the `debug.sh/run.sh` and then start the debugger in IntelliJ. 
 Note that the development environment will be hanging until the remote debugger 
 is started from the IDE.
+
+Also see this: [https://docs.alfresco.com/5.2/tasks/sdk-debug-intellij.html](https://docs.alfresco.com/5.2/tasks/sdk-debug-intellij.html)
