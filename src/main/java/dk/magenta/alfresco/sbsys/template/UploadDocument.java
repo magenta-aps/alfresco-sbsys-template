@@ -1,8 +1,11 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import com.google.gson.Gson;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.site.SiteService;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -12,6 +15,8 @@ import java.util.Properties;
 
 public class UploadDocument extends AbstractWebScript {
 
+    private static Log logger = LogFactory.getLog(UploadDocument.class);
+
     private ContentService contentService;
     private FileFolderService fileFolderService;
     private Properties properties;
@@ -19,6 +24,15 @@ public class UploadDocument extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+
+        Gson gson = new Gson();
+
+        DocumentReceiver req = gson.fromJson(
+                webScriptRequest.getContent().getContent(),
+                DocumentReceiver.class
+        );
+
+        logger.debug(req.getPreUploadId());
 
     }
 

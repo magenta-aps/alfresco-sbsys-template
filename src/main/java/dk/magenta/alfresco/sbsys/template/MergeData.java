@@ -188,8 +188,8 @@ public class MergeData extends AbstractWebScript {
             /////////////////////// Build response /////////////////////////
             Map<String, String> resp = new HashMap<>();
             // TODO: remove magic keys/values
-            resp.put("pre-upload-id", mergedDoc.getNodeRef().toString());
-            resp.put("pre-upload-filename", preUploadFilename);
+            resp.put("preUploadId", mergedDoc.getNodeRef().toString());
+            resp.put("preUploadFilename", preUploadFilename);
             resp.put("url", "https://alfrescoskabelon.magenta.dk/share/page/site/swsdp/onlyoffice-edit?nodeRef=" + mergedDoc.getNodeRef().toString());
 
             String result = gson.toJson(resp);
