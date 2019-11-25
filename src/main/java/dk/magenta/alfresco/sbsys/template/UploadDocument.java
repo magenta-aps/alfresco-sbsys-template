@@ -1,6 +1,7 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.Gson;
+import dk.magenta.alfresco.sbsys.template.json.DocumentReceiver;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.site.SiteService;

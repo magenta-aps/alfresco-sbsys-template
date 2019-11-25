@@ -1,6 +1,8 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.Gson;
+import dk.magenta.alfresco.sbsys.template.json.Case;
+import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
@@ -64,9 +66,9 @@ public class MergeData extends AbstractWebScript {
         Gson gson = new Gson();
 
         //////////////////  Get POSTed JSON as string from request and deserialize into POJO ///////////////////
-        TemplateReceiveModel req = gson.fromJson(
+        TemplateReceiver req = gson.fromJson(
                 webScriptRequest.getContent().getContent(),
-                TemplateReceiveModel.class
+                TemplateReceiver.class
         );
         logger.debug(req.token.get(TOKEN));
 

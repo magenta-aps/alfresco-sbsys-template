@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.json;
 
 public class DocumentReceiver {
 

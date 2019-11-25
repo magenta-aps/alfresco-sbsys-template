@@ -1,8 +1,8 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.json;
 
 import java.util.Map;
 
-public class TemplateReceiveModel {
+public class TemplateReceiver {
 
     public String id;
     public Map<String, String> kladde;
