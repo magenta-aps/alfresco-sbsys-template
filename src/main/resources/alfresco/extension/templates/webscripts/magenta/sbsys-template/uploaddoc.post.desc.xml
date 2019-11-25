@@ -1,0 +1,8 @@
+<webscript>
+    <shortname>Upload document to SBSYS</shortname>
+    <description>Upload document to SBSYS</description>
+    <url>/template/upload</url>
+    <authentication>user</authentication>
+    <format default="json"></format>
+    <!--lifecycle>sample</lifecycle-->
+</webscript>
