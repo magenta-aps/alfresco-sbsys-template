@@ -51,10 +51,6 @@ public class MergeData extends AbstractWebScript {
     private static final String AUTHORIZATION = "Authorization";
     private static final String TOKEN = "token";
 
-    public MergeData(NodeRefUtil nodeRefUtil) {
-        this.nodeRefUtil = nodeRefUtil;
-    }
-
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
@@ -220,5 +216,9 @@ public class MergeData extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
+    }
+
+    public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
+        this.nodeRefUtil = nodeRefUtil;
     }
 }

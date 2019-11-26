@@ -21,10 +21,6 @@ public class Template extends AbstractWebScript {
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
 
-    public Template(NodeRefUtil nodeRefUtil) {
-        this.nodeRefUtil = nodeRefUtil;
-    }
-
     @Override
     public void execute(WebScriptRequest request, WebScriptResponse response) {
 
@@ -52,5 +48,9 @@ public class Template extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
+    }
+
+    public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
+        this.nodeRefUtil = nodeRefUtil;
     }
 }

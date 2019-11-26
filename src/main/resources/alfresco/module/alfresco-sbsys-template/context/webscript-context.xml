@@ -27,6 +27,7 @@
 		  class="dk.magenta.alfresco.sbsys.template.Template"
 		  parent="webscript">
 		<property name="fileFolderService" ref="FileFolderService" />
+		<property name="nodeRefUtil" ref="NodeRefUtil" />
 	</bean>
 	<bean id="webscript.magenta.sbsys-template.mergedata.post"
 		  class="dk.magenta.alfresco.sbsys.template.MergeData"
@@ -34,6 +35,7 @@
 		<!--property name="fileFolderService" ref="FileFolderService" /-->
 		<property name="contentService" ref="ContentService" />
 		<property name="fileFolderService" ref="FileFolderService" />
+		<property name="nodeRefUtil" ref="NodeRefUtil" />
 	</bean>
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
 		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"
