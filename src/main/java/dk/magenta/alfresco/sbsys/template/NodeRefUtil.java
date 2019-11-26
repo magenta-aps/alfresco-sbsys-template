@@ -17,6 +17,9 @@ public class NodeRefUtil {
     private static final String SITE_PROPERTY = "sbsys.template.site";
 
     public NodeRef getDocLib() {
+
+        // TODO: handle case where site does not exists
+
         PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
         PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
         return siteService.getContainer(getSite(), CONTAINER);

@@ -25,7 +25,6 @@ public class Template extends AbstractWebScript {
     public void execute(WebScriptRequest request, WebScriptResponse response) {
 
         // TODO: add debug log messages
-        // TODO: catch exceptions if site does not exists
 
         // Get the templates (files) in the docLib
         List<FileInfo> template_files = fileFolderService.listFiles(nodeRefUtil.getDocLib());
