@@ -9,29 +9,15 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.util.GUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.wickedsource.docxstamper.DocxStamper;
 import org.wickedsource.docxstamper.DocxStamperConfiguration;
 
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.TrustManager;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,101 +28,40 @@ public class MergeData extends AbstractWebScript {
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
 
-    private static final String AUTHORIZATION = "Authorization";
     private static final String TOKEN = "token";
+    private static final String PREUPLOAD_FOLDER = "pre-upload";
 
     @Override
-    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
-
-        //////////////////  Get POSTed JSON as string from request and deserialize into POJO ///////////////////
-
-        TemplateReceiver req = RequestResponseHandler.deserialize(
-            webScriptRequest.getContent().getContent(),
-            TemplateReceiver.class
-        );
-        logger.debug(req.token.get(TOKEN));
-
-        ////////////////////// Call SBSYS to get case metadata ////////////////////////////////////
-
-        // SSL
-//        SSLContext sslContext = SSLContexts.custom()
-//                .loadTrustMaterial(new File())
-
-//        SSLContext sslContext = SSLContexts.createDefault();
-//        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-//                sslContext,
-//                new String[] {"TLSv1"},
-//                null,
-//                SSLConnectionSocketFactory.getDefaultHostnameVerifier()
-//        );
-
-        TrustManager[] trustAllCerts = new TrustManager[] {
-            new X509TrustManagerImpl()
-        };
-
-        SSLContext sslContext = null;
+    public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
         try {
-            sslContext = SSLContext.getInstance("TLS");
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        try {
-            sslContext.init(null, trustAllCerts, new SecureRandom());
-        } catch (KeyManagementException e) {
-            e.printStackTrace();
-        }
 
-        SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-                sslContext,
-                new String[]{"TLSv1.2"},
-                null,
-                SSLConnectionSocketFactory.getDefaultHostnameVerifier()
-        );
+            ////////////////////////// Get request body ///////////////////////////
 
-        // Get case details from the SBSYS server
-        CloseableHttpClient httpClient = HttpClients.custom()
-                .setSSLSocketFactory(sslConnectionSocketFactory)
-                .build();
+            // Get POSTed JSON as string from request and deserialize into POJO
+            TemplateReceiver req = RequestResponseHandler.deserialize(
+                    webScriptRequest.getContent().getContent(),
+                    TemplateReceiver.class
+            );
 
-        try {
+            // Call SBSYS to get case metadata
             // TODO: fix hardcoded URL
-            HttpGet httpGet = new HttpGet("https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.kladde.get("SagID"));
-            httpGet.addHeader(AUTHORIZATION, "Bearer " + req.token.get(TOKEN));
-            logger.debug(httpGet.toString());
-
-            // Create response handler
-            ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-                @Override
-                public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        logger.debug("##### SBSYS server message #####");
-                        logger.debug(response.getStatusLine().getReasonPhrase());
-                        logger.debug(response.getEntity().getContent().toString());
-                        logger.debug("################################");
-                        throw new AlfrescoRuntimeException("Got HTTP status " + Integer.toString(status) + " from SBSYS server");
-                    }
-                }
-            };
-
-            String response = httpClient.execute(httpGet, responseHandler);
+            String response = HttpHandler.GET(
+                    "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.kladde.get("SagID"),
+                    req.token.get(TOKEN)
+            );
             logger.debug(response);
-
             Case sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
 
-            ///////////////////////// Get template and merge case data ///////////////////////////
+            ///////////////////// Merge data into template ////////////////////////
 
-            // The NodeRef should be constructed in a better way
+            // Get InputStream for template document
+            // TODO: The NodeRef should be constructed in a better way
             InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.id);
 
             // Get the pre-upload folder
-            // TODO: remove magic pre-upload
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
             FileInfo preUpload = docLibFolders.stream()
-                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals("pre-upload"))
+                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals(PREUPLOAD_FOLDER))
                     .findFirst()
                     .get();
 
@@ -158,6 +83,7 @@ public class MergeData extends AbstractWebScript {
             outputStream.close();
 
             /////////////////////// Build response /////////////////////////
+
             Map<String, String> resp = new HashMap<>();
             // TODO: remove magic keys/values
             resp.put("preUploadId", mergedDoc.getNodeRef().toString());
@@ -167,9 +93,9 @@ public class MergeData extends AbstractWebScript {
             String json = RequestResponseHandler.serialize(resp);
             RequestResponseHandler.writeWebscriptResponse(webScriptResponse, json);
 
-        } finally {
-            // TODO: close the try block earlier
-            httpClient.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AlfrescoRuntimeException(e.getMessage());
         }
     }
 

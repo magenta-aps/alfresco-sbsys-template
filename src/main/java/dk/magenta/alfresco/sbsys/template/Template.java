@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+// TODO: rename this class
+
 public class Template extends AbstractWebScript {
 
     private static Log logger = LogFactory.getLog(Template.class);

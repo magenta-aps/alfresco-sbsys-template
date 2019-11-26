@@ -38,7 +38,6 @@
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
 		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"
 		  parent="webscript">
-		<!--property name="fileFolderService" ref="FileFolderService" /-->
 		<property name="contentService" ref="ContentService" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="properties">
