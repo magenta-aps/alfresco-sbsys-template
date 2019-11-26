@@ -27,10 +27,6 @@
 		  class="dk.magenta.alfresco.sbsys.template.Template"
 		  parent="webscript">
 		<property name="fileFolderService" ref="FileFolderService" />
-		<property name="properties">
-			<ref bean="global-properties" />
-		</property>
-		<property name="siteService" ref="SiteService" />
 	</bean>
 	<bean id="webscript.magenta.sbsys-template.mergedata.post"
 		  class="dk.magenta.alfresco.sbsys.template.MergeData"
@@ -38,10 +34,6 @@
 		<!--property name="fileFolderService" ref="FileFolderService" /-->
 		<property name="contentService" ref="ContentService" />
 		<property name="fileFolderService" ref="FileFolderService" />
-		<property name="properties">
-			<ref bean="global-properties" />
-		</property>
-		<property name="siteService" ref="SiteService" />
 	</bean>
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
 		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"

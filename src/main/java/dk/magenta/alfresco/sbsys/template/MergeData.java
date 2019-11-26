@@ -5,15 +5,12 @@ import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
-import org.alfresco.query.PagingRequest;
-import org.alfresco.query.PagingResults;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentReader;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.util.GUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -43,22 +40,20 @@ import java.security.SecureRandom;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
 
     private ContentService contentService;
     private FileFolderService fileFolderService;
-    private Properties properties;
-    private SiteService siteService;
+    private NodeRefUtil nodeRefUtil;
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String TOKEN = "token";
 
-    // TODO: move this string to common class
-    private static final String CONTAINER = "documentLibrary";
-
+    public MergeData(NodeRefUtil nodeRefUtil) {
+        this.nodeRefUtil = nodeRefUtil;
+    }
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -154,10 +149,7 @@ public class MergeData extends AbstractWebScript {
 
             // Get the pre-upload folder
             // TODO: remove magic pre-upload
-            PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
-            PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
-            NodeRef docLib = siteService.getContainer(getSite(), CONTAINER);
-            List<FileInfo> docLibFolders = fileFolderService.listFolders(docLib);
+            List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
             FileInfo preUpload = docLibFolders.stream()
                     .filter((FileInfo fileInfo) -> fileInfo.getName().equals("pre-upload"))
                     .findFirst()
@@ -212,15 +204,6 @@ public class MergeData extends AbstractWebScript {
         logger.debug("Working!!!");
     }
 
-    /**
-     * Get site short name from alfresco-global.properties
-     * @return Site short name
-     */
-    private String getSite() {
-        return properties.getProperty("sbsys.template.site");
-    }
-
-
     ////////////////////// Getters and setters /////////////////////////
 
     public ContentService getContentService() {
@@ -237,21 +220,5 @@ public class MergeData extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
-    }
-
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
-
-    public SiteService getSiteService() {
-        return siteService;
-    }
-
-    public void setSiteService(SiteService siteService) {
-        this.siteService = siteService;
     }
 }
