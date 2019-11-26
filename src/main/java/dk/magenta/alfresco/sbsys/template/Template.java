@@ -1,6 +1,5 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import com.google.gson.Gson;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -35,14 +34,8 @@ public class Template extends AbstractWebScript {
             return template;
         }).collect(Collectors.toList());
 
-        Gson gson = new Gson();
-        String result = gson.toJson(templates);
-
-        try {
-            response.getWriter().write(result);
-        } catch (IOException e) {
-            throw new AlfrescoRuntimeException(e.getMessage());
-        }
+        String json = RequestResponseHandler.serialize(templates);
+        RequestResponseHandler.writeWebscriptResponse(response, json);
     }
 
     public void setFileFolderService(FileFolderService fileFolderService) {

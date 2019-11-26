@@ -1,6 +1,5 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import com.google.gson.Gson;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -49,12 +48,11 @@ public class MergeData extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
 
-        Gson gson = new Gson();
-
         //////////////////  Get POSTed JSON as string from request and deserialize into POJO ///////////////////
-        TemplateReceiver req = gson.fromJson(
-                webScriptRequest.getContent().getContent(),
-                TemplateReceiver.class
+
+        TemplateReceiver req = RequestResponseHandler.deserialize(
+            webScriptRequest.getContent().getContent(),
+            TemplateReceiver.class
         );
         logger.debug(req.token.get(TOKEN));
 
@@ -127,7 +125,7 @@ public class MergeData extends AbstractWebScript {
             String response = httpClient.execute(httpGet, responseHandler);
             logger.debug(response);
 
-            Case sbsysCase = gson.fromJson(response, Case.class);
+            Case sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
 
             ///////////////////////// Get template and merge case data ///////////////////////////
 
@@ -166,22 +164,13 @@ public class MergeData extends AbstractWebScript {
             resp.put("preUploadFilename", preUploadFilename);
             resp.put("url", "https://alfrescoskabelon.magenta.dk/share/page/site/swsdp/onlyoffice-edit?nodeRef=" + mergedDoc.getNodeRef().toString());
 
-            String result = gson.toJson(resp);
+            String json = RequestResponseHandler.serialize(resp);
+            RequestResponseHandler.writeWebscriptResponse(webScriptResponse, json);
 
-            try {
-                webScriptResponse.getWriter().write(result);
-            } catch (IOException e) {
-                throw new AlfrescoRuntimeException(e.getMessage());
-            }
-
-            System.out.println("hurra");
         } finally {
             // TODO: close the try block earlier
             httpClient.close();
         }
-
-
-        logger.debug("Working!!!");
     }
 
     ////////////////////// Getters and setters /////////////////////////
