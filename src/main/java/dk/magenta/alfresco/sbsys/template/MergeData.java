@@ -7,10 +7,6 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.GUID;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -44,7 +40,6 @@ import java.util.Map;
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
 
-    private ContentService contentService;
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
 
@@ -137,11 +132,7 @@ public class MergeData extends AbstractWebScript {
             ///////////////////////// Get template and merge case data ///////////////////////////
 
             // The NodeRef should be constructed in a better way
-            ContentReader contentReader = contentService.getReader(
-                    new NodeRef("workspace://SpacesStore/" + req.id),
-                    ContentModel.PROP_CONTENT
-            );
-            InputStream inputStream = contentReader.getContentInputStream();
+            InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.id);
 
             // Get the pre-upload folder
             // TODO: remove magic pre-upload
@@ -159,14 +150,7 @@ public class MergeData extends AbstractWebScript {
                     ContentModel.TYPE_CONTENT
             );
 
-            ContentWriter contentWriter = contentService.getWriter(
-                    mergedDoc.getNodeRef(),
-                    ContentModel.PROP_CONTENT,
-                    true
-            );
-            // TODO: remove magic value
-            contentWriter.setMimetype("application/vnd.openxmlformats-officedocument.wordprocessingml.document");
-            OutputStream outputStream = contentWriter.getContentOutputStream();
+            OutputStream outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template
             DocxStamper stamper = new DocxStamperConfiguration().build();
@@ -201,14 +185,6 @@ public class MergeData extends AbstractWebScript {
     }
 
     ////////////////////// Getters and setters /////////////////////////
-
-    public ContentService getContentService() {
-        return contentService;
-    }
-
-    public void setContentService(ContentService contentService) {
-        this.contentService = contentService;
-    }
 
     public FileFolderService getFileFolderService() {
         return fileFolderService;
