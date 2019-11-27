@@ -6,6 +6,6 @@ target
 
 utils/venv
 utils/headers.txt
-utils/json/post_template_temp.json
+utils/json/*_temp.json
 
 src/main/resources/sandbox/.~lock*

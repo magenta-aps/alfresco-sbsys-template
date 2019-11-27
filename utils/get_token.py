@@ -8,12 +8,16 @@ with open('headers.txt', 'w') as f:
 
 #print(token)
 
-# Insert token into post_template.json
+# Insert token into JSON files
 
-with open('json/post_template.json') as f:
-    payload = json.load(f)
-    payload['token'] = {'token': token}
+def add_token(filename):
+    with open('json/' + filename) as f:
+        payload = json.load(f)
+        payload['token'] = {'token': token}
+    
+    with open('json/' + filename.split('.')[0] + '_temp.json', 'w') as f:
+        json.dump(payload, f)
 
-with open('json/post_template_temp.json', 'w') as f:
-    json.dump(payload, f) 
+add_token('post_merge.json')
+add_token('post_preupload_document.json')
 
