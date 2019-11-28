@@ -13,17 +13,22 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
+import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
@@ -69,12 +74,19 @@ public class HttpHandler {
         httpPost.addHeader(AUTHORIZATION, "Bearer " + token);
         logger.debug(httpPost.toString());
 
-        StringBody jsonValue = new StringBody(json, ContentType.APPLICATION_JSON); // Is this right???
-        InputStreamBody inputStreamBody = new InputStreamBody(file, "random_filename.docx");
+        StringBody jsonValue = new StringBody(json, ContentType.TEXT_PLAIN); // Is this right???
+        // InputStreamBody inputStreamBody = new InputStreamBody(file, "random_filename.docx");
 
         HttpEntity httpEntity = MultipartEntityBuilder.create()
+                .setCharset(Charset.forName(HTTP.UTF_8))
+                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
                 .addPart("json", jsonValue)
-                .addPart("files", inputStreamBody)
+                .addBinaryBody(
+                        "files",
+                        file,
+                        ContentType.APPLICATION_OCTET_STREAM,
+                        "filename.docx"
+                )
                 .build();
 
         httpPost.setEntity(httpEntity);
@@ -112,7 +124,13 @@ public class HttpHandler {
                         HttpEntity entity = response.getEntity();
                         return entity != null ? EntityUtils.toString(entity) : null;
                     } else {
-                        logger.debug(response.getEntity().getContent().toString());
+                        logger.debug("SBSYS Error");
+                        // logger.debug(response.getEntity().getContent().toString());
+                        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                        reader.lines()
+                                .forEach(System.out::println);
+                        reader.close();
+                        // TODO: close things
                         throw new AlfrescoRuntimeException("Got HTTP status " + Integer.toString(status) + " from SBSYS server");
                     }
                 }

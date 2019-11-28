@@ -19,5 +19,5 @@ def add_token(filename):
         json.dump(payload, f)
 
 add_token('post_merge.json')
-add_token('post_preupload_document.json')
+add_token('post_upload.json')
 
