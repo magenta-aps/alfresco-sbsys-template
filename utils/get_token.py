@@ -21,3 +21,11 @@ def add_token(filename):
 add_token('post_merge.json')
 add_token('post_upload.json')
 
+with open('json/post_multipart.json') as f:
+    payload = json.load(f)
+    payload['content'] = token
+
+with open('json/post_multipart_temp.json', 'w') as f:
+    json.dump(payload, f)
+
+
