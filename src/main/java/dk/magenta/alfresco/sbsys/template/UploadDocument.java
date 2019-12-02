@@ -2,6 +2,7 @@ package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.Gson;
 import dk.magenta.alfresco.sbsys.template.json.DocumentReceiver;
+import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -35,18 +36,19 @@ public class UploadDocument extends AbstractWebScript {
                     DocumentReceiver.class
             );
 
-            String json = "{\"SagID\":979,\"Navn\":\"NavnABC\",\"Emne\":\"Emne\",\"Beskrivelse\":\"Dette er en beskrivelse\"}";
-            InputStream inputStream = nodeRefUtil.getInputStream(req.preUploadId);
+            // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
+            // separate service that in turn will perform the actual multipart/form-data request
 
-            // TODO: handle magic values
-            String response = HttpHandler.POST_MULTIPART(
-                    "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde",
+            MultipartRequest multipartRequest = new MultipartRequest(
+                    979,
+                    "TestNavn",
+                    "test.docx",
+                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                     req.token.get("token"),
-                    json,
-                    inputStream
-            );
+                    "/home/andreas/skabelon/alfresco-sbsys-template/alf_data_dev/contentstore/2019/11/26/14/3/ed5379f7-b504-482e-9fbb-e6cbcd182519.bin"
+                    );
 
-            inputStream.close();
+            String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
             logger.debug(req.preUploadId);
 

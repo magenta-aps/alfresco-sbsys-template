@@ -23,7 +23,7 @@ add_token('post_upload.json')
 
 with open('json/post_multipart.json') as f:
     payload = json.load(f)
-    payload['content'] = token
+    payload['token'] = token
 
 with open('json/post_multipart_temp.json', 'w') as f:
     json.dump(payload, f)

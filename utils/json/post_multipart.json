@@ -1,4 +1,8 @@
 {
-  "id":0,
-  "content": "token"
+  "caseId":979,
+  "name":"SomeName",
+  "filename":"test.docx",
+  "token":"token",
+  "mimeType":"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "contentStorePath": "/home/andreas/skabelon/alfresco-sbsys-template/alf_data_dev/contentstore/2019/11/26/14/3/ed5379f7-b504-482e-9fbb-e6cbcd182519.bin"
 }

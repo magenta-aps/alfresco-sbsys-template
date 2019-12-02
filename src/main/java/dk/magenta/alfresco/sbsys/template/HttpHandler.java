@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.logging.Log;
@@ -13,6 +14,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.entity.mime.content.InputStreamBody;
@@ -39,6 +41,7 @@ public class HttpHandler {
     private static ResponseHandler<String> responseHandler;
 
     private static final String AUTHORIZATION = "Authorization";
+    private static final String URL_MULTIPART_FORM_DATA_REQUESTER = "http://localhost:8081/multipart";
 
     /**
      * Make a HTTPS GET request
@@ -66,28 +69,20 @@ public class HttpHandler {
         }
     }
 
-    public static String POST_MULTIPART(String url, String token, String json, InputStream file) {
+    /**
+     * NOTE: this method call the multipart-form-data-requester service and NOT SBSYS directly!
+     */
+    public static String POST_MULTIPART(MultipartRequest multipartRequest) {
 
-        httpClient = getCloseableHttpClient();
+        httpClient = getCloseableHttpClient(null);
 
-        HttpPost httpPost = new HttpPost(url);
-        httpPost.addHeader(AUTHORIZATION, "Bearer " + token);
+        HttpPost httpPost = new HttpPost(URL_MULTIPART_FORM_DATA_REQUESTER);
         logger.debug(httpPost.toString());
 
-        StringBody jsonValue = new StringBody(json, ContentType.TEXT_PLAIN); // Is this right???
-        // InputStreamBody inputStreamBody = new InputStreamBody(file, "random_filename.docx");
-
-        HttpEntity httpEntity = MultipartEntityBuilder.create()
-                .setCharset(Charset.forName(HTTP.UTF_8))
-                .setMode(HttpMultipartMode.BROWSER_COMPATIBLE)
-                .addPart("json", jsonValue)
-                .addBinaryBody(
-                        "files",
-                        file,
-                        ContentType.APPLICATION_OCTET_STREAM,
-                        "filename.docx"
-                )
-                .build();
+        HttpEntity httpEntity = new StringEntity(
+                RequestResponseHandler.serialize(multipartRequest),
+                ContentType.APPLICATION_JSON
+        );
 
         httpPost.setEntity(httpEntity);
 
@@ -109,9 +104,13 @@ public class HttpHandler {
     }
 
     private static CloseableHttpClient getCloseableHttpClient(SSLConnectionSocketFactory sslConnectionSocketFactory) {
-        return HttpClients.custom()
-                .setSSLSocketFactory(sslConnectionSocketFactory)
-                .build();
+        if (sslConnectionSocketFactory == null) {
+            return HttpClients.createDefault();
+        } else {
+            return HttpClients.custom()
+                    .setSSLSocketFactory(sslConnectionSocketFactory)
+                    .build();
+        }
     }
 
     private static ResponseHandler<String> getResponseHandler() {
