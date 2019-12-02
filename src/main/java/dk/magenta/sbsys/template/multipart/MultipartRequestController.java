@@ -95,11 +95,18 @@ public class MultipartRequestController {
                     .build();
 
             logger.info("Make multipart/form-data request to SBSYS server");
+
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            logger.info("HTTP status: " + response.statusCode());
+            int status = response.statusCode();
+
+            logger.info("HTTP status: " + status);
             logger.debug("HTTP body: " + response.body());
 
-        } catch (Exception e) {
+            if (!(status >= 200 && status < 300)) {
+                throw new SbsysException(response);
+            }
+
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
 
@@ -135,8 +142,7 @@ public class MultipartRequestController {
                         + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
                 byteArrays.add(Files.readAllBytes(path));
                 byteArrays.add("\r\n".getBytes(StandardCharsets.UTF_8));
-            }
-            else {
+            } else {
                 byteArrays.add(("\"" + entry.getKey() + "\"\r\n\r\n" + entry.getValue() + "\r\n")
                         .getBytes(StandardCharsets.UTF_8));
             }
