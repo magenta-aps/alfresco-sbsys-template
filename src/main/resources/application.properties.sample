@@ -1,3 +1,4 @@
+server.port=8081
 sbsys.endpoint=CHANGE THIS
 
 ### Logging ###
