@@ -4,13 +4,15 @@ public class Request {
 
     private int caseId;
     private String name;
+    private String filename;
     private String mimeType;
     private String token;
     private String contentStorePath;
 
-    public Request(int caseId, String name, String mimeType, String token, String contentStorePath) {
+    public Request(int caseId, String name, String filename, String mimeType, String token, String contentStorePath) {
         this.caseId = caseId;
         this.name = name;
+        this.filename = filename;
         this.mimeType = mimeType;
         this.token = token;
         this.contentStorePath = contentStorePath;
@@ -30,6 +32,14 @@ public class Request {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
     }
 
     public String getMimeType() {

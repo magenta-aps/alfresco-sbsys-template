@@ -90,7 +90,7 @@ public class MultipartRequestController {
             HttpRequest request = HttpRequest.newBuilder()
                     .header("Authorization", "Bearer " + body.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
-                    .POST(ofMimeMultipartData(data, boundary, body.getMimeType()))
+                    .POST(ofMimeMultipartData(data, boundary, body.getFilename(), body.getMimeType()))
                     .uri(URI.create(SBSYS_ENDPOINT))
                     .build();
 
@@ -117,7 +117,12 @@ public class MultipartRequestController {
                 .toString();
     }
 
-    private BodyPublisher ofMimeMultipartData(Map<Object, Object> data, String boundary, String mimeType) throws IOException {
+    private BodyPublisher ofMimeMultipartData(
+            Map<Object, Object> data,
+            String boundary,
+            String filename,
+            String mimeType) throws IOException {
+
         var byteArrays = new ArrayList<byte[]>();
         byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=").getBytes(StandardCharsets.UTF_8);
         for (Map.Entry<Object, Object> entry : data.entrySet()) {
@@ -125,7 +130,8 @@ public class MultipartRequestController {
 
             if (entry.getValue() instanceof Path) {
                 var path = (Path) entry.getValue();
-                byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
+                // byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
+                byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + filename
                         + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
                 byteArrays.add(Files.readAllBytes(path));
                 byteArrays.add("\r\n".getBytes(StandardCharsets.UTF_8));
