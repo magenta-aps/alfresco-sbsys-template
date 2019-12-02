@@ -24,6 +24,7 @@ import java.util.Random;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.SSLContext;
@@ -34,9 +35,9 @@ import javax.net.ssl.X509TrustManager;
 public class MultipartRequestController {
 
     private final Logger logger = LoggerFactory.getLogger(MultipartRequestController.class);
-
     private final String SUCCESS = "success";
-    private final String SBSYS_ENDPOINT = "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde";
+    @Value("${sbsys.endpoint}")
+    private String sbsysEndpoint;
 
     @RequestMapping(path = "/multipart", method = RequestMethod.POST)
     public Response request(@RequestBody Request body) {
@@ -91,7 +92,7 @@ public class MultipartRequestController {
                     .header("Authorization", "Bearer " + body.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
                     .POST(ofMimeMultipartData(data, boundary, body.getFilename(), body.getMimeType()))
-                    .uri(URI.create(SBSYS_ENDPOINT))
+                    .uri(URI.create(sbsysEndpoint))
                     .build();
 
             logger.info("Make multipart/form-data request to SBSYS server");

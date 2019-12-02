@@ -1,1 +1,4 @@
+sbsys.endpoint=CHANGE THIS
+
+### Logging ###
 logging.level.dk.magenta.sbsys.template.multipart.MultipartRequestController=INFO
