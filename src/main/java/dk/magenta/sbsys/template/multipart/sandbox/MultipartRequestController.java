@@ -95,10 +95,11 @@ public class MultipartRequestController {
                     .uri(URI.create(SBSYS_ENDPOINT))
                     .build();
 
+            logger.info("Make multipart/form-data request to SBSYS server");
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
-            System.out.println("---------------------------");
-            System.out.println(response.statusCode());
-            System.out.println(response.body());
+            logger.info("HTTP status: " + response.statusCode());
+            logger.debug("HTTP body: " + response.body());
+
         } catch (Exception e) {
             e.printStackTrace();
         }
