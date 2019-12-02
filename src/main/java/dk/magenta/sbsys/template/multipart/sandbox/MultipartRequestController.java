@@ -21,8 +21,10 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
 
+import dk.magenta.sbsys.template.multipart.Response;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.SSLContext;
@@ -30,17 +32,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 @RestController
-public class GreetingController {
+public class MultipartRequestController {
 
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
+    private final Logger logger = LoggerFactory.getLogger(MultipartRequestController.class);
 
-//    private String token = "";
+    private final String SUCCESS = "success";
+    private final String SBSYS_ENDPOINT = "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde";
 
-    @RequestMapping(path = "/greeting", method = RequestMethod.POST)
-    public Greeting greeting(@RequestParam(value="name", defaultValue="World") String name, @RequestBody Greeting body) {
-
-        String token = body.getContent();
+    @RequestMapping(path = "/multipart", method = RequestMethod.POST)
+    public Response request(@RequestBody Request body) {
 
         // SSL
         TrustManager[] trustAllCerts = {
@@ -80,31 +80,44 @@ public class GreetingController {
                 .build();
         String boundary = new BigInteger(256, new Random()).toString();
 
-        Path localFile = Paths.get("/home/andreas/Dropbox/testDocs/test1.docx");
+        Path localFile = Paths.get(body.getContentStorePath());
         Map<Object, Object> data = new LinkedHashMap<>();
-        data.put("json", "{\"SagID\":979,\"Navn\":\"NavnABC\",\"Emne\":\"Emne\",\"Beskrivelse\":\"Dette er en beskrivelse\"}");
+        data.put("json", buildJsonPart(body));
         data.put("files", localFile);
+
+        logger.debug(buildJsonPart(body));
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .header("Authorization", "Bearer " + token)
+                    .header("Authorization", "Bearer " + body.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
-                    .POST(ofMimeMultipartData(data, boundary))
-                    .uri(URI.create("https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde"))
+                    .POST(ofMimeMultipartData(data, boundary, body.getMimeType()))
+                    .uri(URI.create(SBSYS_ENDPOINT))
                     .build();
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
             System.out.println("---------------------------");
             System.out.println(response.statusCode());
+            System.out.println(response.body());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new Greeting(counter.incrementAndGet(),
-                String.format(template, name));
+        return new Response(SUCCESS);
     }
 
-    private BodyPublisher ofMimeMultipartData(Map<Object, Object> data, String boundary) throws IOException {
+    private String buildJsonPart(Request body) {
+        // TODO: this could be handled better with Jackson
+        return new StringBuilder()
+                .append("{\"SagID\":")
+                .append(body.getCaseId())
+                .append(",\"Navn\":\"")
+                .append(body.getName())
+                .append("\"}")
+                .toString();
+    }
+
+    private BodyPublisher ofMimeMultipartData(Map<Object, Object> data, String boundary, String mimeType) throws IOException {
         var byteArrays = new ArrayList<byte[]>();
         byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=").getBytes(StandardCharsets.UTF_8);
         for (Map.Entry<Object, Object> entry : data.entrySet()) {
@@ -112,7 +125,6 @@ public class GreetingController {
 
             if (entry.getValue() instanceof Path) {
                 var path = (Path) entry.getValue();
-                String mimeType = Files.probeContentType(path);
                 byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
                         + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
                 byteArrays.add(Files.readAllBytes(path));
