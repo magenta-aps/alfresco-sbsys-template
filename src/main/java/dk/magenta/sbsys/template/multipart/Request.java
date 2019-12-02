@@ -1,4 +1,4 @@
-package dk.magenta.sbsys.template.multipart.sandbox;
+package dk.magenta.sbsys.template.multipart;
 
 public class Request {
 

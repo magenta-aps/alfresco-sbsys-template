@@ -1,4 +1,4 @@
-package dk.magenta.sbsys.template.multipart.sandbox;
+package dk.magenta.sbsys.template.multipart;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -22,7 +22,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
 
-import dk.magenta.sbsys.template.multipart.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
