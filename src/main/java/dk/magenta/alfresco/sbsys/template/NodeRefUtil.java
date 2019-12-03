@@ -3,26 +3,30 @@ package dk.magenta.alfresco.sbsys.template;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
+import org.alfresco.repo.domain.node.ContentDataWithId;
 import org.alfresco.service.cmr.model.FileInfo;
-import org.alfresco.service.cmr.repository.ContentReader;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.ContentWriter;
-import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.namespace.QName;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
 public class NodeRefUtil {
 
     private ContentService contentService;
+    private NodeService nodeService;
     private Properties properties;
     private SiteService siteService;
 
     private static final String CONTAINER = "documentLibrary";
     private static final String MIMETYPE_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private static final String SITE_PROPERTY = "sbsys.template.site";
+    private static final String CONTENT_STORE_PATH = "sbsys.template.contentstore";
 
     public NodeRef getDocLib() {
 
@@ -51,15 +55,45 @@ public class NodeRefUtil {
         return contentWriter.getContentOutputStream();
     }
 
-     /**
+    /**
+     * Get info about the document to upload (filename, mimetype,...)
+     */
+    public Map<String, String> getUploadDocumentDetails(String node) {
+        NodeRef nodeRef = new NodeRef(node);
+
+        String filename = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        ContentDataWithId contentData = (ContentDataWithId) nodeService.getProperty(nodeRef, ContentModel.PROP_CONTENT);
+        String contentUrl = contentData.getContentUrl();
+        String mimeType = contentData.getMimetype();
+
+        String contentStorePath = properties.get(CONTENT_STORE_PATH) + contentUrl.substring(7);
+
+        Map<String, String> documentDetails = new HashMap<>();
+        documentDetails.put("filename", filename);
+        documentDetails.put("mimeType", mimeType);
+        documentDetails.put("contentStorePath", contentStorePath);
+
+        return documentDetails;
+    }
+
+    /**
      * Get site short name from alfresco-global.properties
+     *
      * @return Site short name
      */
     private String getSite() {
         return properties.getProperty(SITE_PROPERTY);
     }
 
-    public void setContentService(ContentService contentService) { this.contentService = contentService; }
+    //////////////// Getters and setters /////////////////
+
+    public void setContentService(ContentService contentService) {
+        this.contentService = contentService;
+    }
+
+    public void setNodeService(NodeService nodeService) {
+        this.nodeService = nodeService;
+    }
 
     public void setProperties(Properties properties) {
         this.properties = properties;

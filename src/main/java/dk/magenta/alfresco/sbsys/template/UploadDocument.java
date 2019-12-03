@@ -1,13 +1,10 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import com.google.gson.Gson;
 import dk.magenta.alfresco.sbsys.template.json.DocumentReceiver;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
+import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
-import org.alfresco.service.cmr.repository.ContentService;
-import org.alfresco.service.cmr.repository.NodeRef;
-import org.alfresco.service.cmr.site.SiteService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -15,8 +12,6 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
@@ -24,6 +19,7 @@ public class UploadDocument extends AbstractWebScript {
 
     private static Log logger = LogFactory.getLog(UploadDocument.class);
 
+    private AttributeService attributeService;
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
@@ -39,23 +35,31 @@ public class UploadDocument extends AbstractWebScript {
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
             // separate service that in turn will perform the actual multipart/form-data request
 
+            // String sagId = (String) attributeService.getAttribute(req.preUploadId);
+            String sagId = "979";
+            Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
+
             MultipartRequest multipartRequest = new MultipartRequest(
-                    979,
-                    "TestNavn",
-                    "test.docx",
-                    "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-                    req.token.get("token"),
-                    "/home/andreas/skabelon/alfresco-sbsys-template/alf_data_dev/contentstore/2019/11/26/14/3/ed5379f7-b504-482e-9fbb-e6cbcd182519.bin"
+                    Integer.parseInt(sagId),
+                    "Kladde " + sagId,
+                    documentDetails.get("filename"),
+                    documentDetails.get("mimeType"),
+                    req.getToken().get("token"),
+                    documentDetails.get("contentStorePath")
                     );
 
             String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
-            logger.debug(req.preUploadId);
+            logger.debug("Document uploaded");
 
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());
         }
+    }
+
+    public void setAttributeService(AttributeService attributeService) {
+        this.attributeService = attributeService;
     }
 
     public void setFileFolderService(FileFolderService fileFolderService) {

@@ -4,6 +4,7 @@ import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.util.GUID;
@@ -25,6 +26,7 @@ import java.util.Map;
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
 
+    private AttributeService attributeService;
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
 
@@ -82,6 +84,10 @@ public class MergeData extends AbstractWebScript {
             inputStream.close();
             outputStream.close();
 
+            ///////////// Store caseId in the AttributeService /////////////
+
+            attributeService.createAttribute(req.kladde.get("SagID"), mergedDoc.getNodeRef().toString());
+
             /////////////////////// Build response /////////////////////////
 
             Map<String, String> resp = new HashMap<>();
@@ -100,6 +106,10 @@ public class MergeData extends AbstractWebScript {
     }
 
     ////////////////////// Getters and setters /////////////////////////
+
+    public void setAttributeService(AttributeService attributeService) {
+        this.attributeService = attributeService;
+    }
 
     public FileFolderService getFileFolderService() {
         return fileFolderService;
