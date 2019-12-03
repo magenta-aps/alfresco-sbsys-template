@@ -48,8 +48,8 @@ public class MergeData extends AbstractWebScript {
             // Call SBSYS to get case metadata
             // TODO: fix hardcoded URL
             String response = HttpHandler.GET(
-                    "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.kladde.get("SagID"),
-                    req.token.get(TOKEN)
+                    "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.getKladde().get("SagID"),
+                    req.getToken().get(TOKEN)
             );
             logger.debug(response);
             Case sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
@@ -58,7 +58,7 @@ public class MergeData extends AbstractWebScript {
 
             // Get InputStream for template document
             // TODO: The NodeRef should be constructed in a better way
-            InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.id);
+            InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.getId());
 
             // Get the pre-upload folder
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
@@ -86,7 +86,7 @@ public class MergeData extends AbstractWebScript {
 
             ///////////// Store caseId in the AttributeService /////////////
 
-            attributeService.createAttribute(req.kladde.get("SagID"), mergedDoc.getNodeRef().toString());
+            attributeService.createAttribute(req.getKladde().get("SagID"), mergedDoc.getNodeRef().toString());
 
             /////////////////////// Build response /////////////////////////
 

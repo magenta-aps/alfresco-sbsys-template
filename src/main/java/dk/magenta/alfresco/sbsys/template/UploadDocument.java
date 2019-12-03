@@ -52,7 +52,7 @@ public class UploadDocument extends AbstractWebScript {
 
             // TODO: delete document from pre-upload folder
             // TODO: clean up the attribute service
-            
+
             logger.debug("Document uploaded");
 
         } catch (IOException e) {

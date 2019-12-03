@@ -4,9 +4,47 @@ import java.util.Map;
 
 public class TemplateReceiver {
 
-    public String id;
-    public Map<String, String> kladde;
-    public Map<String, String> urls;
-    public Map<String, String> token;
+    private String id;
+    private Map<String, String> kladde;
+    private Map<String, String> urls;
+    private Map<String, String> token;
 
+    public TemplateReceiver(String id, Map<String, String> kladde, Map<String, String> urls, Map<String, String> token) {
+        this.id = id;
+        this.kladde = kladde;
+        this.urls = urls;
+        this.token = token;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Map<String, String> getKladde() {
+        return kladde;
+    }
+
+    public void setKladde(Map<String, String> kladde) {
+        this.kladde = kladde;
+    }
+
+    public Map<String, String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Map<String, String> urls) {
+        this.urls = urls;
+    }
+
+    public Map<String, String> getToken() {
+        return token;
+    }
+
+    public void setToken(Map<String, String> token) {
+        this.token = token;
+    }
 }

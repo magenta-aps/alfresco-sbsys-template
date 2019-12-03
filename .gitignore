@@ -3,6 +3,7 @@ alf_data_dev
 alfresco.log*
 solr.log*
 target
+__pycache__
 
 utils/venv
 utils/headers.txt
