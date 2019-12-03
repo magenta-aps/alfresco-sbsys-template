@@ -2,35 +2,24 @@ package dk.magenta.alfresco.sbsys.template;
 
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.entity.mime.HttpMultipartMode;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.InputStreamBody;
-import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.apache.http.protocol.HTTP;
 import org.apache.http.util.EntityUtils;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.nio.charset.Charset;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
@@ -59,6 +48,7 @@ public class HttpHandler {
 
         try {
             try {
+                logger.debug("GET " + url);
                 return httpClient.execute(httpGet, getResponseHandler());
             } finally {
                 httpClient.close();
@@ -89,6 +79,7 @@ public class HttpHandler {
         // TODO: put this into private method
         try {
             try {
+                logger.debug("POST (multipart) " + URL_MULTIPART_FORM_DATA_REQUESTER);
                 return httpClient.execute(httpPost, getResponseHandler());
             } finally {
                 httpClient.close();
@@ -119,18 +110,16 @@ public class HttpHandler {
                 @Override
                 public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
                     int status = response.getStatusLine().getStatusCode();
+
+                    logger.debug("HTTP status: " + status);
+
                     if (status >= 200 && status < 300) {
                         HttpEntity entity = response.getEntity();
                         return entity != null ? EntityUtils.toString(entity) : null;
                     } else {
-                        logger.debug("SBSYS Error");
-                        // logger.debug(response.getEntity().getContent().toString());
-                        BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-                        reader.lines()
-                                .forEach(System.out::println);
-                        reader.close();
+                        logger.error("SBSYS Error");
                         // TODO: close things
-                        throw new AlfrescoRuntimeException("Got HTTP status " + Integer.toString(status) + " from SBSYS server");
+                        throw new AlfrescoRuntimeException("Got HTTP status " + status);
                     }
                 }
             };
