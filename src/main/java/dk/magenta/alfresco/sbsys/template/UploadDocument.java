@@ -32,12 +32,12 @@ public class UploadDocument extends AbstractWebScript {
                     DocumentReceiver.class
             );
 
+            String sagId = (String) attributeService.getAttribute(req.getPreUploadId());
+            // String sagId = "979"; // For debugging
+            Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
+
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
             // separate service that in turn will perform the actual multipart/form-data request
-
-            // String sagId = (String) attributeService.getAttribute(req.preUploadId);
-            String sagId = "979";
-            Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
 
             MultipartRequest multipartRequest = new MultipartRequest(
                     Integer.parseInt(sagId),
@@ -50,6 +50,9 @@ public class UploadDocument extends AbstractWebScript {
 
             String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
+            // TODO: delete document from pre-upload folder
+            // TODO: clean up the attribute service
+            
             logger.debug("Document uploaded");
 
         } catch (IOException e) {
