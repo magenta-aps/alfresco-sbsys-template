@@ -1,6 +1,8 @@
 package dk.magenta.alfresco.sbsys.template.sandbox;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MyContext {
@@ -9,12 +11,22 @@ public class MyContext {
     private String foo;
 
     private Map<String, String> map = new HashMap<>();
+    private List<Map<String, String>> persons = new ArrayList<>();
 
     public MyContext(String name, String foo) {
         this.name = name;
         this.foo = foo;
 
         map.put("xyz", "hurra3");
+        persons.add(map);
+    }
+
+    public List<Map<String, String>> getPersons() {
+        return persons;
+    }
+
+    public void setPersons(List<Map<String, String>> persons) {
+        this.persons = persons;
     }
 
     public String getName() {
