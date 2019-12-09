@@ -21,6 +21,7 @@
                 Search index (i.e. the indexed content and metadata)
              Configured in alfresco-global.properties with the 'dir.root' property.
                 -->
+        <!--suppress UnresolvedMavenProperty -->
         <alfresco.data.location>${session.executionRootDirectory}/alf_data_dev</alfresco.data.location>
 
         <!-- Duplicated with alfresco.solrHome in the plugin, we need them out here to do filtering -->

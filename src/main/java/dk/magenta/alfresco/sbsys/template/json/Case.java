@@ -6,7 +6,7 @@ import java.util.Map;
 public class Case {
 
     private String SagsTitel;
-    private List<Object> Personer;
+    private List<Person> Personer;
     private List<Object> Firmaer;
     private int Id;
     private String SagIdentity;
@@ -39,11 +39,11 @@ public class Case {
         SagsTitel = sagsTitel;
     }
 
-    public List<Object> getPersoner() {
+    public List<Person> getPersoner() {
         return Personer;
     }
 
-    public void setPersoner(List<Object> personer) {
+    public void setPersoner(List<Person> personer) {
         Personer = personer;
     }
 
