@@ -9,6 +9,7 @@ public class MyContext {
 
     private String name;
     private String foo;
+    private SomePOJO somePOJO;
 
     private Map<String, String> map = new HashMap<>();
     private List<Map<String, String>> persons = new ArrayList<>();
@@ -19,6 +20,7 @@ public class MyContext {
 
         map.put("xyz", "hurra3");
         persons.add(map);
+        somePOJO = new SomePOJO("This is s");
     }
 
     public List<Map<String, String>> getPersons() {
@@ -27,6 +29,14 @@ public class MyContext {
 
     public void setPersons(List<Map<String, String>> persons) {
         this.persons = persons;
+    }
+
+    public SomePOJO getSomePOJO() {
+        return somePOJO;
+    }
+
+    public void setSomePOJO(SomePOJO somePOJO) {
+        this.somePOJO = somePOJO;
     }
 
     public String getName() {
