@@ -16,7 +16,7 @@ admin_basic_auth = HTTPBasicAuth('admin', 'admin')
 # Get and select a template
 
 r = requests.get(ALF_GET_TEMPLATE_URL, auth=admin_basic_auth)
-template = [template for template in r.json() if template.get('filename') == 'skabelon1.docx'][0]
+template = [template for template in r.json() if template.get('filename') == 'skabelon2.docx'][0]
 
 print('GET ' + ALF_GET_TEMPLATE_URL)
 print(r.status_code)
@@ -26,6 +26,7 @@ print(r.status_code)
 add_token('post_merge.json')
 with open('json/post_merge_temp.json') as f:
     merge_payload = json.load(f)
+merge_payload['id'] = template.get('id')
 
 r = requests.post(
     ALF_MERGE_URL,
