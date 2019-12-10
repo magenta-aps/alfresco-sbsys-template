@@ -1,4 +1,22 @@
-# Hot reloading
+# alfresco-sbsys-template
+
+Project for handeling document templates to be used with SBSYS. A number of document templates 
+are stored in Alfresco and SBSYS can (via REST) access a list of these templates. The SBSYS user 
+can select a template and send this back to Alfresco along with an SBSYS case id. Alfresco then 
+retreives case metadata from SBSYS and merges these data into the template. Finally, the 
+filled out template is send back to SBSYS.
+
+_NOTE: This is a proof-of-concept project, i.e. no test are written and proper error 
+handling (with respect to the HTTP communication between Alfresco and SBSYS) is missing 
+in the code base_.
+
+This project is (for historic) reasons made for Java 8 which means that HTTP/2 communication 
+cannot be handled. This is, however, required when communicating with SBSYS, so this project 
+makes use of the utils project found in here: [multipart-form-data-requester](https://github.com/magenta-aps/multipart-form-data-requester).
+
+# Development
+
+## Hot reloading
 
 This project was build with
 ```
@@ -28,7 +46,7 @@ JAVA_HOME="/opt/jdk8u181-b13" MAVEN_OPTS="-Xms256m -Xmx2G
 
 This seems to work!
 
-# Remote debugging
+## Remote debugging
 
 Use the `debug.sh` file instead of the `run.sh` (or modify this file 
 accordingly). Make a new "Run configuration" in IntelliJ (choose the type 
