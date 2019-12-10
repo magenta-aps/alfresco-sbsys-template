@@ -10,6 +10,7 @@ import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
@@ -46,17 +47,7 @@ public class HttpHandler {
         httpGet.addHeader(AUTHORIZATION, "Bearer " + token);
         logger.debug(httpGet.toString());
 
-        try {
-            try {
-                logger.debug("GET " + url);
-                return httpClient.execute(httpGet, getResponseHandler());
-            } finally {
-                httpClient.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new AlfrescoRuntimeException(e.getMessage());
-        }
+        return executeAndClose(httpGet, "GET " + url);
     }
 
     /**
@@ -75,19 +66,7 @@ public class HttpHandler {
         );
 
         httpPost.setEntity(httpEntity);
-
-        // TODO: put this into private method
-        try {
-            try {
-                logger.debug("POST (multipart) " + URL_MULTIPART_FORM_DATA_REQUESTER);
-                return httpClient.execute(httpPost, getResponseHandler());
-            } finally {
-                httpClient.close();
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            throw new AlfrescoRuntimeException(e.getMessage());
-        }
+        return executeAndClose(httpPost, "POST (multipart) " + URL_MULTIPART_FORM_DATA_REQUESTER);
     }
 
     private static CloseableHttpClient getCloseableHttpClient() {
@@ -101,6 +80,20 @@ public class HttpHandler {
             return HttpClients.custom()
                     .setSSLSocketFactory(sslConnectionSocketFactory)
                     .build();
+        }
+    }
+
+    private static String executeAndClose(HttpUriRequest request, String logMessage) {
+        try {
+            try {
+                logger.debug(logMessage);
+                return httpClient.execute(request, getResponseHandler());
+            } finally {
+                httpClient.close();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new AlfrescoRuntimeException(e.getMessage());
         }
     }
 
