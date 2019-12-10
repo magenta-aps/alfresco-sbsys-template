@@ -1,19 +1,15 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.*;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
-// TODO: rename this class
 
 public class Template extends AbstractWebScript {
 
@@ -25,7 +21,7 @@ public class Template extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest request, WebScriptResponse response) {
 
-        // TODO: add debug log messages
+        logger.debug("GET /alfresco/s/template");
 
         // Get the templates (files) in the docLib
         List<FileInfo> template_files = fileFolderService.listFiles(nodeRefUtil.getDocLib());
