@@ -75,6 +75,9 @@ public class MergeData extends AbstractWebScript {
                     ContentModel.TYPE_CONTENT
             );
 
+            // Set the date
+            sbsysCase.setDato(nodeRefUtil.getNodeRefCreationDate(mergedDoc));
+
             OutputStream outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template

@@ -7,11 +7,10 @@ import org.alfresco.repo.domain.node.ContentDataWithId;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.namespace.QName;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.Serializable;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -27,6 +26,13 @@ public class NodeRefUtil {
     private static final String MIMETYPE_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private static final String SITE_PROPERTY = "sbsys.template.site";
     private static final String CONTENT_STORE_PATH = "sbsys.template.contentstore";
+
+    public Date getNodeRefCreationDate(FileInfo fileInfo) {
+        return (Date) nodeService.getProperty(
+                fileInfo.getNodeRef(),
+                ContentModel.PROP_CREATED
+        );
+    }
 
     public NodeRef getDocLib() {
 

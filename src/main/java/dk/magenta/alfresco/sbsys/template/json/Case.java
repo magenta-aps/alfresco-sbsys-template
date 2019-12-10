@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template.json;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -30,6 +31,17 @@ public class Case {
     private Map<String, String> SenestAendretAf;
     private Map<String, String> StyringsreolHylde;
     private int SecuritySetId;
+
+    // Server generated
+    private Date Dato;
+
+    public Date getDato() {
+        return Dato;
+    }
+
+    public void setDato(Date dato) {
+        Dato = dato;
+    }
 
     public String getSagsTitel() {
         return SagsTitel;
