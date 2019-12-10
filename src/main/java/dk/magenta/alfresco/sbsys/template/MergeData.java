@@ -95,7 +95,7 @@ public class MergeData extends AbstractWebScript {
 
             Map<String, String> resp = new HashMap<>();
             resp.put("preUploadId", mergedDoc.getNodeRef().toString());
-            resp.put("preUploadFilename", preUploadFilename);
+            resp.put("preUploadFilename", preUploadFilename + ".docx");
             resp.put("url",
                     properties.getProperty("alfresco.protocol")
                     + "://" + properties.getProperty("alfresco.host")
