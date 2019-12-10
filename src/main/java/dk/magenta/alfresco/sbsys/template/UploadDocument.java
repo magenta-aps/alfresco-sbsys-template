@@ -4,7 +4,6 @@ import dk.magenta.alfresco.sbsys.template.json.DocumentReceiver;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.attributes.AttributeService;
-import org.alfresco.service.cmr.model.FileFolderService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -13,16 +12,13 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 
 import java.io.IOException;
 import java.util.Map;
-import java.util.Properties;
 
 public class UploadDocument extends AbstractWebScript {
 
     private static Log logger = LogFactory.getLog(UploadDocument.class);
 
     private AttributeService attributeService;
-    private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
-    private Properties properties;
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
@@ -33,7 +29,6 @@ public class UploadDocument extends AbstractWebScript {
             );
 
             String sagId = (String) attributeService.getAttribute(req.getPreUploadId());
-            // String sagId = "979"; // For debugging
             Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
 
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
@@ -50,10 +45,12 @@ public class UploadDocument extends AbstractWebScript {
 
             String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
-            // TODO: delete document from pre-upload folder
-            // TODO: clean up the attribute service
-
             logger.debug("Document uploaded");
+
+            nodeRefUtil.deleteNode(req.getPreUploadId());
+            attributeService.removeAttribute(req.getPreUploadId());
+
+            logger.debug("Final template document deleted");
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -65,15 +62,7 @@ public class UploadDocument extends AbstractWebScript {
         this.attributeService = attributeService;
     }
 
-    public void setFileFolderService(FileFolderService fileFolderService) {
-        this.fileFolderService = fileFolderService;
-    }
-
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
         this.nodeRefUtil = nodeRefUtil;
-    }
-
-    public void setProperties(Properties properties) {
-        this.properties = properties;
     }
 }

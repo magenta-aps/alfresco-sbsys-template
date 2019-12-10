@@ -41,6 +41,8 @@ print(r.status_code)
 
 # Simulate SBSYS POSTing of the pre-uploaded document
 
+input('Press enter to upload...')
+
 payload = {
     'preUploadId': pre_upload.get('preUploadId'),
     'token': {

@@ -47,11 +47,7 @@
 		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
-		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
-		<property name="properties">
-			<ref bean="global-properties" />
-		</property>
 	</bean>
 
 </beans>
