@@ -94,12 +94,19 @@ public class MergeData extends AbstractWebScript {
             /////////////////////// Build response /////////////////////////
 
             Map<String, String> resp = new HashMap<>();
-            // TODO: remove magic keys/values
             resp.put("preUploadId", mergedDoc.getNodeRef().toString());
             resp.put("preUploadFilename", preUploadFilename);
-            resp.put("url", "https://alfrescoskabelon.magenta.dk/share/page/site/swsdp/onlyoffice-edit?nodeRef=" + mergedDoc.getNodeRef().toString());
+            resp.put("url",
+                    properties.getProperty("alfresco.protocol")
+                    + "://" + properties.getProperty("alfresco.host")
+                    + "/share/page/site/"
+                    + properties.getProperty("sbsys.template.site")
+                    + "/onlyoffice-edit?nodeRef="
+                    + mergedDoc.getNodeRef().toString()
+            );
 
             String json = RequestResponseHandler.serialize(resp);
+            logger.debug(json);
             RequestResponseHandler.writeWebscriptResponse(webScriptResponse, json);
 
         } catch (IOException e) {
