@@ -12,7 +12,7 @@ public class Person {
     private String Ansaettelsessted;
     private String Koen;
     private String CprNummer;
-    private Map<String, String> Adresse;
+    private Address Adresse;
     private int CivilstandId;
     private String MorCPR;
     private String FarCPR;
@@ -85,11 +85,11 @@ public class Person {
         CprNummer = cprNummer;
     }
 
-    public Map<String, String> getAdresse() {
+    public Address getAdresse() {
         return Adresse;
     }
 
-    public void setAdresse(Map<String, String> adresse) {
+    public void setAdresse(Address adresse) {
         Adresse = adresse;
     }
 
