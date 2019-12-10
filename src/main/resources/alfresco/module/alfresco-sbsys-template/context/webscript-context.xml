@@ -38,6 +38,9 @@
 		<property name="attributeService" ref="AttributeService" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
+		<property name="properties">
+			<ref bean="global-properties" />
+		</property>
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"

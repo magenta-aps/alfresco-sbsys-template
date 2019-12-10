@@ -111,7 +111,6 @@ public class HttpHandler {
                         return entity != null ? EntityUtils.toString(entity) : null;
                     } else {
                         logger.error("SBSYS Error");
-                        // TODO: close things
                         throw new AlfrescoRuntimeException("Got HTTP status " + status);
                     }
                 }

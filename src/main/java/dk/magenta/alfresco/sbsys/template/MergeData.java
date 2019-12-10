@@ -22,6 +22,7 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 
 public class MergeData extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeData.class);
@@ -29,6 +30,7 @@ public class MergeData extends AbstractWebScript {
     private AttributeService attributeService;
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
+    private Properties properties;
 
     private static final String TOKEN = "token";
     private static final String PREUPLOAD_FOLDER = "pre-upload";
@@ -46,9 +48,8 @@ public class MergeData extends AbstractWebScript {
             );
 
             // Call SBSYS to get case metadata
-            // TODO: fix hardcoded URL
             String response = HttpHandler.GET(
-                    "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/" + req.getKladde().get("SagID"),
+                    properties.getProperty("sbsys.template.url.get.case") + "/" + req.getKladde().get("SagID"),
                     req.getToken().get(TOKEN)
             );
             logger.debug(response);
@@ -57,7 +58,6 @@ public class MergeData extends AbstractWebScript {
             ///////////////////// Merge data into template ////////////////////////
 
             // Get InputStream for template document
-            // TODO: The NodeRef should be constructed in a better way
             InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.getId());
 
             // Get the pre-upload folder
@@ -124,5 +124,9 @@ public class MergeData extends AbstractWebScript {
 
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
         this.nodeRefUtil = nodeRefUtil;
+    }
+
+    public void setProperties(Properties properties) {
+        this.properties = properties;
     }
 }
