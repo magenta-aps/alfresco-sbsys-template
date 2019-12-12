@@ -97,12 +97,12 @@
         </dependency>
 
         <!-- Integration tests need httpcomponents to execute tests -->
-        <dependency>
+        <!--dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.2</version>
             <scope>test</scope>
-        </dependency>
+        </dependency-->
 
         <!-- https://mvnrepository.com/artifact/com.google.code.gson/gson -->
         <dependency>
@@ -115,13 +115,6 @@
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.9</version>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpmime</artifactId>
-            <version>4.5.9</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- For templating Word docs -->
