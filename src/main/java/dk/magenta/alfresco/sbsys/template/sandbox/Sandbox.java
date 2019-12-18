@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template.sandbox;
 
 import com.google.gson.Gson;
-import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
+import dk.magenta.alfresco.sbsys.template.json.Merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,7 +45,7 @@ public class Sandbox {
                 "  }\n" +
                 "}\n";
 
-                TemplateReceiver trm = gson.fromJson(post, TemplateReceiver.class);
+                Merge trm = gson.fromJson(post, Merge.class);
                 System.out.println("hurra");
     }
 }

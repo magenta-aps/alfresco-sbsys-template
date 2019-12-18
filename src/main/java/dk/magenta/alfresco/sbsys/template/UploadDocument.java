@@ -1,6 +1,6 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import dk.magenta.alfresco.sbsys.template.json.DocumentReceiver;
+import dk.magenta.alfresco.sbsys.template.json.Upload;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.attributes.AttributeService;
@@ -23,9 +23,9 @@ public class UploadDocument extends AbstractWebScript {
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
         try {
-            DocumentReceiver req = RequestResponseHandler.deserialize(
+            Upload req = RequestResponseHandler.deserialize(
                     webScriptRequest.getContent().getContent(),
-                    DocumentReceiver.class
+                    Upload.class
             );
 
             String sagId = (String) attributeService.getAttribute(req.getPreUploadId());

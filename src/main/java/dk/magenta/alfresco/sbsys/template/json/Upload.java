@@ -2,12 +2,12 @@ package dk.magenta.alfresco.sbsys.template.json;
 
 import java.util.Map;
 
-public class DocumentReceiver {
+public class Upload {
 
     private String preUploadId;
     private Map<String, String> token;
 
-    public DocumentReceiver(String preUploadId, Map<String, String> token) {
+    public Upload(String preUploadId, Map<String, String> token) {
         this.preUploadId = preUploadId;
         this.token = token;
     }

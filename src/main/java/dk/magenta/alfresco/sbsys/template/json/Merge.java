@@ -2,14 +2,14 @@ package dk.magenta.alfresco.sbsys.template.json;
 
 import java.util.Map;
 
-public class TemplateReceiver {
+public class Merge {
 
     private String id;
     private Map<String, String> kladde;
     private Map<String, String> urls;
     private Map<String, String> token;
 
-    public TemplateReceiver(String id, Map<String, String> kladde, Map<String, String> urls, Map<String, String> token) {
+    public Merge(String id, Map<String, String> kladde, Map<String, String> urls, Map<String, String> token) {
         this.id = id;
         this.kladde = kladde;
         this.urls = urls;

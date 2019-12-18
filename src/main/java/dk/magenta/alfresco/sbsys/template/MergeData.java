@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import dk.magenta.alfresco.sbsys.template.json.Case;
-import dk.magenta.alfresco.sbsys.template.json.TemplateReceiver;
+import dk.magenta.alfresco.sbsys.template.json.Merge;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
@@ -42,9 +42,9 @@ public class MergeData extends AbstractWebScript {
             ////////////////////////// Get request body ///////////////////////////
 
             // Get POSTed JSON as string from request and deserialize into POJO
-            TemplateReceiver req = RequestResponseHandler.deserialize(
+            Merge req = RequestResponseHandler.deserialize(
                     webScriptRequest.getContent().getContent(),
-                    TemplateReceiver.class
+                    Merge.class
             );
 
             // Call SBSYS to get case metadata
