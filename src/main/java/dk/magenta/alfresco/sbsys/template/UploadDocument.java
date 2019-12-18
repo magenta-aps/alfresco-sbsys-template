@@ -1,9 +1,11 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.json.Upload;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.attributes.AttributeService;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -52,6 +54,12 @@ public class UploadDocument extends AbstractWebScript {
 
             logger.debug("Final template document deleted");
 
+        } catch (JsonSyntaxException e) {
+            webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.getJsonSyntaxErrorMessage()
+            );
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());
