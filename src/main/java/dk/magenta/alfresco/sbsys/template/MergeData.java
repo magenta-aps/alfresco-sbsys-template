@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -8,6 +9,7 @@ import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.util.GUID;
+import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
@@ -98,17 +100,23 @@ public class MergeData extends AbstractWebScript {
             resp.put("preUploadFilename", preUploadFilename + ".docx");
             resp.put("url",
                     properties.getProperty("alfresco.protocol")
-                    + "://" + properties.getProperty("alfresco.host")
-                    + "/share/page/site/"
-                    + properties.getProperty("sbsys.template.site")
-                    + "/onlyoffice-edit?nodeRef="
-                    + mergedDoc.getNodeRef().toString()
+                            + "://" + properties.getProperty("alfresco.host")
+                            + "/share/page/site/"
+                            + properties.getProperty("sbsys.template.site")
+                            + "/onlyoffice-edit?nodeRef="
+                            + mergedDoc.getNodeRef().toString()
             );
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);
             RequestResponseHandler.writeWebscriptResponse(webScriptResponse, json);
 
+        } catch (JsonSyntaxException e) {
+            webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.getJsonSyntaxErrorMessage()
+            );
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());
