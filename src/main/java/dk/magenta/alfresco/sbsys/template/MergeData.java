@@ -49,7 +49,7 @@ public class MergeData extends AbstractWebScript {
 
             // Call SBSYS to get case metadata
             String response = HttpHandler.GET(
-                    properties.getProperty("sbsys.template.url.get.case") + "/" + req.getKladde().get("SagID"),
+                    properties.getProperty("sbsys.template.url.get.case") + "/" + req.getKladde().getSagID(),
                     req.getToken().get(TOKEN)
             );
             logger.debug(response);
@@ -89,7 +89,7 @@ public class MergeData extends AbstractWebScript {
 
             ///////////// Store caseId in the AttributeService /////////////
 
-            attributeService.createAttribute(req.getKladde().get("SagID"), mergedDoc.getNodeRef().toString());
+            attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString());
 
             /////////////////////// Build response /////////////////////////
 

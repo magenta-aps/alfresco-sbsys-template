@@ -5,11 +5,11 @@ import java.util.Map;
 public class Merge {
 
     private String id;
-    private Map<String, String> kladde;
+    private Draft kladde;
     private Map<String, String> urls;
     private Map<String, String> token;
 
-    public Merge(String id, Map<String, String> kladde, Map<String, String> urls, Map<String, String> token) {
+    public Merge(String id, Draft kladde, Map<String, String> urls, Map<String, String> token) {
         this.id = id;
         this.kladde = kladde;
         this.urls = urls;
@@ -24,11 +24,11 @@ public class Merge {
         this.id = id;
     }
 
-    public Map<String, String> getKladde() {
+    public Draft getKladde() {
         return kladde;
     }
 
-    public void setKladde(Map<String, String> kladde) {
+    public void setKladde(Draft kladde) {
         this.kladde = kladde;
     }
 
