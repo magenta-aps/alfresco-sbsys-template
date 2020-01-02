@@ -34,6 +34,8 @@ public class MergeData extends AbstractWebScript {
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
 
+    public static final String CASE_ID = "caseId";
+    public static final String DOCUMENT_NAME = "documentName";
     private static final String TOKEN = "token";
     private static final String PREUPLOAD_FOLDER = "pre-upload";
 
@@ -89,9 +91,10 @@ public class MergeData extends AbstractWebScript {
             inputStream.close();
             outputStream.close();
 
-            ///////////// Store caseId in the AttributeService /////////////
+            ///////////// Store caseId and document name in the AttributeService /////////////
 
-            attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString());
+            attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), CASE_ID);
+            attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), DOCUMENT_NAME);
 
             /////////////////////// Build response /////////////////////////
 
