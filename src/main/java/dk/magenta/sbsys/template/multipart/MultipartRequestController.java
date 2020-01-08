@@ -1,7 +1,6 @@
 package dk.magenta.sbsys.template.multipart;
 
 import java.io.IOException;
-import java.math.BigInteger;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -17,10 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,11 +32,12 @@ public class MultipartRequestController {
 
     private final Logger logger = LoggerFactory.getLogger(MultipartRequestController.class);
     private final String SUCCESS = "success";
+    private final String CRLF = "\r\n";
     @Value("${sbsys.endpoint}")
     private String sbsysEndpoint;
 
     @RequestMapping(path = "/multipart", method = RequestMethod.POST)
-    public Response request(@RequestBody Request body) {
+    public Response request(@RequestBody Request requestBody) {
 
         // SSL
         TrustManager[] trustAllCerts = {
@@ -78,20 +75,29 @@ public class MultipartRequestController {
                 .version(HttpClient.Version.HTTP_2)
                 .sslContext(sslContext)
                 .build();
-        String boundary = new BigInteger(256, new Random()).toString();
+        //String boundary = new BigInteger(256, new Random()).toString();
+        String boundary = getBoundary();
 
-        Path localFile = Paths.get(body.getContentStorePath());
-        Map<Object, Object> data = new LinkedHashMap<>();
-        data.put("json", buildJsonPart(body));
-        data.put("files", localFile);
+        Path localFile = Paths.get(requestBody.getContentStorePath());
+//        Map<Object, Object> data = new LinkedHashMap<>();
+//        data.put("json", buildJsonPart(requestBody));
+//        data.put("files", localFile);
 
-        logger.debug(buildJsonPart(body));
+        logger.debug(buildJsonPart(requestBody));
 
         try {
             HttpRequest request = HttpRequest.newBuilder()
-                    .header("Authorization", "Bearer " + body.getToken())
+                    .header("Authorization", "Bearer " + requestBody.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
-                    .POST(ofMimeMultipartData(data, boundary, body.getFilename(), body.getMimeType()))
+                    //.POST(buildMultipartBody(data, boundary, requestBody.getFilename(), requestBody.getMimeType()))
+                    .POST(buildMultipartBody(
+                            buildJsonPart(requestBody),
+                            localFile,
+                            boundary,
+                            requestBody.getFilename(),
+                            requestBody.getMimeType()
+                            )
+                    )
                     .uri(URI.create(sbsysEndpoint))
                     .build();
 
@@ -114,41 +120,82 @@ public class MultipartRequestController {
         return new Response(SUCCESS);
     }
 
-    private String buildJsonPart(Request body) {
+    private String buildJsonPart(Request requestBody) {
         // TODO: this could be handled better with Jackson
-        return new StringBuilder()
-                .append("{\"SagID\":")
-                .append(body.getCaseId())
-                .append(",\"Navn\":\"")
-                .append(body.getName())
-                .append("\"}")
-                .toString();
+        return "{\"SagID\":" +
+                requestBody.getCaseId() +
+                ",\"Navn\":\"" +
+                requestBody.getName() +
+                "\"}";
     }
 
-    private BodyPublisher ofMimeMultipartData(
-            Map<Object, Object> data,
+    private BodyPublisher buildMultipartBody(
+            String json,
+            Path path,
             String boundary,
             String filename,
             String mimeType) throws IOException {
 
-        var byteArrays = new ArrayList<byte[]>();
-        byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=").getBytes(StandardCharsets.UTF_8);
-        for (Map.Entry<Object, Object> entry : data.entrySet()) {
-            byteArrays.add(separator);
+        String jsonPart = "--" + boundary + CRLF +
+                "Content-Disposition: form-data; name=\"json\"" + CRLF +
+                CRLF +
+                json +
+                CRLF;
 
-            if (entry.getValue() instanceof Path) {
-                var path = (Path) entry.getValue();
-                // byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
-                byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + filename
-                        + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
-                byteArrays.add(Files.readAllBytes(path));
-                byteArrays.add("\r\n".getBytes(StandardCharsets.UTF_8));
-            } else {
-                byteArrays.add(("\"" + entry.getKey() + "\"\r\n\r\n" + entry.getValue() + "\r\n")
-                        .getBytes(StandardCharsets.UTF_8));
-            }
-        }
-        byteArrays.add(("--" + boundary + "--").getBytes(StandardCharsets.UTF_8));
+        String filePart = "--" + boundary + CRLF +
+                "Content-Disposition: form-data; name=\"files\"; filename=\"" + filename + "\"" + CRLF +
+                "Content-Type: " + mimeType + CRLF +
+                CRLF;
+
+        String end = "--" + boundary + "--" + CRLF;
+
+        List<byte[]> byteArrays = new ArrayList<byte[]>();
+        byteArrays.add(jsonPart.getBytes(StandardCharsets.UTF_8));
+        byteArrays.add(filePart.getBytes(StandardCharsets.UTF_8));
+        byteArrays.add(Files.readAllBytes(path));
+        byteArrays.add(CRLF.getBytes(StandardCharsets.UTF_8));
+        byteArrays.add(end.getBytes(StandardCharsets.UTF_8));
+
+//        byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=").getBytes(StandardCharsets.UTF_8);
+//        for (Map.Entry<Object, Object> entry : data.entrySet()) {
+//            byteArrays.add(separator);
+//
+//            if (entry.getValue() instanceof Path) {
+//                var path = (Path) entry.getValue();
+//                // byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
+//                byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + filename
+//                        + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
+//                byteArrays.add(Files.readAllBytes(path));
+//                byteArrays.add("\r\n".getBytes(StandardCharsets.UTF_8));
+//            } else {
+//                byteArrays.add(("\"" + entry.getKey() + "\"\r\n\r\n" + entry.getValue() + "\r\n")
+//                        .getBytes(StandardCharsets.UTF_8));
+//            }
+//        }
+//        byteArrays.add(("--" + boundary + "--").getBytes(StandardCharsets.UTF_8));
+        log(byteArrays);
         return BodyPublishers.ofByteArrays(byteArrays);
+    }
+
+    private String getBoundary() {
+        // No alphabet string constants in Java?
+        String alphabetLowerCase = "abcdefghijklmnopqrtsuvwxyz";
+        String alphabetLowerAndUpper = alphabetLowerCase + alphabetLowerCase.toUpperCase();
+        StringBuilder boundary = new StringBuilder("----WebKitFormBoundary");
+
+        Random random = new Random();
+        for (int i = 0; i < 16; i++) {
+            boundary.append(alphabetLowerAndUpper.charAt(random.nextInt(alphabetLowerAndUpper.length())));
+        }
+
+        return boundary.toString();
+    }
+
+    private void log(List<byte[]> byteArrays) {
+        logger.debug("Outputting byteArrays...");
+        for (byte[] byteArray : byteArrays) {
+            String s = new String(byteArray, StandardCharsets.UTF_8);
+            System.out.println(s);
+        }
     }
 }
