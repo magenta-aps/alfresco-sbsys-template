@@ -22,6 +22,8 @@ public class NodeRefUtil {
     private Properties properties;
     private SiteService siteService;
 
+    public static final String VERSION_LABEL = "versionLabel";
+
     private static final String CONTAINER = "documentLibrary";
     private static final String MIMETYPE_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private static final String SITE_PROPERTY = "sbsys.template.site";
@@ -75,6 +77,8 @@ public class NodeRefUtil {
         String mimeType = contentData.getMimetype();
 
         String contentStorePath = properties.get(CONTENT_STORE_PATH) + contentUrl.substring(7);
+
+        // TODO: fix magic values (keys below)
 
         Map<String, String> documentDetails = new HashMap<>();
         documentDetails.put("filename", filename);
