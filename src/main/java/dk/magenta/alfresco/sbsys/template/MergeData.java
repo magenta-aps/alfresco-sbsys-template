@@ -36,11 +36,13 @@ public class MergeData extends AbstractWebScript {
 
     public static final String CASE_ID = "caseId";
     public static final String DOCUMENT_NAME = "documentName";
-    private static final String TOKEN = "token";
+    public static final String TOKEN = "token";
     public static final String PREUPLOAD_FOLDER = "pre-upload";
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
+        logger.debug("Merge webscript called");
+
         try {
 
             ////////////////////////// Get request body ///////////////////////////
@@ -95,6 +97,9 @@ public class MergeData extends AbstractWebScript {
 
             attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), CASE_ID);
             attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), DOCUMENT_NAME);
+            attributeService.createAttribute(req.getToken().get(TOKEN).substring(0, 1024), mergedDoc.getNodeRef().toString(), TOKEN + "0");
+            attributeService.createAttribute(req.getToken().get(TOKEN).substring(1024, 2048), mergedDoc.getNodeRef().toString(), TOKEN + "1");
+            attributeService.createAttribute(req.getToken().get(TOKEN).substring(2048), mergedDoc.getNodeRef().toString(), TOKEN + "2");
 
             /////////////////////// Build response /////////////////////////
 
