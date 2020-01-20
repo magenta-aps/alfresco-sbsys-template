@@ -35,6 +35,7 @@ public class MultipartRequestController {
     private final String CRLF = "\r\n";
     @Value("${sbsys.endpoint}")
     private String sbsysEndpoint;
+    private int contentLength;
 
     @RequestMapping(path = "/multipart", method = RequestMethod.POST)
     public Response request(@RequestBody Request requestBody) {
@@ -86,21 +87,24 @@ public class MultipartRequestController {
         logger.debug(buildJsonPart(requestBody));
 
         try {
+
+            BodyPublisher body = buildMultipartBody(
+                    buildJsonPart(requestBody),
+                    localFile,
+                    boundary,
+                    requestBody.getFilename(),
+                    requestBody.getMimeType()
+            );
+
             HttpRequest request = HttpRequest.newBuilder()
                     .header("Authorization", "Bearer " + requestBody.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
                     //.POST(buildMultipartBody(data, boundary, requestBody.getFilename(), requestBody.getMimeType()))
-                    .POST(buildMultipartBody(
-                            buildJsonPart(requestBody),
-                            localFile,
-                            boundary,
-                            requestBody.getFilename(),
-                            requestBody.getMimeType()
-                            )
-                    )
+                    .POST(body)
                     .uri(URI.create(sbsysEndpoint))
                     .build();
 
+            // logHeaders(request);
             logger.info("Make multipart/form-data request to SBSYS server");
 
             HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -139,8 +143,7 @@ public class MultipartRequestController {
         String jsonPart = "--" + boundary + CRLF +
                 "Content-Disposition: form-data; name=\"json\"" + CRLF +
                 CRLF +
-                json +
-                CRLF;
+                json + CRLF;
 
         String filePart = "--" + boundary + CRLF +
                 "Content-Disposition: form-data; name=\"files\"; filename=\"" + filename + "\"" + CRLF +
@@ -173,7 +176,11 @@ public class MultipartRequestController {
 //            }
 //        }
 //        byteArrays.add(("--" + boundary + "--").getBytes(StandardCharsets.UTF_8));
-        log(byteArrays);
+
+        getContentLength(byteArrays);
+
+        // log(byteArrays);
+
         return BodyPublishers.ofByteArrays(byteArrays);
     }
 
@@ -193,9 +200,30 @@ public class MultipartRequestController {
 
     private void log(List<byte[]> byteArrays) {
         logger.debug("Outputting byteArrays...");
+        int length = 0;
         for (byte[] byteArray : byteArrays) {
             String s = new String(byteArray, StandardCharsets.UTF_8);
             System.out.println(s);
+
+            length += byteArray.length;
         }
+        logger.debug(Integer.toString(length));
+    }
+
+    private void logHeaders(HttpRequest request) {
+        logger.debug("Logging headers (START)...");
+        var map = request.headers().map();
+        for (var key : map.keySet()) {
+            logger.debug(key, map.get(key));
+        }
+        logger.debug("Logging headers (END)...");
+    }
+
+    private int getContentLength(List<byte[]> byteArrays) {
+        int contentLength = byteArrays.stream()
+                .map(b -> b.length)
+                .reduce(0, Integer::sum);
+        this.contentLength = contentLength;
+        return contentLength;
     }
 }
