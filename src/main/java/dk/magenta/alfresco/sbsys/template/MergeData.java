@@ -37,7 +37,7 @@ public class MergeData extends AbstractWebScript {
     public static final String CASE_ID = "caseId";
     public static final String DOCUMENT_NAME = "documentName";
     private static final String TOKEN = "token";
-    private static final String PREUPLOAD_FOLDER = "pre-upload";
+    public static final String PREUPLOAD_FOLDER = "pre-upload";
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {

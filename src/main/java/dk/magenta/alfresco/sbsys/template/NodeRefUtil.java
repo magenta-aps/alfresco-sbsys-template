@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import dk.magenta.alfresco.sbsys.template.behavior.SbsysUploadBehavior;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
@@ -7,15 +8,17 @@ import org.alfresco.repo.domain.node.ContentDataWithId;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
+import org.alfresco.service.cmr.version.Version;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class NodeRefUtil {
+
+    private static Log logger = LogFactory.getLog(NodeRefUtil.class);
 
     private ContentService contentService;
     private NodeService nodeService;
@@ -82,6 +85,28 @@ public class NodeRefUtil {
         documentDetails.put("contentStorePath", contentStorePath);
 
         return documentDetails;
+    }
+
+    public boolean shouldDocumentBeUploaded(NodeRef nodeRef, Version version) {
+        logger.debug("Version = " + version.getVersionLabel());
+
+        if (!version.getVersionLabel().equals("1.1")) {
+            return false;
+        }
+
+        List<ChildAssociationRef> parentAssocs = nodeService.getParentAssocs(nodeRef);
+        if (parentAssocs.size() != 1) {
+            return false;
+        }
+
+        ChildAssociationRef parentAssoc = parentAssocs.get(0);
+        NodeRef parent = parentAssoc.getParentRef();
+        String name = (String) nodeService.getProperty(parent, ContentModel.PROP_NAME);
+        if (name.equals(MergeData.PREUPLOAD_FOLDER)) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
