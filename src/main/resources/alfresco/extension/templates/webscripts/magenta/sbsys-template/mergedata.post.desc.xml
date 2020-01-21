@@ -4,5 +4,6 @@
     <url>/template/merge</url>
     <authentication>user</authentication>
     <format default="json"></format>
+    <transaction>required</transaction>
     <!--lifecycle>sample</lifecycle-->
 </webscript>

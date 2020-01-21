@@ -81,6 +81,9 @@ public class MergeData extends AbstractWebScript {
                     ContentModel.TYPE_CONTENT
             );
 
+            // Add versionable aspect
+            nodeRefUtil.setVersionableAspect(mergedDoc.getNodeRef());
+
             // Set the date
             sbsysCase.setDato(nodeRefUtil.getNodeRefCreationDate(mergedDoc));
 

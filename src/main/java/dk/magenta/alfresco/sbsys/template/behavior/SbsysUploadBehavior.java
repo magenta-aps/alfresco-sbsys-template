@@ -52,12 +52,16 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
             String sagId = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.CASE_ID);
             String documentName = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
             logger.debug("Get token...");
-            String token = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN);
+            String token0 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
+            String token1 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
+            String token2 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
+            String token = token0 + token1 + token2;
             logger.debug("Got token...");
             Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(versionableNode.toString());
 
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
-            // separate service that in turn will perform the actual multipart/form-data request
+            // separate service (Java 11) that in turn will perform the actual multipart/form-data request.
+            // The reason for this is that the Java 8 HTTP libs cannot perform HTTP/2 requests
 
             MultipartRequest multipartRequest = new MultipartRequest(
                     Integer.parseInt(sagId),

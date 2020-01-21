@@ -9,11 +9,13 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.version.Version;
+import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.Serializable;
 import java.util.*;
 
 public class NodeRefUtil {
@@ -85,6 +87,12 @@ public class NodeRefUtil {
         documentDetails.put("contentStorePath", contentStorePath);
 
         return documentDetails;
+    }
+
+    public void setVersionableAspect(NodeRef nodeRef) {
+        Map<QName, Serializable> properties = new HashMap<>();
+        properties.put(ContentModel.PROP_VERSION_LABEL, "1.0");
+        nodeService.addAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE, properties);
     }
 
     public boolean shouldDocumentBeUploaded(NodeRef nodeRef, Version version) {
