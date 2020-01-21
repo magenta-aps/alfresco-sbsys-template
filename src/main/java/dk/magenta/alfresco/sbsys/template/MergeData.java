@@ -100,6 +100,8 @@ public class MergeData extends AbstractWebScript {
 
             attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), CASE_ID);
             attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), DOCUMENT_NAME);
+
+            // The full length of the token cannot be stored in one go since it is too long
             attributeService.createAttribute(req.getToken().get(TOKEN).substring(0, 1024), mergedDoc.getNodeRef().toString(), TOKEN + "0");
             attributeService.createAttribute(req.getToken().get(TOKEN).substring(1024, 2048), mergedDoc.getNodeRef().toString(), TOKEN + "1");
             attributeService.createAttribute(req.getToken().get(TOKEN).substring(2048), mergedDoc.getNodeRef().toString(), TOKEN + "2");
