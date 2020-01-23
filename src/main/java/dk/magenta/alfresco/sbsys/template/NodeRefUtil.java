@@ -1,6 +1,5 @@
 package dk.magenta.alfresco.sbsys.template;
 
-import dk.magenta.alfresco.sbsys.template.behavior.SbsysUploadBehavior;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;

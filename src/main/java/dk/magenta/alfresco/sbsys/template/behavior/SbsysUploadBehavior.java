@@ -8,6 +8,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.policy.Behaviour;
 import org.alfresco.repo.policy.JavaBehaviour;
 import org.alfresco.repo.policy.PolicyComponent;
+import org.alfresco.repo.security.authentication.AuthenticationUtil;
 import org.alfresco.repo.version.VersionServicePolicies;
 import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.repository.NodeRef;
@@ -40,51 +41,56 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
 
     @Override
     public void afterCreateVersion(NodeRef versionableNode, Version version) {
-        logger.debug("Called behavior");
+        logger.debug("Called SBSYS upload behavior");
 
-        boolean shouldUpload = nodeRefUtil.shouldDocumentBeUploaded(versionableNode, version);
-        logger.debug("shouldUpload = " + shouldUpload);
+        AuthenticationUtil.runAs((AuthenticationUtil.RunAsWork<Void>) () -> {
+            boolean shouldUpload = nodeRefUtil.shouldDocumentBeUploaded(versionableNode, version);
+            logger.debug("shouldUpload = " + shouldUpload);
 
-        if (shouldUpload) {
+            if (shouldUpload) {
 
-            logger.debug("versionalbleNode.toString() = " + versionableNode.toString());
+                logger.debug("versionalbleNode.toString() = " + versionableNode.toString());
 
-            String sagId = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.CASE_ID);
-            String documentName = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
-            logger.debug("Get token...");
-            String token0 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
-            String token1 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
-            String token2 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
-            String token = token0 + token1 + token2;
-            logger.debug("Got token...");
-            Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(versionableNode.toString());
+                String sagId = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.CASE_ID);
+                String documentName = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
+                logger.debug("Get token...");
+                String token0 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
+                String token1 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
+                String token2 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
+                String token = token0 + token1 + token2;
+                logger.debug("Got token...");
+                Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(versionableNode.toString());
 
-            // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
-            // separate service (Java 11) that in turn will perform the actual multipart/form-data request.
-            // The reason for this is that the Java 8 HTTP libs cannot perform HTTP/2 requests
+                // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
+                // separate service (Java 11) that in turn will perform the actual multipart/form-data request.
+                // The reason for this is that the Java 8 HTTP libs cannot perform HTTP/2 requests
 
-            MultipartRequest multipartRequest = new MultipartRequest(
-                    Integer.parseInt(sagId),
-                    documentName,
-                    documentDetails.get("filename"),
-                    documentDetails.get("mimeType"),
-                    token,
-                    documentDetails.get("contentStorePath")
-            );
+                MultipartRequest multipartRequest = new MultipartRequest(
+                        Integer.parseInt(sagId),
+                        documentName,
+                        documentDetails.get("filename"),
+                        documentDetails.get("mimeType"),
+                        token,
+                        documentDetails.get("contentStorePath")
+                );
 
-            String response = HttpHandler.POST_MULTIPART(multipartRequest);
+                String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
-            logger.debug("Document uploaded");
+                logger.debug("Document uploaded");
 
-            nodeRefUtil.deleteNode(versionableNode.toString());
-            attributeService.removeAttribute(versionableNode.toString(), MergeData.CASE_ID);
-            attributeService.removeAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
-            attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
-            attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
-            attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "3");
+                nodeRefUtil.deleteNode(versionableNode.toString());
+                attributeService.removeAttribute(versionableNode.toString(), MergeData.CASE_ID);
+                attributeService.removeAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
+                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
+                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
+                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
 
-            logger.debug("Final template document deleted");
-        }
+                logger.debug("Final template document deleted");
+            }
+
+            return null;
+
+        }, "admin");
     }
 
     public void setAttributeService(AttributeService attributeService) {
