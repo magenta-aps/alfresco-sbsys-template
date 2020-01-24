@@ -27,10 +27,11 @@ public class HttpHandler {
 
     private static Log logger = LogFactory.getLog(HttpHandler.class);
     private static CloseableHttpClient httpClient;
-    private static ResponseHandler<String> responseHandler;
 
     private static final String AUTHORIZATION = "Authorization";
     private static final String URL_MULTIPART_FORM_DATA_REQUESTER = "http://localhost:8081/multipart";
+
+    // TODO: condense the two methods below into one
 
     public static InputStream GET_CONTENT(String url, String token) {
 
@@ -40,9 +41,7 @@ public class HttpHandler {
         httpGet.addHeader(AUTHORIZATION, "Bearer " + token);
         logger.debug(httpGet.toString());
 
-
-
-        return null;
+        return executeAndClose(httpGet, getInputStreamResponseHandler(), "GET " + url);
     }
 
     /**
@@ -105,7 +104,7 @@ public class HttpHandler {
                 logger.debug(logMessage);
                 return httpClient.execute(request, responseHandler);
             } finally {
-                httpClient.close();
+                // httpClient.close();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,22 +112,35 @@ public class HttpHandler {
         }
     }
 
+    private static ResponseHandler<InputStream> getInputStreamResponseHandler() {
+        ResponseHandler<InputStream> responseHandler = response -> {
+            int status = response.getStatusLine().getStatusCode();
+            logger.debug("HTTP status: " + status);
+
+            if (status >= 200 && status < 300) {
+                HttpEntity entity = response.getEntity();
+                return entity != null ? entity.getContent() : null;
+            } else {
+                logger.error("SBSYS Error");
+                throw new AlfrescoRuntimeException("Got HTTP status " + status);
+            }
+        };
+        return responseHandler;
+    }
+
     private static ResponseHandler<String> getStringResponseHandler() {
-        if (responseHandler == null) {
-            responseHandler = response -> {
-                int status = response.getStatusLine().getStatusCode();
+        ResponseHandler<String> responseHandler = response -> {
+            int status = response.getStatusLine().getStatusCode();
+            logger.debug("HTTP status: " + status);
 
-                logger.debug("HTTP status: " + status);
-
-                if (status >= 200 && status < 300) {
-                    HttpEntity entity = response.getEntity();
-                    return entity != null ? EntityUtils.toString(entity) : null;
-                } else {
-                    logger.error("SBSYS Error");
-                    throw new AlfrescoRuntimeException("Got HTTP status " + status);
-                }
-            };
-        }
+            if (status >= 200 && status < 300) {
+                HttpEntity entity = response.getEntity();
+                return entity != null ? EntityUtils.toString(entity) : null;
+            } else {
+                logger.error("SBSYS Error");
+                throw new AlfrescoRuntimeException("Got HTTP status " + status);
+            }
+        };
         return responseHandler;
     }
 

@@ -1,0 +1,12 @@
+{
+  "filnavn": "test.docx",
+  "kladdeID": 1480,
+  "token": {
+    "refreshToken": "eyJhbGciOiJSUzI1NiIs...nXM4Yd5hg",
+    "token": "token",
+    "exp": 1558515632,
+    "refreshurl": "https://<server:port>/auth/realms/sbsip/protocol/openid-connect/token",
+    "refreshuser": "username",
+    "refreshpwd": "pwd"
+  }
+}

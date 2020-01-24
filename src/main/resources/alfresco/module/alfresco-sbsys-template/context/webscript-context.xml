@@ -43,6 +43,17 @@
 		</property>
 	</bean>
 
+	<bean id="webscript.magenta.sbsys-template.preview.post"
+		  class="dk.magenta.alfresco.sbsys.template.Preview"
+		  parent="webscript">
+		<property name="contentService" ref="ContentService" />
+		<property name="fileFolderService" ref="FileFolderService" />
+		<property name="nodeRefUtil" ref="NodeRefUtil" />
+		<property name="properties">
+			<ref bean="global-properties" />
+		</property>
+	</bean>
+
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
 		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"
 		  parent="webscript">
