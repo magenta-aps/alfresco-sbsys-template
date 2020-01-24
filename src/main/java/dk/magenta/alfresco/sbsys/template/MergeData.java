@@ -54,7 +54,7 @@ public class MergeData extends AbstractWebScript {
             );
 
             // Call SBSYS to get case metadata
-            String response = HttpHandler.GET(
+            String response = HttpHandler.GET_JSON(
                     properties.getProperty("sbsys.template.url.get.case") + "/" + req.getKladde().getSagID(),
                     req.getToken().get(TOKEN)
             );

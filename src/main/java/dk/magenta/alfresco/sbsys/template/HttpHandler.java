@@ -5,8 +5,6 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -21,6 +19,7 @@ import org.apache.http.util.EntityUtils;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import java.io.IOException;
+import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
@@ -33,13 +32,7 @@ public class HttpHandler {
     private static final String AUTHORIZATION = "Authorization";
     private static final String URL_MULTIPART_FORM_DATA_REQUESTER = "http://localhost:8081/multipart";
 
-    /**
-     * Make a HTTPS GET request
-     * @param url The SBSYS URL to call
-     * @param token The bearer auth token
-     * @return The HTTP body of the response
-     */
-    public static String GET(String url, String token) {
+    public static InputStream GET_CONTENT(String url, String token) {
 
         httpClient = getCloseableHttpClient();
 
@@ -47,7 +40,26 @@ public class HttpHandler {
         httpGet.addHeader(AUTHORIZATION, "Bearer " + token);
         logger.debug(httpGet.toString());
 
-        return executeAndClose(httpGet, "GET " + url);
+
+
+        return null;
+    }
+
+    /**
+     * Make a HTTPS GET request
+     * @param url The SBSYS URL to call
+     * @param token The bearer auth token
+     * @return The HTTP JSON body of the response
+     */
+    public static String GET_JSON(String url, String token) {
+
+        httpClient = getCloseableHttpClient();
+
+        HttpGet httpGet = new HttpGet(url);
+        httpGet.addHeader(AUTHORIZATION, "Bearer " + token);
+        logger.debug(httpGet.toString());
+
+        return executeAndClose(httpGet, getStringResponseHandler(), "GET " + url);
     }
 
     /**
@@ -66,7 +78,11 @@ public class HttpHandler {
         );
 
         httpPost.setEntity(httpEntity);
-        return executeAndClose(httpPost, "POST (multipart) " + URL_MULTIPART_FORM_DATA_REQUESTER);
+        return executeAndClose(
+                httpPost,
+                getStringResponseHandler(),
+                "POST (multipart) " + URL_MULTIPART_FORM_DATA_REQUESTER
+        );
     }
 
     private static CloseableHttpClient getCloseableHttpClient() {
@@ -83,11 +99,11 @@ public class HttpHandler {
         }
     }
 
-    private static String executeAndClose(HttpUriRequest request, String logMessage) {
+    private static <T> T executeAndClose(HttpUriRequest request, ResponseHandler<T> responseHandler, String logMessage) {
         try {
             try {
                 logger.debug(logMessage);
-                return httpClient.execute(request, getResponseHandler());
+                return httpClient.execute(request, responseHandler);
             } finally {
                 httpClient.close();
             }
@@ -97,22 +113,19 @@ public class HttpHandler {
         }
     }
 
-    private static ResponseHandler<String> getResponseHandler() {
+    private static ResponseHandler<String> getStringResponseHandler() {
         if (responseHandler == null) {
-            responseHandler = new ResponseHandler<String>() {
-                @Override
-                public String handleResponse(HttpResponse response) throws ClientProtocolException, IOException {
-                    int status = response.getStatusLine().getStatusCode();
+            responseHandler = response -> {
+                int status = response.getStatusLine().getStatusCode();
 
-                    logger.debug("HTTP status: " + status);
+                logger.debug("HTTP status: " + status);
 
-                    if (status >= 200 && status < 300) {
-                        HttpEntity entity = response.getEntity();
-                        return entity != null ? EntityUtils.toString(entity) : null;
-                    } else {
-                        logger.error("SBSYS Error");
-                        throw new AlfrescoRuntimeException("Got HTTP status " + status);
-                    }
+                if (status >= 200 && status < 300) {
+                    HttpEntity entity = response.getEntity();
+                    return entity != null ? EntityUtils.toString(entity) : null;
+                } else {
+                    logger.error("SBSYS Error");
+                    throw new AlfrescoRuntimeException("Got HTTP status " + status);
                 }
             };
         }
