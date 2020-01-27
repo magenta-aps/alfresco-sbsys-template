@@ -14,6 +14,8 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -43,10 +45,12 @@ public class Preview extends AbstractWebScript {
             );
 
             // Get content InputStream from SBSYS
-            InputStream content = HttpHandler.GET_CONTENT(
+            byte[] content = HttpHandler.GET_CONTENT(
                     String.format(properties.getProperty("sbsys.template.url.get.draft"), req.getKladdeID()),
                     req.getToken().get(MergeData.TOKEN)
             );
+            logger.debug("content.length: " + content.length);
+            InputStream in = new ByteArrayInputStream(content);
 
             // TODO: refactor common code with MergeData webscript
 
@@ -66,14 +70,14 @@ public class Preview extends AbstractWebScript {
             );
 
             ContentWriter writer = contentService.getWriter(
-                    preview.getNodeRef(),
+                    previewDoc.getNodeRef(),
                     ContentModel.PROP_CONTENT,
                     true
             );
+            writer.putContent(in);
             writer.guessMimetype(req.getFilnavn());
-            writer.putContent(content);
 
-            content.close();
+            // in.close(); // Not necessary for ByteArrayInputStream
 
             // Make response
 

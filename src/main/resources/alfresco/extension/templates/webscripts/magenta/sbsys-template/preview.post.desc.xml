@@ -4,5 +4,6 @@
     <url>/preview-draft</url>
     <authentication>user</authentication>
     <format default="json"></format>
+    <transaction>required</transaction>
     <!--lifecycle>sample</lifecycle-->
 </webscript>

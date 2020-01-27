@@ -19,7 +19,6 @@ import org.apache.http.util.EntityUtils;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.TrustManager;
 import java.io.IOException;
-import java.io.InputStream;
 import java.security.GeneralSecurityException;
 import java.security.SecureRandom;
 
@@ -33,7 +32,7 @@ public class HttpHandler {
 
     // TODO: condense the two methods below into one
 
-    public static InputStream GET_CONTENT(String url, String token) {
+    public static byte[] GET_CONTENT(String url, String token) {
 
         httpClient = getCloseableHttpClient();
 
@@ -112,14 +111,16 @@ public class HttpHandler {
         }
     }
 
-    private static ResponseHandler<InputStream> getInputStreamResponseHandler() {
-        ResponseHandler<InputStream> responseHandler = response -> {
+    // TODO: condense the two methods below
+
+    private static ResponseHandler<byte[]> getInputStreamResponseHandler() {
+        ResponseHandler<byte[]> responseHandler = response -> {
             int status = response.getStatusLine().getStatusCode();
             logger.debug("HTTP status: " + status);
 
             if (status >= 200 && status < 300) {
                 HttpEntity entity = response.getEntity();
-                return entity != null ? entity.getContent() : null;
+                return entity != null ? EntityUtils.toByteArray(entity) : null;
             } else {
                 logger.error("SBSYS Error");
                 throw new AlfrescoRuntimeException("Got HTTP status " + status);
