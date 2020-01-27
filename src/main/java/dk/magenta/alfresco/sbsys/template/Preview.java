@@ -7,6 +7,7 @@ import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
+import org.alfresco.service.cmr.repository.MimetypeService;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -14,7 +15,6 @@ import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -28,10 +28,12 @@ public class Preview extends AbstractWebScript {
 
     private ContentService contentService;
     private FileFolderService fileFolderService;
+    private MimetypeService mimetypeService;
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
 
     public static final String PREVIEW_FOLDER = "preview";
+    private static final int STREAM_MARK_BUFFER = 1000;
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
@@ -49,8 +51,12 @@ public class Preview extends AbstractWebScript {
                     String.format(properties.getProperty("sbsys.template.url.get.draft"), req.getKladdeID()),
                     req.getToken().get(MergeData.TOKEN)
             );
-            logger.debug("content.length: " + content.length);
             InputStream in = new ByteArrayInputStream(content);
+
+            // Guess the content mimetype
+            in.mark(STREAM_MARK_BUFFER);
+            String mimetypeGuess = mimetypeService.guessMimetype(req.getFilnavn(), in);
+            in.reset();
 
             // TODO: refactor common code with MergeData webscript
 
@@ -74,8 +80,8 @@ public class Preview extends AbstractWebScript {
                     ContentModel.PROP_CONTENT,
                     true
             );
+            writer.setMimetype(mimetypeGuess);
             writer.putContent(in);
-            writer.guessMimetype(req.getFilnavn());
 
             // in.close(); // Not necessary for ByteArrayInputStream
 
@@ -103,6 +109,10 @@ public class Preview extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
+    }
+
+    public void setMimetypeService(MimetypeService mimetypeService) {
+        this.mimetypeService = mimetypeService;
     }
 
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
