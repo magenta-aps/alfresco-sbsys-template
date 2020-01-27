@@ -8,6 +8,7 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.MimetypeService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -88,7 +89,7 @@ public class Preview extends AbstractWebScript {
             // Make response
 
             Map<String, String> resp = new HashMap<>();
-            resp.put("msg", "success");
+            resp.put("url", getPreviewUrl(previewDoc.getNodeRef()));
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);
@@ -101,6 +102,14 @@ public class Preview extends AbstractWebScript {
                     RequestResponseHandler.getJsonSyntaxErrorMessage()
             );
         }
+    }
+
+    private String getPreviewUrl(NodeRef nodeRef) {
+        return properties.getProperty("alfresco.protocol") +
+                "://" +
+                properties.getProperty("alfresco.host") +
+                "/share/page/iframe-preview?nodeRef=" +
+                nodeRef.toString();
     }
 
     public void setContentService(ContentService contentService) {
