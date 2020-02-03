@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 
 import java.util.Map;
 
+@Deprecated
 public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVersionPolicy {
 
     private static Log logger = LogFactory.getLog(SbsysUploadBehavior.class);
