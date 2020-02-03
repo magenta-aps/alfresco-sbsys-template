@@ -121,7 +121,7 @@ public class PreviewAndEdit extends AbstractWebScript {
             return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
         } else if (operation.equals("edit")) {
             return commonUrl + "/site/" + properties.getProperty("sbsys.template.site") +
-                    "onlyoffice-edit?nodeRef=" + nodeRef.toString();
+                    "/onlyoffice-edit?nodeRef=" + nodeRef.toString();
         } else {
             // Should never happen
             return null;
