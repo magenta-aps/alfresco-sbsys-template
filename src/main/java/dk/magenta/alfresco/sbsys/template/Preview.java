@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.MimetypeService;
 import org.alfresco.service.cmr.repository.NodeRef;
+import org.alfresco.util.GUID;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -33,6 +34,7 @@ public class Preview extends AbstractWebScript {
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
 
+    private static final String FILDOWNLOAD = "fildownload";
     public static final String PREVIEW_FOLDER = "preview";
     private static final int STREAM_MARK_BUFFER = 1000;
 
@@ -49,14 +51,14 @@ public class Preview extends AbstractWebScript {
 
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
-                    String.format(properties.getProperty("sbsys.template.url.get.draft"), req.getKladdeID()),
+                    req.getUrls().get(FILDOWNLOAD),
                     req.getToken().get(MergeData.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
 
             // Guess the content mimetype
             in.mark(STREAM_MARK_BUFFER);
-            String mimetypeGuess = mimetypeService.guessMimetype(req.getFilnavn(), in);
+            String mimetypeGuess = mimetypeService.guessMimetype("unknown", in);
             in.reset();
 
             // TODO: refactor common code with MergeData webscript
@@ -70,9 +72,10 @@ public class Preview extends AbstractWebScript {
 
             // Create document in Alfresco
 
+            String previewFilename = GUID.generate();
             FileInfo previewDoc = fileFolderService.create(
                     preview.getNodeRef(),
-                    req.getFilnavn(),
+                    previewFilename,
                     ContentModel.TYPE_CONTENT
             );
 

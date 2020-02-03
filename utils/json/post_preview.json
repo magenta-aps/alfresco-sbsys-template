@@ -1,6 +1,7 @@
 {
-  "filnavn": "test.docx",
-  "kladdeID": 1480,
+  "urls": {
+    "fildownload": "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde/1501/readonly/1"
+  },
   "token": {
     "refreshToken": "eyJhbGciOiJSUzI1NiIs...nXM4Yd5hg",
     "token": "token",

@@ -5,7 +5,7 @@ from requests.auth import HTTPBasicAuth
 from get_token import add_token
 from get_token import get_token
 
-ALF_PREVIEW_DRAFT = 'http://localhost:8080/alfresco/s/preview-draft'
+ALF_PREVIEW_DRAFT = 'http://localhost:8080/alfresco/s/template/draft/preview'
 
 admin_basic_auth = HTTPBasicAuth('admin', 'admin')
 

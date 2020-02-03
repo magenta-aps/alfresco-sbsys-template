@@ -4,30 +4,12 @@ import java.util.Map;
 
 public class PreviewRequest {
 
-    private String filnavn;
-    private String kladdeID;
     private Map<String, String> token;
+    private Map<String, String> urls;
 
-    public PreviewRequest(String filnavn, String kladdeID, Map<String, String> token) {
-        this.filnavn = filnavn;
-        this.kladdeID = kladdeID;
+    public PreviewRequest(Map<String, String> token, Map<String, String> urls) {
         this.token = token;
-    }
-
-    public String getKladdeID() {
-        return kladdeID;
-    }
-
-    public void setFilnavn(String filnavn) {
-        this.filnavn = filnavn;
-    }
-
-    public String getFilnavn() {
-        return filnavn;
-    }
-
-    public void setKladdeID(String kladdeID) {
-        this.kladdeID = kladdeID;
+        this.urls = urls;
     }
 
     public Map<String, String> getToken() {
@@ -36,5 +18,13 @@ public class PreviewRequest {
 
     public void setToken(Map<String, String> token) {
         this.token = token;
+    }
+
+    public Map<String, String> getUrls() {
+        return urls;
+    }
+
+    public void setUrls(Map<String, String> urls) {
+        this.urls = urls;
     }
 }
