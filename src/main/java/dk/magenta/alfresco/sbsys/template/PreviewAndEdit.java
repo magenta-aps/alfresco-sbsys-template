@@ -61,6 +61,7 @@ public class PreviewAndEdit extends AbstractWebScript {
                     req.getToken().get(MergeData.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
+            logger.debug("fildownload: " + req.getUrls().get(FILDOWNLOAD));
 
             // Guess the content mimetype
             in.mark(STREAM_MARK_BUFFER);
@@ -119,7 +120,7 @@ public class PreviewAndEdit extends AbstractWebScript {
     public Map<String, String> getEditingFileLocationData(NodeRef nodeRef, String filename, String operation) {
         Map<String, String> map = new HashMap<>();
         map.put("preUploadId", nodeRef.toString());
-        map.put("preUploadFilename", filename + ".docx");
+        map.put("preUploadFilename", filename);
         map.put("url", getUrl(operation, nodeRef));
         return map;
     }
