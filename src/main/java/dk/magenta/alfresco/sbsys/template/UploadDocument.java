@@ -56,6 +56,8 @@ public class UploadDocument extends AbstractWebScript {
 
             logger.debug("Final template document deleted");
 
+            RequestResponseHandler.writeWebscriptResponse(webScriptResponse, "{\"msg\":\"success\"}");
+
         } catch (JsonSyntaxException e) {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
