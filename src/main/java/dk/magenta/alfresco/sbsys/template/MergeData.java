@@ -21,7 +21,6 @@ import org.wickedsource.docxstamper.DocxStamperConfiguration;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -32,6 +31,7 @@ public class MergeData extends AbstractWebScript {
     private AttributeService attributeService;
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;
+    private PreviewAndEdit previewAndEdit;
     private Properties properties;
 
     public static final String CASE_ID = "caseId";
@@ -103,17 +103,10 @@ public class MergeData extends AbstractWebScript {
 
             /////////////////////// Build response /////////////////////////
 
-            Map<String, String> resp = new HashMap<>();
-            resp.put("preUploadId", mergedDoc.getNodeRef().toString());
-            resp.put("preUploadFilename", preUploadFilename + ".docx");
-            resp.put("url",
-                    properties.getProperty("alfresco.protocol")
-                            + "://" + properties.getProperty("alfresco.host")
-                            + "/share/page/site/"
-                            + properties.getProperty("sbsys.template.site")
-                            + "/onlyoffice-edit?nodeRef="
-                            + mergedDoc.getNodeRef().toString()
-            );
+            Map<String, String> resp = previewAndEdit.getEditingFileLocationData(
+                    mergedDoc.getNodeRef(),
+                    preUploadFilename + ".docx",
+                    PreviewAndEdit.EDIT);
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);
@@ -147,6 +140,10 @@ public class MergeData extends AbstractWebScript {
 
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
         this.nodeRefUtil = nodeRefUtil;
+    }
+
+    public void setPreviewAndEdit(PreviewAndEdit previewAndEdit) {
+        this.previewAndEdit = previewAndEdit;
     }
 
     public void setProperties(Properties properties) {

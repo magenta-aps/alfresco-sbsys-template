@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.JsonSyntaxException;
-import dk.magenta.alfresco.sbsys.template.json.PreviewOrEditRequest;
+import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -36,6 +36,8 @@ public class PreviewAndEdit extends AbstractWebScript {
 
     private static final String FILDOWNLOAD = "fildownload";
     private static final String OPERATION = "operation";
+    public static final String PREVIEW = "preview";
+    public static final String EDIT = "edit";
     private static final int STREAM_MARK_BUFFER = 1000;
 
     @Override
@@ -48,9 +50,9 @@ public class PreviewAndEdit extends AbstractWebScript {
         try {
 
             // Get POSTed JSON as string from request and deserialize into POJO
-            PreviewOrEditRequest req = RequestResponseHandler.deserialize(
+            UrlsAndTokenRequest req = RequestResponseHandler.deserialize(
                     webScriptRequest.getContent().getContent(),
-                    PreviewOrEditRequest.class
+                    UrlsAndTokenRequest.class
             );
 
             // Get content InputStream from SBSYS
@@ -95,8 +97,11 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // Make response
 
-            Map<String, String> resp = new HashMap<>();
-            resp.put("url", getUrl(operation, previewDoc.getNodeRef()));
+            Map<String, String> resp = getEditingFileLocationData(
+                    previewDoc.getNodeRef(),
+                    previewFilename + ".docx",
+                    operation
+            );
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);
@@ -111,16 +116,28 @@ public class PreviewAndEdit extends AbstractWebScript {
         }
     }
 
+    public Map<String, String> getEditingFileLocationData(NodeRef nodeRef, String filename, String operation) {
+        Map<String, String> map = new HashMap<>();
+        map.put("preUploadId", nodeRef.toString());
+        map.put("preUploadFilename", filename + ".docx");
+        map.put("url", getUrl(operation, nodeRef));
+        return map;
+    }
+
     private String getUrl(String operation, NodeRef nodeRef) {
         // TODO: do not handle variability parametric
 
-        String commonUrl = properties.getProperty("alfresco.protocol") + "://" +
-                properties.getProperty("alfresco.host") + "/share/page";
+        String commonUrl = properties.getProperty("alfresco.protocol") +
+                "://" +
+                properties.getProperty("alfresco.host") +
+                "/share/page";
 
-        if (operation.equals("preview")) {
+        if (operation.equals(PREVIEW)) {
             return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
-        } else if (operation.equals("edit")) {
-            return commonUrl + "/site/" + properties.getProperty("sbsys.template.site") +
+        } else if (operation.equals(EDIT)) {
+            return commonUrl +
+                    "/site/" +
+                    properties.getProperty("sbsys.template.site") +
                     "/onlyoffice-edit?nodeRef=" + nodeRef.toString();
         } else {
             // Should never happen

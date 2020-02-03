@@ -4,13 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>dk.magenta.alfresco.sbsys.template</groupId>
     <artifactId>alfresco-sbsys-template</artifactId>
-    <version>0.2.1</version>
+    <version>0.3</version>
     <name>alfresco-sbsys-template Platform Jar Module - SDK 3</name>
     <description>
         Implementation of:
         Get template list
         Merge case data into template
         Upload template (assuming OnlyOffice uses forcesave)
+        Preview and Edit webscript
     </description>
     <packaging>jar</packaging>
 

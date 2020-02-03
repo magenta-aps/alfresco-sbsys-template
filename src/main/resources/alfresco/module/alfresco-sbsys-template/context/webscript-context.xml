@@ -38,6 +38,7 @@
 		<property name="attributeService" ref="AttributeService" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
+		<property name="previewAndEdit" ref="webscript.magenta.sbsys-template.preview-and-edit.post" />
 		<property name="properties">
 			<ref bean="global-properties" />
 		</property>
