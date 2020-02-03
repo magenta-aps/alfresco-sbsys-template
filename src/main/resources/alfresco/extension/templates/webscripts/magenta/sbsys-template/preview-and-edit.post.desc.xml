@@ -1,7 +1,10 @@
 <webscript>
     <shortname>Preview SBSYS draft</shortname>
     <description>Receives a draft ID from SBSYS, downloads this file and returns a URL for previewing</description>
-    <url>/template/draft/preview</url>
+
+    <url>/template/draft/{operation}</url>
+    <!-- operation must be either "preview" or "edit" -->
+
     <authentication>user</authentication>
     <format default="json"></format>
     <transaction>required</transaction>

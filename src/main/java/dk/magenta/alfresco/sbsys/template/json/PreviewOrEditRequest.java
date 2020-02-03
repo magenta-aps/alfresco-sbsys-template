@@ -2,12 +2,12 @@ package dk.magenta.alfresco.sbsys.template.json;
 
 import java.util.Map;
 
-public class PreviewRequest {
+public class PreviewOrEditRequest {
 
     private Map<String, String> token;
     private Map<String, String> urls;
 
-    public PreviewRequest(Map<String, String> token, Map<String, String> urls) {
+    public PreviewOrEditRequest(Map<String, String> token, Map<String, String> urls) {
         this.token = token;
         this.urls = urls;
     }

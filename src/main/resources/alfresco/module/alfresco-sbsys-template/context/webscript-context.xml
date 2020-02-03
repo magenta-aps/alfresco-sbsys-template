@@ -43,8 +43,8 @@
 		</property>
 	</bean>
 
-	<bean id="webscript.magenta.sbsys-template.preview.post"
-		  class="dk.magenta.alfresco.sbsys.template.Preview"
+	<bean id="webscript.magenta.sbsys-template.preview-and-edit.post"
+		  class="dk.magenta.alfresco.sbsys.template.PreviewAndEdit"
 		  parent="webscript">
 		<property name="contentService" ref="ContentService" />
 		<property name="fileFolderService" ref="FileFolderService" />

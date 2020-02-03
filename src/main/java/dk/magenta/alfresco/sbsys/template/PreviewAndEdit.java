@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.JsonSyntaxException;
-import dk.magenta.alfresco.sbsys.template.json.PreviewRequest;
+import dk.magenta.alfresco.sbsys.template.json.PreviewOrEditRequest;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
@@ -25,8 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class Preview extends AbstractWebScript {
-    private static Log logger = LogFactory.getLog(Preview.class);
+public class PreviewAndEdit extends AbstractWebScript {
+    private static Log logger = LogFactory.getLog(PreviewAndEdit.class);
 
     private ContentService contentService;
     private FileFolderService fileFolderService;
@@ -35,18 +35,22 @@ public class Preview extends AbstractWebScript {
     private Properties properties;
 
     private static final String FILDOWNLOAD = "fildownload";
-    public static final String PREVIEW_FOLDER = "preview";
+    private static final String OPERATION = "operation";
     private static final int STREAM_MARK_BUFFER = 1000;
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
         logger.debug("Preview webscript called");
+
+        // TODO: throw exception for unknown operation
+        String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(OPERATION);
+
         try {
 
             // Get POSTed JSON as string from request and deserialize into POJO
-            PreviewRequest req = RequestResponseHandler.deserialize(
+            PreviewOrEditRequest req = RequestResponseHandler.deserialize(
                     webScriptRequest.getContent().getContent(),
-                    PreviewRequest.class
+                    PreviewOrEditRequest.class
             );
 
             // Get content InputStream from SBSYS
@@ -66,7 +70,7 @@ public class Preview extends AbstractWebScript {
             // Get the preview folder
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
             FileInfo preview = docLibFolders.stream()
-                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals(PREVIEW_FOLDER))
+                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals(operation))
                     .findFirst()
                     .get();
 
@@ -92,7 +96,7 @@ public class Preview extends AbstractWebScript {
             // Make response
 
             Map<String, String> resp = new HashMap<>();
-            resp.put("url", getPreviewUrl(previewDoc.getNodeRef()));
+            resp.put("url", getUrl(operation, previewDoc.getNodeRef()));
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);
@@ -107,12 +111,21 @@ public class Preview extends AbstractWebScript {
         }
     }
 
-    private String getPreviewUrl(NodeRef nodeRef) {
-        return properties.getProperty("alfresco.protocol") +
-                "://" +
-                properties.getProperty("alfresco.host") +
-                "/share/page/iframe-preview?nodeRef=" +
-                nodeRef.toString();
+    private String getUrl(String operation, NodeRef nodeRef) {
+        // TODO: do not handle variability parametric
+
+        String commonUrl = properties.getProperty("alfresco.protocol") + "://" +
+                properties.getProperty("alfresco.host") + "/share/page";
+
+        if (operation.equals("preview")) {
+            return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
+        } else if (operation.equals("edit")) {
+            return commonUrl + "/site/" + properties.getProperty("sbsys.template.site") +
+                    "onlyoffice-edit?nodeRef=" + nodeRef.toString();
+        } else {
+            // Should never happen
+            return null;
+        }
     }
 
     public void setContentService(ContentService contentService) {
