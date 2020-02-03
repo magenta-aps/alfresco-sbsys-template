@@ -43,20 +43,20 @@ print()
 
 # Simulate SBSYS POSTing of the pre-uploaded document
 
-# input('Press enter to upload...')
-#
-# payload = {
-#     'preUploadId': pre_upload.get('preUploadId'),
-#     'token': {
-#         'token': get_token()
-#     }
-# }
-#
-# r = requests.post(
-#     ALF_UPLOAD_URL,
-#     json=payload,
-#     auth=admin_basic_auth
-# )
-#
-# print('POST ' + ALF_UPLOAD_URL)
-# print(r.status_code)
+input('Press enter to upload...')
+
+payload = {
+    'preUploadId': pre_upload.get('preUploadId'),
+    'token': {
+        'token': get_token()
+    }
+}
+
+r = requests.post(
+    ALF_UPLOAD_URL,
+    json=payload,
+    auth=admin_basic_auth
+)
+
+print('POST ' + ALF_UPLOAD_URL)
+print(r.status_code)
