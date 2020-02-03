@@ -139,7 +139,8 @@ public class PreviewAndEdit extends AbstractWebScript {
             return commonUrl +
                     "/site/" +
                     properties.getProperty("sbsys.template.site") +
-                    "/onlyoffice-edit?nodeRef=" + nodeRef.toString();
+                    "/onlyoffice-edit?nodeRef=" + nodeRef.toString() +
+                    "&new=";
         } else {
             // Should never happen
             return null;
