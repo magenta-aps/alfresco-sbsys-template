@@ -34,11 +34,6 @@ public class MergeData extends AbstractWebScript {
     private PreviewAndEdit previewAndEdit;
     private Properties properties;
 
-    public static final String CASE_ID = "caseId";
-    public static final String DOCUMENT_NAME = "documentName";
-    public static final String TOKEN = "token";
-    public static final String PREUPLOAD_FOLDER = "pre-upload";
-
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
         logger.debug("Merge webscript called");
@@ -56,7 +51,7 @@ public class MergeData extends AbstractWebScript {
             // Call SBSYS to get case metadata
             String response = HttpHandler.GET_JSON(
                     properties.getProperty("sbsys.template.url.get.case") + "/" + req.getKladde().getSagID(),
-                    req.getToken().get(TOKEN)
+                    req.getToken().get(Constants.TOKEN)
             );
             logger.debug(response);
             Case sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
@@ -69,7 +64,7 @@ public class MergeData extends AbstractWebScript {
             // Get the pre-upload folder
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
             FileInfo preUpload = docLibFolders.stream()
-                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals(PREUPLOAD_FOLDER))
+                    .filter((FileInfo fileInfo) -> fileInfo.getName().equals(Constants.PREUPLOAD_FOLDER))
                     .findFirst()
                     .get();
 
@@ -98,8 +93,9 @@ public class MergeData extends AbstractWebScript {
 
             ///////////// Store caseId and document name in the AttributeService /////////////
 
-            attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), CASE_ID);
-            attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), DOCUMENT_NAME);
+            // attributeService.createAttribute(MERGE, mergedDoc.getNodeRef().toString());
+            attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), Constants.CASE_ID);
+            attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), Constants.DOCUMENT_NAME);
 
             /////////////////////// Build response /////////////////////////
 

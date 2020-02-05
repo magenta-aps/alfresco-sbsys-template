@@ -58,7 +58,7 @@ public class PreviewAndEdit extends AbstractWebScript {
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
                     req.getUrls().get(FILDOWNLOAD),
-                    req.getToken().get(MergeData.TOKEN)
+                    req.getToken().get(Constants.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
             logger.debug("fildownload: " + req.getUrls().get(FILDOWNLOAD));

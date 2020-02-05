@@ -109,7 +109,7 @@ public class NodeRefUtil {
         ChildAssociationRef parentAssoc = parentAssocs.get(0);
         NodeRef parent = parentAssoc.getParentRef();
         String name = (String) nodeService.getProperty(parent, ContentModel.PROP_NAME);
-        if (name.equals(MergeData.PREUPLOAD_FOLDER)) {
+        if (name.equals(Constants.PREUPLOAD_FOLDER)) {
             return true;
         }
 

@@ -30,8 +30,8 @@ public class UploadDocument extends AbstractWebScript {
                     Upload.class
             );
 
-            String sagId = (String) attributeService.getAttribute(req.getPreUploadId(), MergeData.CASE_ID);
-            String documentName = (String) attributeService.getAttribute(req.getPreUploadId(), MergeData.DOCUMENT_NAME);
+            String sagId = (String) attributeService.getAttribute(req.getPreUploadId(), Constants.CASE_ID);
+            String documentName = (String) attributeService.getAttribute(req.getPreUploadId(), Constants.DOCUMENT_NAME);
             Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
 
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
@@ -51,8 +51,8 @@ public class UploadDocument extends AbstractWebScript {
             logger.debug("Document uploaded");
 
             nodeRefUtil.deleteNode(req.getPreUploadId());
-            attributeService.removeAttribute(req.getPreUploadId(), MergeData.CASE_ID);
-            attributeService.removeAttribute(req.getPreUploadId(), MergeData.DOCUMENT_NAME);
+            attributeService.removeAttribute(req.getPreUploadId(), Constants.CASE_ID);
+            attributeService.removeAttribute(req.getPreUploadId(), Constants.DOCUMENT_NAME);
 
             logger.debug("Final template document deleted");
 

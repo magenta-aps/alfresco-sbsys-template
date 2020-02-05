@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template.behavior;
 
+import dk.magenta.alfresco.sbsys.template.Constants;
 import dk.magenta.alfresco.sbsys.template.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.MergeData;
 import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
@@ -52,12 +53,12 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
 
                 logger.debug("versionalbleNode.toString() = " + versionableNode.toString());
 
-                String sagId = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.CASE_ID);
-                String documentName = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
+                String sagId = (String) attributeService.getAttribute(versionableNode.toString(), Constants.CASE_ID);
+                String documentName = (String) attributeService.getAttribute(versionableNode.toString(), Constants.DOCUMENT_NAME);
                 logger.debug("Get token...");
-                String token0 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
-                String token1 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
-                String token2 = (String) attributeService.getAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
+                String token0 = (String) attributeService.getAttribute(versionableNode.toString(), Constants.TOKEN + "0");
+                String token1 = (String) attributeService.getAttribute(versionableNode.toString(), Constants.TOKEN + "1");
+                String token2 = (String) attributeService.getAttribute(versionableNode.toString(), Constants.TOKEN + "2");
                 String token = token0 + token1 + token2;
                 logger.debug("Got token...");
                 Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(versionableNode.toString());
@@ -80,11 +81,11 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
                 logger.debug("Document uploaded");
 
                 nodeRefUtil.deleteNode(versionableNode.toString());
-                attributeService.removeAttribute(versionableNode.toString(), MergeData.CASE_ID);
-                attributeService.removeAttribute(versionableNode.toString(), MergeData.DOCUMENT_NAME);
-                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "0");
-                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "1");
-                attributeService.removeAttribute(versionableNode.toString(), MergeData.TOKEN + "2");
+                attributeService.removeAttribute(versionableNode.toString(), Constants.CASE_ID);
+                attributeService.removeAttribute(versionableNode.toString(), Constants.DOCUMENT_NAME);
+                attributeService.removeAttribute(versionableNode.toString(), Constants.TOKEN + "0");
+                attributeService.removeAttribute(versionableNode.toString(), Constants.TOKEN + "1");
+                attributeService.removeAttribute(versionableNode.toString(), Constants.TOKEN + "2");
 
                 logger.debug("Final template document deleted");
             }
