@@ -79,7 +79,7 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // Create document in Alfresco
 
-            String previewFilename = GUID.generate();
+            String previewFilename = GUID.generate() + ".docx";
             FileInfo previewDoc = fileFolderService.create(
                     preview.getNodeRef(),
                     previewFilename,
