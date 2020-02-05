@@ -93,7 +93,7 @@ public class MergeData extends AbstractWebScript {
 
             ///////////// Store caseId and document name in the AttributeService /////////////
 
-            // attributeService.createAttribute(MERGE, mergedDoc.getNodeRef().toString());
+            attributeService.createAttribute(Constants.MERGE, mergedDoc.getNodeRef().toString(), Constants.OPERATION);
             attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), Constants.CASE_ID);
             attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), Constants.DOCUMENT_NAME);
 

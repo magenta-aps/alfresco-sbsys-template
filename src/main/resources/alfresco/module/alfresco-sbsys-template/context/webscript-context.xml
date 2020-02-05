@@ -57,9 +57,11 @@
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
-		  class="dk.magenta.alfresco.sbsys.template.UploadDocument"
+		  class="dk.magenta.alfresco.sbsys.template.upload.UploadDocument"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
+		<property name="jsonBuilderStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.MergeJsonBuilderStrategy"/>
+		<property name="cleanUpStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"/>
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
 	</bean>
 

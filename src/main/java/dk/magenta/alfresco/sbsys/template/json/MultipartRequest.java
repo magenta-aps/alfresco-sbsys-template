@@ -2,36 +2,26 @@ package dk.magenta.alfresco.sbsys.template.json;
 
 public class MultipartRequest {
 
-    private int caseId;
-    private String name;
+    private String json;
     private String filename;
     private String mimeType;
     private String token;
     private String contentStorePath;
 
-    public MultipartRequest(int caseId, String name, String filename, String mimeType, String token, String contentStorePath) {
-        this.caseId = caseId;
-        this.name = name;
+    public MultipartRequest(String json, String filename, String mimeType, String token, String contentStorePath) {
+        this.json = json;
         this.filename = filename;
         this.mimeType = mimeType;
         this.token = token;
         this.contentStorePath = contentStorePath;
     }
 
-    public int getCaseId() {
-        return caseId;
+    public String getJson() {
+        return json;
     }
 
-    public void setCaseId(int caseId) {
-        this.caseId = caseId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setJson(String json) {
+        this.json = json;
     }
 
     public String getFilename() {

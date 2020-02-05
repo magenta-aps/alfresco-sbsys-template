@@ -37,6 +37,12 @@
         <property name="nodeLocatorService" ref="nodeLocatorService" />
     </bean>
 
+    <bean id="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"
+          class="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"/>
+
+    <bean id="dk.magenta.alfresco.sbsys.template.upload.MergeJsonBuilderStrategy"
+          class="dk.magenta.alfresco.sbsys.template.upload.MergeJsonBuilderStrategy"/>
+
     <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.NodeRefUtil">
         <property name="contentService" ref="ContentService" />
         <property name="nodeService" ref="NodeService" />

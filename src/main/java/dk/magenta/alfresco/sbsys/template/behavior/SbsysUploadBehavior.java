@@ -68,8 +68,7 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
                 // The reason for this is that the Java 8 HTTP libs cannot perform HTTP/2 requests
 
                 MultipartRequest multipartRequest = new MultipartRequest(
-                        Integer.parseInt(sagId),
-                        documentName,
+                        "{}",  // TODO: fix this
                         documentDetails.get("filename"),
                         documentDetails.get("mimeType"),
                         token,

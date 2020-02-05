@@ -34,6 +34,8 @@ public class PreviewAndEdit extends AbstractWebScript {
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
 
+    // TODO: move public contants into constants class
+    private static final String FILCHECKUD = "filcheckud";
     private static final String FILDOWNLOAD = "fildownload";
     private static final String OPERATION = "operation";
     public static final String PREVIEW = "preview";
@@ -57,11 +59,11 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
-                    req.getUrls().get(FILDOWNLOAD),
+                    req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
                     req.getToken().get(Constants.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
-            logger.debug("fildownload: " + req.getUrls().get(FILDOWNLOAD));
+            logger.debug("Download URL: " + req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)));
 
             // Guess the content mimetype
             in.mark(STREAM_MARK_BUFFER);
