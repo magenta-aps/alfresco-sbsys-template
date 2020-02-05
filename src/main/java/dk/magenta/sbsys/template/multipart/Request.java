@@ -2,36 +2,28 @@ package dk.magenta.sbsys.template.multipart;
 
 public class Request {
 
-    private int caseId;
-    private String name;
+    private String json;
     private String filename;
     private String mimeType;
+    private String url;
     private String token;
     private String contentStorePath;
 
-    public Request(int caseId, String name, String filename, String mimeType, String token, String contentStorePath) {
-        this.caseId = caseId;
-        this.name = name;
+    public Request(String json, String filename, String mimeType, String url, String token, String contentStorePath) {
+        this.json = json;
         this.filename = filename;
         this.mimeType = mimeType;
+        this.url = url;
         this.token = token;
         this.contentStorePath = contentStorePath;
     }
 
-    public int getCaseId() {
-        return caseId;
+    public String getJson() {
+        return json;
     }
 
-    public void setCaseId(int caseId) {
-        this.caseId = caseId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
+    public void setJson(String json) {
+        this.json = json;
     }
 
     public String getFilename() {
@@ -48,6 +40,14 @@ public class Request {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getToken() {

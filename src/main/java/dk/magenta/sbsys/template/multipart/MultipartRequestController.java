@@ -76,20 +76,17 @@ public class MultipartRequestController {
                 .version(HttpClient.Version.HTTP_2)
                 .sslContext(sslContext)
                 .build();
-        //String boundary = new BigInteger(256, new Random()).toString();
+
         String boundary = getBoundary();
 
         Path localFile = Paths.get(requestBody.getContentStorePath());
-//        Map<Object, Object> data = new LinkedHashMap<>();
-//        data.put("json", buildJsonPart(requestBody));
-//        data.put("files", localFile);
 
-        logger.debug(buildJsonPart(requestBody));
+        logger.debug(requestBody.getJson());
 
         try {
 
             BodyPublisher body = buildMultipartBody(
-                    buildJsonPart(requestBody),
+                    requestBody.getJson(),
                     localFile,
                     boundary,
                     requestBody.getFilename(),
@@ -99,7 +96,6 @@ public class MultipartRequestController {
             HttpRequest request = HttpRequest.newBuilder()
                     .header("Authorization", "Bearer " + requestBody.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
-                    //.POST(buildMultipartBody(data, boundary, requestBody.getFilename(), requestBody.getMimeType()))
                     .POST(body)
                     .uri(URI.create(sbsysEndpoint))
                     .build();
@@ -122,15 +118,6 @@ public class MultipartRequestController {
         }
 
         return new Response(SUCCESS);
-    }
-
-    private String buildJsonPart(Request requestBody) {
-        // TODO: this could be handled better with Jackson
-        return "{\"SagID\":" +
-                requestBody.getCaseId() +
-                ",\"Navn\":\"" +
-                requestBody.getName() +
-                "\"}";
     }
 
     private BodyPublisher buildMultipartBody(
@@ -158,24 +145,6 @@ public class MultipartRequestController {
         byteArrays.add(Files.readAllBytes(path));
         byteArrays.add(CRLF.getBytes(StandardCharsets.UTF_8));
         byteArrays.add(end.getBytes(StandardCharsets.UTF_8));
-
-//        byte[] separator = ("--" + boundary + "\r\nContent-Disposition: form-data; name=").getBytes(StandardCharsets.UTF_8);
-//        for (Map.Entry<Object, Object> entry : data.entrySet()) {
-//            byteArrays.add(separator);
-//
-//            if (entry.getValue() instanceof Path) {
-//                var path = (Path) entry.getValue();
-//                // byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + path.getFileName()
-//                byteArrays.add(("\"" + entry.getKey() + "\"; filename=\"" + filename
-//                        + "\"\r\nContent-Type: " + mimeType + "\r\n\r\n").getBytes(StandardCharsets.UTF_8));
-//                byteArrays.add(Files.readAllBytes(path));
-//                byteArrays.add("\r\n".getBytes(StandardCharsets.UTF_8));
-//            } else {
-//                byteArrays.add(("\"" + entry.getKey() + "\"\r\n\r\n" + entry.getValue() + "\r\n")
-//                        .getBytes(StandardCharsets.UTF_8));
-//            }
-//        }
-//        byteArrays.add(("--" + boundary + "--").getBytes(StandardCharsets.UTF_8));
 
         getContentLength(byteArrays);
 
