@@ -40,6 +40,9 @@
     <bean id="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"
           class="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"/>
 
+    <bean id="dk.magenta.alfresco.sbsys.template.upload.CheckoutCleanUpStrategy"
+          class="dk.magenta.alfresco.sbsys.template.upload.CheckoutCleanUpStrategy"/>
+
     <bean id="dk.magenta.alfresco.sbsys.template.upload.CheckoutJsonBuilderStrategy"
           class="dk.magenta.alfresco.sbsys.template.upload.CheckoutJsonBuilderStrategy"/>
 
@@ -50,6 +53,12 @@
           class="dk.magenta.alfresco.sbsys.template.upload.CommonJsonBuilderStrategy">
         <property name="mergeJsonBuilderStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.MergeJsonBuilderStrategy"/>
         <property name="checkoutJsonBuilderStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.CheckoutJsonBuilderStrategy"/>
+    </bean>
+
+    <bean id="dk.magenta.alfresco.sbsys.template.upload.CommonCleanUpStrategy"
+          class="dk.magenta.alfresco.sbsys.template.upload.CommonCleanUpStrategy">
+        <property name="mergeCleanUpStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.MergeCleanUpStrategy"/>
+        <property name="checkoutCleanUpStrategy" ref="dk.magenta.alfresco.sbsys.template.upload.CheckoutCleanUpStrategy"/>
     </bean>
 
     <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.NodeRefUtil">

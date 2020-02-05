@@ -5,13 +5,15 @@ public class MultipartRequest {
     private String json;
     private String filename;
     private String mimeType;
+    private String url;
     private String token;
     private String contentStorePath;
 
-    public MultipartRequest(String json, String filename, String mimeType, String token, String contentStorePath) {
+    public MultipartRequest(String json, String filename, String mimeType, String url, String token, String contentStorePath) {
         this.json = json;
         this.filename = filename;
         this.mimeType = mimeType;
+        this.url = url;
         this.token = token;
         this.contentStorePath = contentStorePath;
     }
@@ -38,6 +40,14 @@ public class MultipartRequest {
 
     public void setMimeType(String mimeType) {
         this.mimeType = mimeType;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 
     public String getToken() {

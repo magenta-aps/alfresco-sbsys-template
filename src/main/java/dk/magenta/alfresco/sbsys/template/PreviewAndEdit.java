@@ -36,12 +36,7 @@ public class PreviewAndEdit extends AbstractWebScript {
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
 
-    // TODO: move public contants into constants class
-    private static final String FILCHECKUD = "filcheckud";
     private static final String FILDOWNLOAD = "fildownload";
-    private static final String OPERATION = "operation";
-    public static final String PREVIEW = "preview";
-    public static final String EDIT = "edit";
     private static final int STREAM_MARK_BUFFER = 1000;
 
     @Override
@@ -49,7 +44,7 @@ public class PreviewAndEdit extends AbstractWebScript {
         logger.debug("Preview webscript called");
 
         // TODO: throw exception for unknown operation
-        String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(OPERATION);
+        String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(Constants.OPERATION);
 
         try {
 
@@ -59,13 +54,15 @@ public class PreviewAndEdit extends AbstractWebScript {
                     UrlsAndTokenRequest.class
             );
 
+            String urlKey = operation.equals(Constants.EDIT) ? FILCHECKUD : FILDOWNLOAD;
+
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
                     req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
                     req.getToken().get(Constants.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
-            logger.debug("Download URL: " + req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)));
+            logger.debug("Download URL: " + req.getUrls().get(urlKey));
 
             // Guess the content mimetype
             in.mark(STREAM_MARK_BUFFER);
@@ -100,7 +97,10 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // in.close(); // Not necessary for ByteArrayInputStream
 
-            attributeService.createAttribute(Constants.CHECKOUT, previewDoc.getNodeRef().toString(), Constants.OPERATION);
+            if (operation.equals(Constants.EDIT)) {
+                attributeService.createAttribute(Constants.CHECKOUT, previewDoc.getNodeRef().toString(), Constants.OPERATION);
+                attributeService.createAttribute(req.getUrls().get(Constants.FILCHECKUD), previewDoc.getNodeRef().toString(), Constants.URL);
+            }
 
             // Make response
 
@@ -139,9 +139,9 @@ public class PreviewAndEdit extends AbstractWebScript {
                 properties.getProperty("alfresco.host") +
                 "/share/page";
 
-        if (operation.equals(PREVIEW)) {
+        if (operation.equals(Constants.PREVIEW)) {
             return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
-        } else if (operation.equals(EDIT)) {
+        } else if (operation.equals(Constants.EDIT)) {
             return commonUrl +
                     "/site/" +
                     properties.getProperty("sbsys.template.site") +

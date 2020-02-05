@@ -1,6 +1,7 @@
 package dk.magenta.alfresco.sbsys.template.upload;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.Constants;
 import dk.magenta.alfresco.sbsys.template.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.RequestResponseHandler;
@@ -30,6 +31,7 @@ public class UploadDocument extends AbstractWebScript {
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
+        logger.debug("Upload webscript called");
         try {
                 req = RequestResponseHandler.deserialize(
                     webScriptRequest.getContent().getContent(),
@@ -41,13 +43,17 @@ public class UploadDocument extends AbstractWebScript {
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
             // separate service that in turn will perform the actual multipart/form-data request
 
+            String url = (String) attributeService.getAttribute(req.getPreUploadId(), Constants.URL);
+
             MultipartRequest multipartRequest = new MultipartRequest(
                     jsonBuilderStrategy.build(this),
                     documentDetails.get("filename"),
                     documentDetails.get("mimeType"),
+                    url != null ? url : Tages fra global properties...,
                     req.getToken().get("token"),
                     documentDetails.get("contentStorePath")
             );
+            logger.debug("MultipartRequest: " + RequestResponseHandler.serialize(multipartRequest));
 
             String response = HttpHandler.POST_MULTIPART(multipartRequest);
 
@@ -57,6 +63,8 @@ public class UploadDocument extends AbstractWebScript {
             cleanUpStrategy.cleanUp(this);
 
             logger.debug("Document deleted");
+
+            attributeService.removeAttribute(req.getPreUploadId(), Constants.OPERATION);
 
             RequestResponseHandler.writeWebscriptResponse(webScriptResponse, "{\"msg\":\"success\"}");
 
