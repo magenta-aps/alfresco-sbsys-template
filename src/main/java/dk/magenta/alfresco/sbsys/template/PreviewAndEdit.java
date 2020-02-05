@@ -3,6 +3,7 @@ package dk.magenta.alfresco.sbsys.template;
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
 import org.alfresco.model.ContentModel;
+import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
@@ -28,6 +29,7 @@ import java.util.Properties;
 public class PreviewAndEdit extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(PreviewAndEdit.class);
 
+    private AttributeService attributeService;
     private ContentService contentService;
     private FileFolderService fileFolderService;
     private MimetypeService mimetypeService;
@@ -98,6 +100,8 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // in.close(); // Not necessary for ByteArrayInputStream
 
+            attributeService.createAttribute(Constants.CHECKOUT, previewDoc.getNodeRef().toString(), Constants.OPERATION);
+
             // Make response
 
             Map<String, String> resp = getEditingFileLocationData(
@@ -147,6 +151,10 @@ public class PreviewAndEdit extends AbstractWebScript {
             // Should never happen
             return null;
         }
+    }
+
+    public void setAttributeService(AttributeService attributeService) {
+        this.attributeService = attributeService;
     }
 
     public void setContentService(ContentService contentService) {
