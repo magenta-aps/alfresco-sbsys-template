@@ -34,6 +34,8 @@ public class MergeData extends AbstractWebScript {
     private PreviewAndEdit previewAndEdit;
     private Properties properties;
 
+    private static final String OPRET_KLADDE = "opretkladde";
+
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) {
         logger.debug("Merge webscript called");
@@ -96,13 +98,14 @@ public class MergeData extends AbstractWebScript {
             attributeService.createAttribute(Constants.MERGE, mergedDoc.getNodeRef().toString(), Constants.OPERATION);
             attributeService.createAttribute(req.getKladde().getSagID(), mergedDoc.getNodeRef().toString(), Constants.CASE_ID);
             attributeService.createAttribute(req.getKladde().getNavn(), mergedDoc.getNodeRef().toString(), Constants.DOCUMENT_NAME);
+            attributeService.createAttribute(req.getUrls().get(OPRET_KLADDE), mergedDoc.getNodeRef().toString(), Constants.URL);
 
             /////////////////////// Build response /////////////////////////
 
             Map<String, String> resp = previewAndEdit.getEditingFileLocationData(
                     mergedDoc.getNodeRef(),
                     preUploadFilename + ".docx",
-                    PreviewAndEdit.EDIT);
+                    Constants.EDIT);
 
             String json = RequestResponseHandler.serialize(resp);
             logger.debug(json);

@@ -43,13 +43,11 @@ public class UploadDocument extends AbstractWebScript {
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
             // separate service that in turn will perform the actual multipart/form-data request
 
-            String url = (String) attributeService.getAttribute(req.getPreUploadId(), Constants.URL);
-
             MultipartRequest multipartRequest = new MultipartRequest(
                     jsonBuilderStrategy.build(this),
                     documentDetails.get("filename"),
                     documentDetails.get("mimeType"),
-                    url != null ? url : Tages fra global properties...,
+                    (String) attributeService.getAttribute(req.getPreUploadId(), Constants.URL),
                     req.getToken().get("token"),
                     documentDetails.get("contentStorePath")
             );

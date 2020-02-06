@@ -12,5 +12,6 @@ public class MergeCleanUpStrategy implements CleanUpStrategy {
 
         attributeService.removeAttribute(req.getPreUploadId(), Constants.CASE_ID);
         attributeService.removeAttribute(req.getPreUploadId(), Constants.DOCUMENT_NAME);
+        attributeService.removeAttribute(req.getPreUploadId(), Constants.URL);
     }
 }

@@ -9,7 +9,7 @@
     }
   },
   "urls": {
-    "opretkladde": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde",
+    "opretkladde": "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde",
     "part": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/part/person?id=1",
     "sag": "https://<server:port>/convergens-sbsip-sbsys-webapi-proxy/proxy/api/sag/12344",
     "redirect": "https://<server:port>/p-sag/v1/#/sager/12344/kladder/{kladdeId}"

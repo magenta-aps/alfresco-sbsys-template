@@ -71,6 +71,7 @@ public class SbsysUploadBehavior implements VersionServicePolicies.AfterCreateVe
                         "{}",  // TODO: fix this
                         documentDetails.get("filename"),
                         documentDetails.get("mimeType"),
+                        "url", // TODO: fix this
                         token,
                         documentDetails.get("contentStorePath")
                 );

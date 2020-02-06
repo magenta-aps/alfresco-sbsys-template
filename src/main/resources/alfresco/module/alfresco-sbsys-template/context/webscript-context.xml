@@ -47,6 +47,7 @@
 	<bean id="webscript.magenta.sbsys-template.preview-and-edit.post"
 		  class="dk.magenta.alfresco.sbsys.template.PreviewAndEdit"
 		  parent="webscript">
+		<property name="attributeService" ref="AttributeService" />
 		<property name="contentService" ref="ContentService" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="mimetypeService" ref="MimetypeService" />

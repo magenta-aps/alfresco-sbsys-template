@@ -54,11 +54,12 @@ public class PreviewAndEdit extends AbstractWebScript {
                     UrlsAndTokenRequest.class
             );
 
-            String urlKey = operation.equals(Constants.EDIT) ? FILCHECKUD : FILDOWNLOAD;
+            String urlKey = operation.equals(Constants.EDIT) ? Constants.FILCHECKUD : FILDOWNLOAD;
+            logger.debug("urlKey: " + urlKey);
 
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
-                    req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
+                    req.getUrls().getOrDefault(Constants.FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
                     req.getToken().get(Constants.TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
@@ -99,14 +100,14 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             if (operation.equals(Constants.EDIT)) {
                 attributeService.createAttribute(Constants.CHECKOUT, previewDoc.getNodeRef().toString(), Constants.OPERATION);
-                attributeService.createAttribute(req.getUrls().get(Constants.FILCHECKUD), previewDoc.getNodeRef().toString(), Constants.URL);
+                attributeService.createAttribute(req.getUrls().get(Constants.FILCHECKIND), previewDoc.getNodeRef().toString(), Constants.URL);
             }
 
             // Make response
 
             Map<String, String> resp = getEditingFileLocationData(
                     previewDoc.getNodeRef(),
-                    previewFilename + ".docx",
+                    previewFilename,
                     operation
             );
 

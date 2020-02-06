@@ -6,6 +6,7 @@ public class Constants {
     public static final String CHECKOUT = "checkout";
     public static final String DOCUMENT_NAME = "documentName";
     public static final String EDIT = "edit";
+    public static final String FILCHECKIND = "filcheckind";
     public static final String FILCHECKUD = "filcheckud";
     public static final String MERGE = "merge";
     public static final String OPERATION = "operation";

@@ -1,0 +1,14 @@
+{
+  "urls": {
+    "filcheckud": "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde/%s/checkout/latest",
+    "filcheckind": "https://sbsip-m-01.bk-sbsys.dk:28443/convergens-sbsip-sbsys-webapi-proxy/proxy/api/kladde/%s/checkin"
+  },
+  "token": {
+    "refreshToken": "eyJhbGciOiJSUzI1NiIs...nXM4Yd5hg",
+    "token": "token",
+    "exp": 1558515632,
+    "refreshurl": "https://<server:port>/auth/realms/sbsip/protocol/openid-connect/token",
+    "refreshuser": "username",
+    "refreshpwd": "pwd"
+  }
+}
