@@ -1,6 +1,6 @@
 import json
 import requests
-from requests.auth import HTTPBasicAuth
+from credentials import admin_basic_auth
 
 from get_token import add_token
 from get_token import get_token
@@ -10,8 +10,6 @@ from get_token import get_token
 ALF_GET_TEMPLATE_URL = 'http://localhost:8080/alfresco/s/template'
 ALF_MERGE_URL = 'http://localhost:8080/alfresco/s/template/merge'
 ALF_UPLOAD_URL = 'http://localhost:8080/alfresco/s/template/upload'
-
-admin_basic_auth = HTTPBasicAuth('admin', 'admin')
 
 # Get and select a template
 

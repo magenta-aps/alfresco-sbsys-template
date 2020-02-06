@@ -1,7 +1,7 @@
 import json
 import sys
 import requests
-from requests.auth import HTTPBasicAuth
+from credentials import admin_basic_auth
 
 from get_token import add_token
 from get_token import get_token
@@ -10,8 +10,6 @@ kladde = sys.argv[1]
 
 ALF_PREVIEW_DRAFT = 'http://localhost:8080/alfresco/s/template/draft/edit'
 ALF_UPLOAD_URL = 'http://localhost:8080/alfresco/s/template/upload'
-
-admin_basic_auth = HTTPBasicAuth('admin', 'admin')
 
 add_token('post_edit.json')
 with open('json/post_edit_temp.json') as f:

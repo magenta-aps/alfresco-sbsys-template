@@ -1,13 +1,11 @@
 import json
 import requests
-from requests.auth import HTTPBasicAuth
+from credentials import admin_basic_auth
 
 from get_token import add_token
 from get_token import get_token
 
 ALF_PREVIEW_DRAFT = 'http://localhost:8080/alfresco/s/template/draft/preview'
-
-admin_basic_auth = HTTPBasicAuth('admin', 'admin')
 
 add_token('post_preview.json')
 with open('json/post_preview_temp.json') as f:
