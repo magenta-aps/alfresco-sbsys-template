@@ -65,4 +65,23 @@ public class Request {
     public void setContentStorePath(String contentStorePath) {
         this.contentStorePath = contentStorePath;
     }
+
+    @Override
+    public String toString() {
+        return new StringBuilder().append("json: ")
+                .append(json)
+                .append("\n")
+                .append("filename: ")
+                .append(filename)
+                .append("\n")
+                .append("mimetype: ")
+                .append(mimeType)
+                .append("\n")
+                .append("url: ")
+                .append(url)
+                .append("\n")
+                .append("contentStorePath: ")
+                .append(contentStorePath)
+                .toString();
+    }
 }

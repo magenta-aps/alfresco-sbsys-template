@@ -20,7 +20,6 @@ import java.util.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.net.ssl.SSLContext;
@@ -33,12 +32,11 @@ public class MultipartRequestController {
     private final Logger logger = LoggerFactory.getLogger(MultipartRequestController.class);
     private final String SUCCESS = "success";
     private final String CRLF = "\r\n";
-    @Value("${sbsys.endpoint}")
-    private String sbsysEndpoint;
     private int contentLength;
 
     @RequestMapping(path = "/multipart", method = RequestMethod.POST)
     public Response request(@RequestBody Request requestBody) {
+        logger.debug("RequestBody: " + requestBody.toString());
 
         // SSL
         TrustManager[] trustAllCerts = {
@@ -81,8 +79,6 @@ public class MultipartRequestController {
 
         Path localFile = Paths.get(requestBody.getContentStorePath());
 
-        logger.debug(requestBody.getJson());
-
         try {
 
             BodyPublisher body = buildMultipartBody(
@@ -97,7 +93,7 @@ public class MultipartRequestController {
                     .header("Authorization", "Bearer " + requestBody.getToken())
                     .header("Content-Type", "multipart/form-data;boundary=" + boundary)
                     .POST(body)
-                    .uri(URI.create(sbsysEndpoint))
+                    .uri(URI.create(requestBody.getUrl()))
                     .build();
 
             // logHeaders(request);
