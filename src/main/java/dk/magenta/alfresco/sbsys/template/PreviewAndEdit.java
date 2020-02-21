@@ -88,6 +88,9 @@ public class PreviewAndEdit extends AbstractWebScript {
                     ContentModel.TYPE_CONTENT
             );
 
+            // Add versionable aspect
+            nodeRefUtil.setVersionableAspect(previewDoc.getNodeRef());
+
             ContentWriter writer = contentService.getWriter(
                     previewDoc.getNodeRef(),
                     ContentModel.PROP_CONTENT,

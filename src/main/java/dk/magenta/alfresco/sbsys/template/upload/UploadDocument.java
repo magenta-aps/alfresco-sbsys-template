@@ -5,10 +5,12 @@ import dk.magenta.alfresco.sbsys.template.Constants;
 import dk.magenta.alfresco.sbsys.template.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.RequestResponseHandler;
+import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
 import dk.magenta.alfresco.sbsys.template.json.Upload;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.attributes.AttributeService;
+import org.alfresco.service.cmr.repository.NodeRef;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -39,6 +41,9 @@ public class UploadDocument extends AbstractWebScript {
             );
 
             Map<String, String> documentDetails = nodeRefUtil.getUploadDocumentDetails(req.getPreUploadId());
+
+            // Only upload the document if the version > 1.0
+            nodeRefUtil.verifyVersionForUpload(req.getPreUploadId());
 
             // NOTE: this is NOT a multipart/form-data request. It is a normal POST request to a
             // separate service that in turn will perform the actual multipart/form-data request
@@ -72,6 +77,9 @@ public class UploadDocument extends AbstractWebScript {
                     webScriptResponse,
                     RequestResponseHandler.getJsonSyntaxErrorMessage()
             );
+        } catch (VersionUploadException e) {
+            webScriptResponse.setStatus(HttpStatus.SC_FORBIDDEN);
+            RequestResponseHandler.writeWebscriptResponse(webScriptResponse, "{\"msg\":\"Document not yet saved\"}");
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());

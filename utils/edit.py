@@ -37,21 +37,26 @@ print()
 
 # Check-in the final draft from Alfresco to SBSYS
 
-input('Press enter to upload...')
+success = False
+while not success:
+    input('Press enter to upload...')
 
-payload = {
-    'preUploadId': pre_upload.get('preUploadId'),
-    'token': {
-        'token': get_token()
+    payload = {
+        'preUploadId': pre_upload.get('preUploadId'),
+        'token': {
+            'token': get_token()
+        }
     }
-}
 
-r = requests.post(
-    ALF_UPLOAD_URL,
-    json=payload,
-    auth=admin_basic_auth
-)
+    r = requests.post(
+        ALF_UPLOAD_URL,
+        json=payload,
+        auth=admin_basic_auth
+    )
 
-print('Upload document (check-in)')
-print('POST ' + ALF_UPLOAD_URL)
-print(r.status_code)
+    print('Upload document (check-in)')
+    print('POST ' + ALF_UPLOAD_URL)
+    print(r.status_code)
+
+    if r.status_code == 200:
+        success = True

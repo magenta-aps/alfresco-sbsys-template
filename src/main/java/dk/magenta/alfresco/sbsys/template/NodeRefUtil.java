@@ -1,5 +1,6 @@
 package dk.magenta.alfresco.sbsys.template;
 
+import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
@@ -86,6 +87,16 @@ public class NodeRefUtil {
         documentDetails.put("contentStorePath", contentStorePath);
 
         return documentDetails;
+    }
+
+    public void verifyVersionForUpload(String nodeRefStr) throws VersionUploadException {
+        NodeRef nodeRef = new NodeRef(nodeRefStr);
+        String version = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_VERSION_LABEL);
+        logger.debug("Version: " + version);
+
+        if (version.equals("1.0")) {
+            throw new VersionUploadException("Not allowed to upload version 1.0 to SBSYS");
+        }
     }
 
     public void setVersionableAspect(NodeRef nodeRef) {
