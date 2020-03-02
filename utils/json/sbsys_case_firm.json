@@ -1,0 +1,109 @@
+{
+  "SagsTitel": "PRTest",
+  "Personer": [],
+  "Firmaer": [
+    {
+      "Reklamebeskyttelse": false,
+      "CvrNummer": "25052943",
+      "Adresse": {
+        "Id": 1527,
+        "ErUdlandsadresse": false,
+        "Adresse1": "Pilestræde 43",
+        "Adresse2": "1112 København K",
+        "Adresse3": "",
+        "Adresse4": "",
+        "PostNummer": 1112,
+        "LandeKode": "",
+        "ErBeskyttet": false
+      },
+      "ErJuridiskEnhed": false,
+      "TilmeldtDigitalPost": false,
+      "Uuid": "bf82d011-cb75-4e6d-9408-481d8869a67d",
+      "Id": 23,
+      "Navn": "MAGENTA ApS"
+    }
+  ],
+  "Firmaer": [],
+  "Id": 1272,
+  "SagIdentity": "eec1ad92-7b47-45f7-b87a-6801aedc485d",
+  "Opstaaet": "2020-02-28T10:52:18.043+01:00",
+  "Nummer": "02.02.00-G01-2-20",
+  "Fagomraade": {
+    "Uuid": "b168ec95-d6e4-480a-8c82-30c1cab68209",
+    "Id": 1,
+    "Navn": "Standard"
+  },
+  "BevaringId": 20,
+  "SenesteStatusAendringKommentar": "Sagsstatus ændret til Opstået",
+  "SenesteStatusAendring": "2020-02-28T10:52:17.963+01:00",
+  "Oprettet": "2020-02-28T10:52:18.043+01:00",
+  "SenestAendret": "2020-02-28T10:52:18.043+01:00",
+  "ErBeskyttet": true,
+  "ErBesluttet": false,
+  "BeslutningHarDeadline": false,
+  "SagsNummerId": 1272,
+  "Ansaettelsessted": {
+    "Uuid": "c2822c97-8e48-4cc7-8e0f-474318c8192a",
+    "Id": 5,
+    "Navn": "Løn"
+  },
+  "Behandler": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "SagsStatus": {
+    "Id": 6,
+    "Navn": "Opstået",
+    "Orden": 1,
+    "SagsTilstand": "Aktiv",
+    "RequireComments": false,
+    "SagsStatusKommentar": "Sagsstatus ændret til Opstået"
+  },
+  "ArkivAfklaringStatusId": 1,
+  "OprettetAf": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "SenestAendretAf": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "SecuritySetId": 89492,
+  "SagSkabelon": {
+    "Uuid": "bc85abd2-cdf9-4658-b414-2a99d45d16a8",
+    "Id": 86,
+    "Navn": "PR Test"
+  },
+  "SagsNummer": {
+    "EmneplanNummer": {
+      "Id": 11267,
+      "EmneplanID": 90,
+      "Nummer": "02.02.00",
+      "Navn": "Bebyggelsens højde- og afstandsforhold i almindelighed",
+      "Beskrivelse": "\r\n",
+      "Niveau": 2,
+      "Oprettet": "1988-01-01T00:00:00+01:00",
+      "ErUdgaaet": false,
+      "AfloserNumre": []
+    },
+    "Facet": {
+      "ID": 770,
+      "FacetTypeID": 1337,
+      "Nummer": "G01",
+      "Navn": "Generelle sager",
+      "Beskrivelse": "G01 anvendes til almindeligt forekommende sager, fx:</p>\n<p> \n - afgørelser efter faste regler, principper eller instrukser - \n - beslutninger ud fra faste regler, principper eller instrukser - \n - generelle henvendelser - \n - generel vejledning - \n - generel rådgivning - \n </p>\n<p>G01 bruges til at skelne generelle sager fra de specielle, dvs. sager hvor facetten bruges til søgning efter bestemte sagstyper, ledelsesinformation eller søgning på tværs af emner.\r\n",
+      "BevaringID": 20,
+      "Oprettet": "1988-01-01T00:00:00+01:00",
+      "Rettet": "2011-11-01T00:00:00+01:00"
+    },
+    "Aarstal": 2020,
+    "SekvensNummer": 2
+  }
+}
+

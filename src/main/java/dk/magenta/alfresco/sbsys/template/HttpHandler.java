@@ -61,7 +61,7 @@ public class HttpHandler {
     }
 
     /**
-     * NOTE: this method call the multipart-form-data-requester service and NOT SBSYS directly!
+     * NOTE: this method calls the multipart-form-data-requester service and NOT SBSYS directly!
      */
     public static String POST_MULTIPART(MultipartRequest multipartRequest) {
 

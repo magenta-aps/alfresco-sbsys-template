@@ -17,6 +17,7 @@ import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
 import org.wickedsource.docxstamper.DocxStamper;
 import org.wickedsource.docxstamper.DocxStamperConfiguration;
+import org.wickedsource.docxstamper.api.DocxStamperException;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -87,7 +88,9 @@ public class MergeData extends AbstractWebScript {
             OutputStream outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template
-            DocxStamper stamper = new DocxStamperConfiguration().build();
+            DocxStamper stamper = new DocxStamperConfiguration()
+                    .leaveEmptyOnExpressionError(true)
+                    .build();
             stamper.stamp(inputStream, sbsysCase, outputStream);
 
             inputStream.close();
@@ -120,6 +123,13 @@ public class MergeData extends AbstractWebScript {
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());
+        } catch (DocxStamperException e) {
+            e.printStackTrace();
+            webScriptResponse.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.getMergeErrorMessage()
+            );
         }
     }
 

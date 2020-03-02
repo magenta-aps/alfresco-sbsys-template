@@ -1,0 +1,166 @@
+{
+  "SagsTitel": "MagentaTest",
+  "Personer": [
+    {
+      "FoedeDato": "1900-04-01T00:00:00+02:00",
+      "Initialer": "TTM",
+      "Titel": "",
+      "Uddannelse": "",
+      "Stilling": "",
+      "Ansaettelsessted": "",
+      "Koen": "Mand",
+      "CprNummer": "010490-9989",
+      "Adresse": {
+        "Id": 53,
+        "Adresse1": "Testgrusgraven 3,3.tv",
+        "PostNummer": 3400,
+        "PostDistrikt": "Hillerød",
+        "ErBeskyttet": false,
+        "WorkTelefonNummer": "",
+        "PrivateEmailAdresse": "torre@hotmail.com",
+        "PrivateMobilNummer": "",
+        "PrivateTelefonNummer": "10100101010"
+      },
+      "CivilstandId": 5,
+      "MorCPR": "010862-9996",
+      "FarCPR": "010858-9995",
+      "TilmeldtDigitalPost": true,
+      "Uuid": "5b2b06ad-67f9-4ea6-b623-c5b48b4ffd01",
+      "Id": 4,
+      "Navn": "Torre Test Mosebryggersen"
+    },
+    {
+      "FoedeDato": "1972-04-01T00:00:00+02:00",
+      "Koen": "Mand",
+      "CprNummer": "010772-9995",
+      "Adresse": {
+        "Id": 55,
+        "Adresse1": "Testervej18",
+        "PostNummer": 6200,
+        "PostDistrikt": "Aabenraa",
+        "ErBeskyttet": false,
+        "WorkTelefonNummer": "",
+        "PrivateEmailAdresse": "",
+        "PrivateMobilNummer": "",
+        "PrivateTelefonNummer": "456767"
+      },
+      "CivilstandId": 5,
+      "MorCPR": "251248-9996",
+      "FarCPR": "000000-0000",
+      "TilmeldtDigitalPost": true,
+      "Uuid": "f42261df-a6e2-40f0-9920-03c210b914a7",
+      "Id": 6,
+      "Navn": "Max Test Berggren"
+    },
+    {
+      "Koen": "Kvinde",
+      "CprNummer": "310154-1966",
+      "Adresse": {
+        "Id": 334,
+        "Adresse1": "Testgrusgraven 3,3.th",
+        "Adresse2": "Dyrup",
+        "PostNummer": 5250,
+        "PostDistrikt": "Odense SV",
+        "ErBeskyttet": false
+      },
+      "CivilstandId": 4,
+      "TilmeldtDigitalPost": false,
+      "Uuid": "51e82b3b-207f-4f73-99b9-83111fbd3cd2",
+      "Id": 46,
+      "Navn": "Lonni Test Lauridsen"
+    }
+  ],
+  "Firmaer": [],
+  "PrimaryPart": {
+    "PartId": 4,
+    "PartType": "Person",
+    "CPRnummer": "010490-9989",
+    "Navn": "Torre Test Mosebryggersen"
+  },
+  "Id": 979,
+  "SagIdentity": "a2252d45-89eb-451e-9079-c7c63203d7af",
+  "Opstaaet": "2019-11-18T09:24:48.507+01:00",
+  "Nummer": "32.03.12-G01-36-19",
+  "Fagomraade": {
+    "Uuid": "b168ec95-d6e4-480a-8c82-30c1cab68209",
+    "Id": 1,
+    "Navn": "Standard"
+  },
+  "BevaringId": 20,
+  "SenesteStatusAendringKommentar": "Sagsstatus ændret til Opstået",
+  "SenesteStatusAendring": "2019-11-18T09:24:48.397+01:00",
+  "Oprettet": "2019-11-18T09:24:48.507+01:00",
+  "SenestAendret": "2020-02-21T14:02:20.687+01:00",
+  "ErBeskyttet": true,
+  "ErBesluttet": false,
+  "BeslutningHarDeadline": false,
+  "SagsNummerId": 979,
+  "Ansaettelsessted": {
+    "Uuid": "c2822c97-8e48-4cc7-8e0f-474318c8192a",
+    "Id": 5,
+    "Navn": "Løn"
+  },
+  "Behandler": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "SagsStatus": {
+    "Id": 6,
+    "Navn": "Opstået",
+    "Orden": 1,
+    "SagsTilstand": "Aktiv",
+    "RequireComments": false,
+    "SagsStatusKommentar": "Sagsstatus ændret til Opstået"
+  },
+  "ArkivAfklaringStatusId": 1,
+  "OprettetAf": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "SenestAendretAf": {
+    "LogonId": "testbruger01",
+    "Uuid": "c713c192-939f-463a-8f71-dc92d699e64e",
+    "Id": 2,
+    "Navn": "Test Bruger 01"
+  },
+  "StyringsreolHylde": {
+    "Id": 3,
+    "Navn": "Ny ansøgning"
+  },
+  "SecuritySetId": 76883,
+  "SagSkabelon": {
+    "Uuid": "ecc02786-56e2-4b56-ae11-ff6e2dce0626",
+    "Id": 11,
+    "Navn": "Ansøgningssag"
+  },
+  "SagsNummer": {
+    "EmneplanNummer": {
+      "Id": 13877,
+      "EmneplanID": 90,
+      "Nummer": "32.03.12",
+      "Navn": "Personligt tillæg og helbredstillæg",
+      "Beskrivelse": "\r\n",
+      "Niveau": 2,
+      "Oprettet": "2009-05-01T00:00:00+02:00",
+      "ErUdgaaet": false,
+      "AfloserNumre": []
+    },
+    "Facet": {
+      "ID": 770,
+      "FacetTypeID": 1337,
+      "Nummer": "G01",
+      "Navn": "Generelle sager",
+      "Beskrivelse": "G01 anvendes til almindeligt forekommende sager, fx:</p>\n<p> \n - afgørelser efter faste regler, principper eller instrukser - \n - beslutninger ud fra faste regler, principper eller instrukser - \n - generelle henvendelser - \n - generel vejledning - \n - generel rådgivning - \n </p>\n<p>G01 bruges til at skelne generelle sager fra de specielle, dvs. sager hvor facetten bruges til søgning efter bestemte sagstyper, ledelsesinformation eller søgning på tværs af emner.\r\n",
+      "BevaringID": 20,
+      "Oprettet": "1988-01-01T00:00:00+01:00",
+      "Rettet": "2011-11-01T00:00:00+01:00"
+    },
+    "Aarstal": 2019,
+    "SekvensNummer": 36
+  }
+}
+

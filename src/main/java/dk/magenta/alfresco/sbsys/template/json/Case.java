@@ -8,7 +8,7 @@ public class Case {
 
     private String SagsTitel;
     private List<Person> Personer;
-    private List<Object> Firmaer;
+    private List<Company> Firmaer;
     private int Id;
     private String SagIdentity;
     private String Opstaaet;
@@ -59,11 +59,11 @@ public class Case {
         Personer = personer;
     }
 
-    public List<Object> getFirmaer() {
+    public List<Company> getFirmaer() {
         return Firmaer;
     }
 
-    public void setFirmaer(List<Object> firmaer) {
+    public void setFirmaer(List<Company> firmaer) {
         Firmaer = firmaer;
     }
 

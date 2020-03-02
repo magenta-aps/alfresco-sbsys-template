@@ -26,6 +26,13 @@ public class RequestResponseHandler {
         return serialize(jsonErrorMessage);
     }
 
+    public static String getMergeErrorMessage() {
+        Map<String, String> mergeErrorMessage = new HashMap<>();
+        mergeErrorMessage.put("msg", "Kunne ikke flette sagens data ned i skabelonen. " +
+                "Kontrollér venligst syntaxen i skabelonen");
+        return serialize(mergeErrorMessage);
+    }
+
     public static String serialize(Object obj) {
         return gson.toJson(obj);
     }
