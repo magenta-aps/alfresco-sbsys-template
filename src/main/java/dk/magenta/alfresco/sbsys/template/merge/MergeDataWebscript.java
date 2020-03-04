@@ -1,6 +1,7 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.merge;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.*;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -27,11 +28,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
-public class MergeData extends AbstractWebScript {
-    private static Log logger = LogFactory.getLog(MergeData.class);
+public class MergeDataWebscript extends AbstractWebScript {
+    private static Log logger = LogFactory.getLog(MergeDataWebscript.class);
 
     private AttributeService attributeService;
     private FileFolderService fileFolderService;
+    private MergeStrategy mergeStrategy;
     private NodeRefUtil nodeRefUtil;
     private PreviewAndEdit previewAndEdit;
     private Properties properties;
@@ -92,10 +94,7 @@ public class MergeData extends AbstractWebScript {
             OutputStream outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template
-            DocxStamper stamper = new DocxStamperConfiguration()
-                    .leaveEmptyOnExpressionError(true)
-                    .build();
-            stamper.stamp(inputStream, sbsysCase, outputStream);
+            mergeStrategy.merge(sbsysCase, inputStream, outputStream);
 
             inputStream.close();
             outputStream.close();
@@ -111,7 +110,7 @@ public class MergeData extends AbstractWebScript {
 
             Map<String, String> resp = previewAndEdit.getEditingFileLocationData(
                     mergedDoc.getNodeRef(),
-                    preUploadFilename + ".docx",
+                    preUploadFilename + mimetypeExtension.getSecond(),
                     Constants.EDIT);
 
             String json = RequestResponseHandler.serialize(resp);
@@ -149,6 +148,10 @@ public class MergeData extends AbstractWebScript {
 
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
+    }
+
+    public void setMergeStrategy(MergeStrategy mergeStrategy) {
+        this.mergeStrategy = mergeStrategy;
     }
 
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {

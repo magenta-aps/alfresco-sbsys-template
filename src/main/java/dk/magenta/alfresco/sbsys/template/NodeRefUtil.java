@@ -63,7 +63,7 @@ public class NodeRefUtil {
         NodeRef nodeRef = new NodeRef(Constants.WORKSPACE_SPACESSTORE + nodeRefUuid);
         ContentDataWithId contentData = (ContentDataWithId) nodeService.getProperty(nodeRef, ContentModel.PROP_CONTENT);
         String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-        return new Pair<>(contentData.getMimetype(), name.split("\\.")[1]);
+        return new Pair<>(contentData.getMimetype(), "." + name.split("\\.")[1]);
     }
 
     public OutputStream getOutputStream(NodeRef nodeRef) {

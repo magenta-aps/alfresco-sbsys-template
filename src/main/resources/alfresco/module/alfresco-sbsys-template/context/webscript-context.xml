@@ -33,10 +33,11 @@
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.mergedata.post"
-		  class="dk.magenta.alfresco.sbsys.template.MergeData"
+		  class="dk.magenta.alfresco.sbsys.template.merge.MergeDataWebscript"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
 		<property name="fileFolderService" ref="FileFolderService" />
+		<property name="mergeStrategy" ref="DocxMergeStrategy" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
 		<property name="previewAndEdit" ref="webscript.magenta.sbsys-template.preview-and-edit.post" />
 		<property name="properties">

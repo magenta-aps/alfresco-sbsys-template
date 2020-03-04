@@ -52,7 +52,7 @@ public class Sandbox {
 
         JsonElement element = gson.toJsonTree(trm);
         JsonObject obj = element.getAsJsonObject();
-        obj.
+
         System.out.println("hurra");
 
     }

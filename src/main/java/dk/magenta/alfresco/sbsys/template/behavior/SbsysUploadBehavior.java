@@ -2,7 +2,6 @@ package dk.magenta.alfresco.sbsys.template.behavior;
 
 import dk.magenta.alfresco.sbsys.template.Constants;
 import dk.magenta.alfresco.sbsys.template.HttpHandler;
-import dk.magenta.alfresco.sbsys.template.MergeData;
 import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
 import org.alfresco.model.ContentModel;
