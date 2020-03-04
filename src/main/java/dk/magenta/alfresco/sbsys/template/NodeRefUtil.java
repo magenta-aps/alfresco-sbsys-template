@@ -10,6 +10,7 @@ import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
 import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.util.Pair;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -56,6 +57,13 @@ public class NodeRefUtil {
                 ContentModel.PROP_CONTENT
         );
         return contentReader.getContentInputStream();
+    }
+
+    public Pair<String, String> getFileType(String nodeRefUuid) {
+        NodeRef nodeRef = new NodeRef(Constants.WORKSPACE_SPACESSTORE + nodeRefUuid);
+        ContentDataWithId contentData = (ContentDataWithId) nodeService.getProperty(nodeRef, ContentModel.PROP_CONTENT);
+        String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
+        return new Pair<>(contentData.getMimetype(), name.split("\\.")[1]);
     }
 
     public OutputStream getOutputStream(NodeRef nodeRef) {

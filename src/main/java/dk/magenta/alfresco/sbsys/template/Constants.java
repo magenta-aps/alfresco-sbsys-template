@@ -14,5 +14,6 @@ public class Constants {
     public static final String PREVIEW = "preview";
     public static final String TOKEN = "token";
     public static final String URL = "url";
+    public static final String WORKSPACE_SPACESSTORE = "workspace://SpacesStore/";
 
 }

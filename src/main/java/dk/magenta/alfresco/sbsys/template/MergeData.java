@@ -9,6 +9,7 @@ import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.util.GUID;
+import org.alfresco.util.Pair;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -61,8 +62,11 @@ public class MergeData extends AbstractWebScript {
 
             ///////////////////// Merge data into template ////////////////////////
 
+            // Get mimetype and filename extension for the template
+            Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(req.getId());
+
             // Get InputStream for template document
-            InputStream inputStream = nodeRefUtil.getInputStream("workspace://SpacesStore/" + req.getId());
+            InputStream inputStream = nodeRefUtil.getInputStream(Constants.WORKSPACE_SPACESSTORE + req.getId());
 
             // Get the pre-upload folder
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
@@ -75,7 +79,7 @@ public class MergeData extends AbstractWebScript {
             String preUploadFilename = GUID.generate();
             FileInfo mergedDoc = fileFolderService.create(
                     preUpload.getNodeRef(),
-                    preUploadFilename + ".docx",
+                    preUploadFilename + mimetypeExtension.getSecond(),
                     ContentModel.TYPE_CONTENT
             );
 

@@ -2,6 +2,7 @@
 alf_data_dev
 alfresco.log*
 solr.log*
+*.iml
 target
 __pycache__
 
