@@ -1,6 +1,8 @@
 package dk.magenta.alfresco.sbsys.template.sandbox;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
 
 import java.util.ArrayList;
@@ -47,5 +49,11 @@ public class Sandbox {
 
                 Merge trm = gson.fromJson(post, Merge.class);
                 System.out.println("hurra");
+
+        JsonElement element = gson.toJsonTree(trm);
+        JsonObject obj = element.getAsJsonObject();
+        obj.
+        System.out.println("hurra");
+
     }
 }

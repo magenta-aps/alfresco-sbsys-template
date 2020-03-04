@@ -136,6 +136,13 @@
             <version>6.1.2</version>
         </dependency>
 
+        <!-- For templating LibreOffice docs -->
+        <dependency>
+            <groupId>org.apache.odftoolkit</groupId>
+            <artifactId>simple-odf</artifactId>
+            <version>0.8.2-incubating</version>
+        </dependency>
+
     </dependencies>
 
     <build>
