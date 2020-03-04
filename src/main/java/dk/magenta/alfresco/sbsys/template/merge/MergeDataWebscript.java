@@ -38,6 +38,11 @@ public class MergeDataWebscript extends AbstractWebScript {
     private PreviewAndEdit previewAndEdit;
     private Properties properties;
 
+    private InputStream inputStream;
+    private OutputStream outputStream;
+    private Case sbsysCase;
+    private Pair<String, String> mimetypeExtension;
+
     private static final String OPRET_KLADDE = "opretkladde";
 
     @Override
@@ -60,15 +65,15 @@ public class MergeDataWebscript extends AbstractWebScript {
                     req.getToken().get(Constants.TOKEN)
             );
             logger.debug(response);
-            Case sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
+            sbsysCase = RequestResponseHandler.deserialize(response, Case.class);
 
             ///////////////////// Merge data into template ////////////////////////
 
             // Get mimetype and filename extension for the template
-            Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(req.getId());
+            mimetypeExtension = nodeRefUtil.getFileType(req.getId());
 
             // Get InputStream for template document
-            InputStream inputStream = nodeRefUtil.getInputStream(Constants.WORKSPACE_SPACESSTORE + req.getId());
+            inputStream = nodeRefUtil.getInputStream(Constants.WORKSPACE_SPACESSTORE + req.getId());
 
             // Get the pre-upload folder
             List<FileInfo> docLibFolders = fileFolderService.listFolders(nodeRefUtil.getDocLib());
@@ -91,10 +96,10 @@ public class MergeDataWebscript extends AbstractWebScript {
             // Set the date
             sbsysCase.setDato(nodeRefUtil.getNodeRefCreationDate(mergedDoc));
 
-            OutputStream outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
+            outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template
-            mergeStrategy.merge(sbsysCase, inputStream, outputStream);
+            mergeStrategy.merge(this);
 
             inputStream.close();
             outputStream.close();
@@ -164,5 +169,21 @@ public class MergeDataWebscript extends AbstractWebScript {
 
     public void setProperties(Properties properties) {
         this.properties = properties;
+    }
+
+    InputStream getInputStream() {
+        return inputStream;
+    }
+
+    OutputStream getOutputStream() {
+        return outputStream;
+    }
+
+    Case getSbsysCase() {
+        return sbsysCase;
+    }
+
+    Pair<String, String> getMimetypeExtension() {
+        return mimetypeExtension;
     }
 }

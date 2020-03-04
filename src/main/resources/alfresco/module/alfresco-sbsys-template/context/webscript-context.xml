@@ -37,7 +37,7 @@
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
 		<property name="fileFolderService" ref="FileFolderService" />
-		<property name="mergeStrategy" ref="DocxMergeStrategy" />
+		<property name="mergeStrategy" ref="ExtensionMergeStrategy" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
 		<property name="previewAndEdit" ref="webscript.magenta.sbsys-template.preview-and-edit.post" />
 		<property name="properties">

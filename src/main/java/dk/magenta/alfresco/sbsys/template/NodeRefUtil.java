@@ -63,7 +63,11 @@ public class NodeRefUtil {
         NodeRef nodeRef = new NodeRef(Constants.WORKSPACE_SPACESSTORE + nodeRefUuid);
         ContentDataWithId contentData = (ContentDataWithId) nodeService.getProperty(nodeRef, ContentModel.PROP_CONTENT);
         String name = (String) nodeService.getProperty(nodeRef, ContentModel.PROP_NAME);
-        return new Pair<>(contentData.getMimetype(), "." + name.split("\\.")[1]);
+        Pair<String, String> mimetypeExtension = new Pair<>(contentData.getMimetype(), "." + name.split("\\.")[1]);
+
+        logger.debug("mimetypeExtension: " + mimetypeExtension);
+
+        return mimetypeExtension;
     }
 
     public OutputStream getOutputStream(NodeRef nodeRef) {
