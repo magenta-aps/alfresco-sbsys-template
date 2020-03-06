@@ -101,6 +101,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             // Merge data into template
             mergeStrategy.merge(this);
 
+            // TODO: move to finally clause
             inputStream.close();
             outputStream.close();
 
