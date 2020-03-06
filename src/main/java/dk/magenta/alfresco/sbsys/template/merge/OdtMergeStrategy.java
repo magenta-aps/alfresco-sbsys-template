@@ -25,6 +25,7 @@ public class OdtMergeStrategy implements MergeStrategy {
         Map<String, String> caseFields = flattenCase(mergeDataWebscript.getSbsysCase());
         populateTemplate(mergeDataWebscript, caseFields);
 
+        // TODO: remove
         caseFields.forEach((key, value) -> System.out.println(key + " " + value));
 
     }

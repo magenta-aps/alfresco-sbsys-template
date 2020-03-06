@@ -1,6 +1,5 @@
 package dk.magenta.alfresco.sbsys.template.json;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -34,13 +33,13 @@ public class Case {
     private CaseNumber SagsNummer;
 
     // Server generated
-    private Date Dato;
+    private String Dato;
 
-    public Date getDato() {
+    public String getDato() {
         return Dato;
     }
 
-    public void setDato(Date dato) {
+    public void setDato(String dato) {
         Dato = dato;
     }
 

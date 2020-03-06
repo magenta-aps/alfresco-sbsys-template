@@ -17,6 +17,9 @@ import org.apache.commons.logging.LogFactory;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class NodeRefUtil {
@@ -37,15 +40,13 @@ public class NodeRefUtil {
         nodeService.deleteNode(new NodeRef(nodeRef));
     }
 
-    public Date getNodeRefCreationDate(FileInfo fileInfo) {
-        return (Date) nodeService.getProperty(
-                fileInfo.getNodeRef(),
-                ContentModel.PROP_CREATED
-        );
+    public String getNodeRefCreationDate(FileInfo fileInfo) {
+        Date oldJavaDate = (Date) nodeService.getProperty(fileInfo.getNodeRef(), ContentModel.PROP_CREATED);
+        LocalDate date = oldJavaDate.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return date.format(DateTimeFormatter.ISO_LOCAL_DATE);
     }
 
     public NodeRef getDocLib() {
-
         PagingRequest pagingRequest = new PagingRequest(Integer.MAX_VALUE);
         PagingResults<FileInfo> containers = siteService.listContainers(getSite(), pagingRequest);
         return siteService.getContainer(getSite(), CONTAINER);
