@@ -8,9 +8,7 @@ import org.alfresco.error.AlfrescoRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
+import java.util.*;
 
 public class OdtMergeStrategy implements MergeStrategy {
 
@@ -30,44 +28,39 @@ public class OdtMergeStrategy implements MergeStrategy {
             JsonObject caseObj = root.getAsJsonObject();
             Set<Map.Entry<String, JsonElement>> entries = caseObj.entrySet();
             entries.forEach(entry -> {
-                extractCaseFields(entry.getValue(), caseFields, new StringBuilder(entry.getKey()));
+                List<String> keys = new ArrayList<>();
+                keys.add(entry.getKey());
+                extractCaseFields(entry.getValue(), caseFields, keys);
             });
         } else {
             throw new AlfrescoRuntimeException("Merge error: root element not a JSON object");
         }
 
-
         caseFields.forEach((key, value) -> System.out.println(key + " " + value));
-
-
 
     }
 
-    private void extractCaseFields(JsonElement element, Map<String, String> caseFields, final StringBuilder keyBuilder) {
+    private void extractCaseFields(JsonElement element, Map<String, String> caseFields, final List<String> keys) {
         if (element.isJsonNull()) {
-            caseFields.put(keyBuilder.toString(), "");
-            keyBuilder.remove_last_append
+            caseFields.put(String.join("_", keys), "");
         } else if (element.isJsonPrimitive()) {
-            // TODO: test id getAsString works
-            caseFields.put(keyBuilder.toString(), element.getAsString());
+            caseFields.put(String.join("_", keys), element.getAsString());
         } else if (element.isJsonObject()) {
-            keyBuilder.append("_");
-
             JsonObject obj = element.getAsJsonObject();
             Set<Map.Entry<String, JsonElement>> entries = obj.entrySet();
 
             entries.forEach(entry -> {
-                keyBuilder.append(entry.getKey());
-                extractCaseFields(entry.getValue(), caseFields, keyBuilder);
+                keys.add(entry.getKey());
+                extractCaseFields(entry.getValue(), caseFields, keys);
             });
         } else if (element.isJsonArray()) {
-            keyBuilder.append("_");
-
             JsonArray array = element.getAsJsonArray();
             for (int i = 0; i < array.size(); i++) {
-                keyBuilder.append(i);
-                extractCaseFields(array.get(i), caseFields, keyBuilder);
+                keys.add(Integer.toString(i));
+                extractCaseFields(array.get(i), caseFields, keys);
             }
         }
+
+        keys.remove(keys.size() - 1);
     }
 }

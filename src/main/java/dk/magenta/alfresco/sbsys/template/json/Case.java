@@ -31,6 +31,7 @@ public class Case {
     private Map<String, String> SenestAendretAf;
     private Map<String, String> StyringsreolHylde;
     private int SecuritySetId;
+    private CaseNumber SagsNummer;
 
     // Server generated
     private Date Dato;
@@ -241,5 +242,13 @@ public class Case {
 
     public void setSecuritySetId(int securitySetId) {
         SecuritySetId = securitySetId;
+    }
+
+    public CaseNumber getSagsNummer() {
+        return SagsNummer;
+    }
+
+    public void setSagsNummer(CaseNumber sagsNummer) {
+        SagsNummer = sagsNummer;
     }
 }

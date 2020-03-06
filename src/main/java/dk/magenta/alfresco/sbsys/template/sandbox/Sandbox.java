@@ -55,5 +55,13 @@ public class Sandbox {
 
         System.out.println("hurra");
 
+        List<String> l = new ArrayList<>();
+        l.add("a");
+        l.add("b");
+        l.add("c");
+
+        String s = String.join("_", l);
+        System.out.println(s);
+
     }
 }
