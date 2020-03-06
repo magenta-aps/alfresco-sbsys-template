@@ -96,14 +96,11 @@ public class MergeDataWebscript extends AbstractWebScript {
             // Set the date
             sbsysCase.setDato(nodeRefUtil.getNodeRefCreationDate(mergedDoc));
 
+            // Get outputStream for merged document
             outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
 
             // Merge data into template
             mergeStrategy.merge(this);
-
-            // TODO: move to finally clause
-            inputStream.close();
-            outputStream.close();
 
             ///////////// Store caseId and document name in the AttributeService /////////////
 
@@ -139,6 +136,13 @@ public class MergeDataWebscript extends AbstractWebScript {
                     webScriptResponse,
                     RequestResponseHandler.getMergeErrorMessage()
             );
+        } finally {
+            try {
+                inputStream.close();
+                outputStream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
