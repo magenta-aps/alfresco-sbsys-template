@@ -66,6 +66,11 @@
     </bean>
 
     <bean id="OnlyOfficeUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.OnlyOfficeUrlStrategy" />
+    <bean id="PreviewUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.PreviewUrlStrategy" />
+    <bean id="CommonUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.CommonUrlStrategy">
+        <property name="previewUrlStrategy" ref="PreviewUrlStrategy" />
+        <property name="onlyOfficeUrlStrategy" ref="OnlyOfficeUrlStrategy" />
+    </bean>
 
     <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.NodeRefUtil">
         <property name="contentService" ref="ContentService" />

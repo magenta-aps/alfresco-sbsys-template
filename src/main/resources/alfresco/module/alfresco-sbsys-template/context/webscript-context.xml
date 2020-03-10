@@ -57,7 +57,7 @@
 			<ref bean="global-properties" />
 		</property>
 		<property name="urlStrategy">
-			<ref bean="OnlyOfficeUrlStrategy" />
+			<ref bean="CommonUrlStrategy" />
 		</property>
 	</bean>
 
