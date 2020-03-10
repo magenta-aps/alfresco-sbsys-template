@@ -1,6 +1,10 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.editpreview;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.Constants;
+import dk.magenta.alfresco.sbsys.template.HttpHandler;
+import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
+import dk.magenta.alfresco.sbsys.template.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
@@ -35,6 +39,7 @@ public class PreviewAndEdit extends AbstractWebScript {
     private MimetypeService mimetypeService;
     private NodeRefUtil nodeRefUtil;
     private Properties properties;
+    private UrlStrategy urlStrategy;
 
     private static final String FILDOWNLOAD = "fildownload";
     private static final int STREAM_MARK_BUFFER = 1000;
@@ -131,30 +136,8 @@ public class PreviewAndEdit extends AbstractWebScript {
         Map<String, String> map = new HashMap<>();
         map.put("preUploadId", nodeRef.toString());
         map.put("preUploadFilename", filename);
-        map.put("url", getUrl(operation, nodeRef));
+        map.put("url", urlStrategy.getUrl(operation, nodeRef, properties));
         return map;
-    }
-
-    private String getUrl(String operation, NodeRef nodeRef) {
-        // TODO: do not handle variability parametric
-
-        String commonUrl = properties.getProperty("alfresco.protocol") +
-                "://" +
-                properties.getProperty("alfresco.host") +
-                "/share/page";
-
-        if (operation.equals(Constants.PREVIEW)) {
-            return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
-        } else if (operation.equals(Constants.EDIT)) {
-            return commonUrl +
-                    "/site/" +
-                    properties.getProperty("sbsys.template.site") +
-                    "/onlyoffice-edit?nodeRef=" + nodeRef.toString() +
-                    "&new=";
-        } else {
-            // Should never happen
-            return null;
-        }
     }
 
     public void setAttributeService(AttributeService attributeService) {
@@ -179,5 +162,9 @@ public class PreviewAndEdit extends AbstractWebScript {
 
     public void setProperties(Properties properties) {
         this.properties = properties;
+    }
+
+    public void setUrlStrategy(UrlStrategy urlStrategy) {
+        this.urlStrategy = urlStrategy;
     }
 }

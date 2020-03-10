@@ -46,7 +46,7 @@
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.preview-and-edit.post"
-		  class="dk.magenta.alfresco.sbsys.template.PreviewAndEdit"
+		  class="dk.magenta.alfresco.sbsys.template.editpreview.PreviewAndEdit"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
 		<property name="contentService" ref="ContentService" />
@@ -55,6 +55,9 @@
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
 		<property name="properties">
 			<ref bean="global-properties" />
+		</property>
+		<property name="urlStrategy">
+			<ref bean="OnlyOfficeUrlStrategy" />
 		</property>
 	</bean>
 

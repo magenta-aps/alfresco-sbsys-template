@@ -2,6 +2,7 @@ package dk.magenta.alfresco.sbsys.template.merge;
 
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.*;
+import dk.magenta.alfresco.sbsys.template.editpreview.PreviewAndEdit;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -17,8 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.wickedsource.docxstamper.DocxStamper;
-import org.wickedsource.docxstamper.DocxStamperConfiguration;
 import org.wickedsource.docxstamper.api.DocxStamperException;
 
 import java.io.IOException;
