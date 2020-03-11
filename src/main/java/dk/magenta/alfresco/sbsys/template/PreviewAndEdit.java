@@ -147,7 +147,11 @@ public class PreviewAndEdit extends AbstractWebScript {
         );
 
         if (operation.equals(Constants.PREVIEW)) {
-            url = commonUrl + "/share/page/iframe-preview?nodeRef=" + nodeRef.toString();
+            url = String.format(
+                    "%s/share/page/iframe-preview?nodeRef=%s",
+                    commonUrl,
+                    nodeRef.toString()
+            );
         } else if (operation.equals(Constants.EDIT)) {
             Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(nodeRef.getId());
             String extension = nodeRefUtil.getFileType(nodeRef.getId()).getSecond();
@@ -160,9 +164,8 @@ public class PreviewAndEdit extends AbstractWebScript {
                 );
             } else if (extension.equals(Constants.ODT)) {
                 url = String.format(
-                        "%s/opendesk/edit/libreOffice/%s/%s",
+                        "%s/opendesk/edit/libreOffice/%s",
                         commonUrl,
-                        properties.getProperty("sbsys.template.site"),
                         nodeRef.getId()
                 );
             } else {
