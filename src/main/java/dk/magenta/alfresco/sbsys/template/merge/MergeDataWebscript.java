@@ -97,7 +97,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             sbsysCase.setDato(nodeRefUtil.getNodeRefCreationDate(mergedDoc));
 
             // Get outputStream for merged document
-            outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef());
+            outputStream = nodeRefUtil.getOutputStream(mergedDoc.getNodeRef(), mimetypeExtension.getFirst());
 
             // Merge data into template
             mergeStrategy.merge(this);

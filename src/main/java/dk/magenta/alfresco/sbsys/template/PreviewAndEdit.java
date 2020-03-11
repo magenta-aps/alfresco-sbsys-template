@@ -71,6 +71,7 @@ public class PreviewAndEdit extends AbstractWebScript {
             in.mark(STREAM_MARK_BUFFER);
             String mimetypeGuess = mimetypeService.guessMimetype("unknown", in);
             in.reset();
+            logger.debug("Mimetype guess: " + mimetypeGuess);
 
             // TODO: refactor common code with MergeData webscript
 
@@ -82,8 +83,7 @@ public class PreviewAndEdit extends AbstractWebScript {
                     .get();
 
             // Create document in Alfresco
-
-            String previewFilename = GUID.generate() + ".docx";
+            String previewFilename = GUID.generate() + "." + mimetypeService.getExtension(mimetypeGuess);
             FileInfo previewDoc = fileFolderService.create(
                     preview.getNodeRef(),
                     previewFilename,

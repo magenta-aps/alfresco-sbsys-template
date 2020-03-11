@@ -32,7 +32,6 @@ public class NodeRefUtil {
     private SiteService siteService;
 
     private static final String CONTAINER = "documentLibrary";
-    private static final String MIMETYPE_WORD = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
     private static final String SITE_PROPERTY = "sbsys.template.site";
     private static final String CONTENT_STORE_PATH = "sbsys.template.contentstore";
 
@@ -71,13 +70,13 @@ public class NodeRefUtil {
         return mimetypeExtension;
     }
 
-    public OutputStream getOutputStream(NodeRef nodeRef) {
+    public OutputStream getOutputStream(NodeRef nodeRef, String mimetype) {
         ContentWriter contentWriter = contentService.getWriter(
                 nodeRef,
                 ContentModel.PROP_CONTENT,
                 true
         );
-        contentWriter.setMimetype(MIMETYPE_WORD);
+        contentWriter.setMimetype(mimetype);
         return contentWriter.getContentOutputStream();
     }
 
