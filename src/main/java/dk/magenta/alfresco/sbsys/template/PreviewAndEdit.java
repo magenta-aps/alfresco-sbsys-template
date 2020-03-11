@@ -2,6 +2,7 @@ package dk.magenta.alfresco.sbsys.template;
 
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
+import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -11,6 +12,7 @@ import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.MimetypeService;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.GUID;
+import org.alfresco.util.Pair;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -136,25 +138,41 @@ public class PreviewAndEdit extends AbstractWebScript {
     }
 
     private String getUrl(String operation, NodeRef nodeRef) {
-        // TODO: do not handle variability parametric
 
-        String commonUrl = properties.getProperty("alfresco.protocol") +
-                "://" +
-                properties.getProperty("alfresco.host") +
-                "/share/page";
+        String url;
+        String commonUrl = String.format(
+            "%s://%s",
+            properties.getProperty("alfresco.protocol"),
+            properties.getProperty("alfresco.host")
+        );
 
         if (operation.equals(Constants.PREVIEW)) {
-            return commonUrl + "/iframe-preview?nodeRef=" + nodeRef.toString();
+            url = commonUrl + "/share/page/iframe-preview?nodeRef=" + nodeRef.toString();
         } else if (operation.equals(Constants.EDIT)) {
-            return commonUrl +
-                    "/site/" +
-                    properties.getProperty("sbsys.template.site") +
-                    "/onlyoffice-edit?nodeRef=" + nodeRef.toString() +
-                    "&new=";
+            Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(nodeRef.getId());
+            String extension = nodeRefUtil.getFileType(nodeRef.getId()).getSecond();
+            if (extension.equals(Constants.DOCX)) {
+                url = String.format(
+                    "%s/share/page/site/%s/onlyoffice-edit?nodeRef=%s&new=",
+                    commonUrl,
+                    properties.getProperty("sbsys.template.site"),
+                    nodeRef.toString()
+                );
+            } else if (extension.equals(Constants.ODT)) {
+                url = String.format(
+                        "%s/opendesk/edit/%s/%s",
+                        commonUrl,
+                        properties.getProperty("sbsys.template.site"),
+                        nodeRef.getId()
+                );
+            } else {
+                throw new AlfrescoRuntimeException("URL generation error: unknown file extension");
+            }
         } else {
-            // Should never happen
-            return null;
+            throw new AlfrescoRuntimeException("URL generation error: unknown operation");
         }
+        logger.debug("url: " + url);
+        return url;
     }
 
     public void setAttributeService(AttributeService attributeService) {
