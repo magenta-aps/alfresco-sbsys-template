@@ -65,11 +65,14 @@
         <property name="odtMergeStrategy" ref="OdtMergeStrategy" />
     </bean>
 
-    <bean id="OnlyOfficeUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.OnlyOfficeUrlStrategy" />
+    <bean id="LoolUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.LoolUrlStrategy" />
     <bean id="PreviewUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.PreviewUrlStrategy" />
+    <bean id="OnlyOfficeUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.OnlyOfficeUrlStrategy" />
     <bean id="CommonUrlStrategy" class="dk.magenta.alfresco.sbsys.template.editpreview.CommonUrlStrategy">
-        <property name="previewUrlStrategy" ref="PreviewUrlStrategy" />
+        <property name="nodeRefUtil" ref="NodeRefUtil" />
+        <property name="loolUrlStrategy" ref="LoolUrlStrategy" />
         <property name="onlyOfficeUrlStrategy" ref="OnlyOfficeUrlStrategy" />
+        <property name="previewUrlStrategy" ref="PreviewUrlStrategy" />
     </bean>
 
     <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.NodeRefUtil">

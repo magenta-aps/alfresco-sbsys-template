@@ -16,4 +16,9 @@ public class Constants {
     public static final String URL = "url";
     public static final String WORKSPACE_SPACESSTORE = "workspace://SpacesStore/";
 
+    // File extensions
+    public static final String DOCX = ".docx";
+    public static final String ODT = ".odt";
+
+
 }

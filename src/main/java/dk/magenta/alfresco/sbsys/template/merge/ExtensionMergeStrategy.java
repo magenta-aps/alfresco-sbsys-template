@@ -1,14 +1,14 @@
 package dk.magenta.alfresco.sbsys.template.merge;
 
+import dk.magenta.alfresco.sbsys.template.Constants;
 import org.alfresco.error.AlfrescoRuntimeException;
+
+import static dk.magenta.alfresco.sbsys.template.Constants.DOCX;
 
 public class ExtensionMergeStrategy implements MergeStrategy {
 
     private MergeStrategy docxMergeStrategy;
     private MergeStrategy odtMergeStrategy;
-
-    private static final String DOCX = ".docx";
-    private static final String ODT = ".odt";
 
     @Override
     public void merge(MergeDataWebscript mergeDataWebscript) {
@@ -18,7 +18,7 @@ public class ExtensionMergeStrategy implements MergeStrategy {
         String extension = mergeDataWebscript.getMimetypeExtension().getSecond();
         if (extension.equals(DOCX)) {
             docxMergeStrategy.merge(mergeDataWebscript);
-        } else if (extension.equals(ODT)) {
+        } else if (extension.equals(Constants.ODT)) {
             odtMergeStrategy.merge(mergeDataWebscript);
         } else {
             throw new AlfrescoRuntimeException("Merge error: cannot merge data into " + extension + " documents");
