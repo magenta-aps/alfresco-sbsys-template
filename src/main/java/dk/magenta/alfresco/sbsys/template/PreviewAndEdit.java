@@ -160,7 +160,7 @@ public class PreviewAndEdit extends AbstractWebScript {
                 );
             } else if (extension.equals(Constants.ODT)) {
                 url = String.format(
-                        "%s/opendesk/edit/%s/%s",
+                        "%s/opendesk/edit/libreOffice/%s/%s",
                         commonUrl,
                         properties.getProperty("sbsys.template.site"),
                         nodeRef.getId()
