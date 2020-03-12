@@ -30,6 +30,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+import static dk.magenta.alfresco.sbsys.template.utils.Constants.JSON_SYNTAX_ERROR_MSG;
+
 public class MergeDataWebscript extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeDataWebscript.class);
 
@@ -126,7 +128,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getJsonSyntaxErrorMessage()
+                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -136,7 +138,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getMergeErrorMessage()
+                    RequestResponseHandler.getErrorMessage(Constants.TEMPLATE_SYNTAX_ERROR_MSG)
             );
         } finally {
             try {

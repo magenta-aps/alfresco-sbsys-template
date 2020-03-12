@@ -20,17 +20,10 @@ public class RequestResponseHandler {
         return gson.fromJson(json, clazz);
     }
 
-    public static String getJsonSyntaxErrorMessage() {
-        Map<String, String> jsonErrorMessage = new HashMap<>();
-        jsonErrorMessage.put("msg", "Could not parse JSON");
-        return serialize(jsonErrorMessage);
-    }
-
-    public static String getMergeErrorMessage() {
-        Map<String, String> mergeErrorMessage = new HashMap<>();
-        mergeErrorMessage.put("msg", "Kunne ikke flette sagens data ned i skabelonen. " +
-                "Kontrollér venligst syntaxen i skabelonen");
-        return serialize(mergeErrorMessage);
+    public static String getErrorMessage(String msg) {
+        Map<String, String> errorMessage = new HashMap<>();
+        errorMessage.put("msg", msg);
+        return serialize(errorMessage);
     }
 
     public static String serialize(Object obj) {

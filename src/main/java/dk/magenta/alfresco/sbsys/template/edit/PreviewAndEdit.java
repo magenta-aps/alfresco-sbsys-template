@@ -1,8 +1,8 @@
 package dk.magenta.alfresco.sbsys.template.edit;
 
 import com.google.gson.JsonSyntaxException;
-import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
+import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.requests.UrlsAndTokenRequest;
@@ -27,6 +27,8 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
+import static dk.magenta.alfresco.sbsys.template.utils.Constants.*;
+
 public class PreviewAndEdit extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(PreviewAndEdit.class);
 
@@ -44,10 +46,11 @@ public class PreviewAndEdit extends AbstractWebScript {
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
         logger.debug("Preview webscript called");
 
-        // TODO: throw exception for unknown operation
-        String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(Constants.OPERATION);
+        String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(OPERATION);
 
         try {
+            // Check that the operation type is allowed (preview or edit)
+            verifyOperation(operation);
 
             // Get POSTed JSON as string from request and deserialize into POJO
             UrlsAndTokenRequest req = RequestResponseHandler.deserialize(
@@ -55,13 +58,13 @@ public class PreviewAndEdit extends AbstractWebScript {
                     UrlsAndTokenRequest.class
             );
 
-            String urlKey = operation.equals(Constants.EDIT) ? Constants.FILCHECKUD : FILDOWNLOAD;
+            String urlKey = operation.equals(EDIT) ? FILCHECKUD : FILDOWNLOAD;
             logger.debug("urlKey: " + urlKey);
 
             // Get content InputStream from SBSYS
             byte[] content = HttpHandler.GET_CONTENT(
-                    req.getUrls().getOrDefault(Constants.FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
-                    req.getToken().get(Constants.TOKEN)
+                    req.getUrls().getOrDefault(FILCHECKUD, req.getUrls().get(FILDOWNLOAD)),
+                    req.getToken().get(TOKEN)
             );
             InputStream in = new ByteArrayInputStream(content);
             logger.debug("Download URL: " + req.getUrls().get(urlKey));
@@ -102,9 +105,9 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // in.close(); // Not necessary for ByteArrayInputStream
 
-            if (operation.equals(Constants.EDIT)) {
-                attributeService.createAttribute(Constants.CHECKOUT, previewDoc.getNodeRef().toString(), Constants.OPERATION);
-                attributeService.createAttribute(req.getUrls().get(Constants.FILCHECKIND), previewDoc.getNodeRef().toString(), Constants.URL);
+            if (operation.equals(EDIT)) {
+                attributeService.createAttribute(CHECKOUT, previewDoc.getNodeRef().toString(), OPERATION);
+                attributeService.createAttribute(req.getUrls().get(FILCHECKIND), previewDoc.getNodeRef().toString(), URL);
             }
 
             // Make response
@@ -123,8 +126,20 @@ public class PreviewAndEdit extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getJsonSyntaxErrorMessage()
+                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
             );
+        } catch (OperationException e) {
+            webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.getErrorMessage(e.getMessage())
+            );
+        }
+    }
+
+    private void verifyOperation(String operation) throws OperationException {
+        if (!(operation.equals(PREVIEW) || operation.equals(EDIT))) {
+            throw new OperationException("Unknown operation: " + operation);
         }
     }
 

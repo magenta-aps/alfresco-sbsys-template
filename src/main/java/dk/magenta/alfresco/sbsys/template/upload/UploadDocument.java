@@ -19,6 +19,8 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import java.io.IOException;
 import java.util.Map;
 
+import static dk.magenta.alfresco.sbsys.template.utils.Constants.JSON_SYNTAX_ERROR_MSG;
+
 public class UploadDocument extends AbstractWebScript {
 
     private static Log logger = LogFactory.getLog(UploadDocument.class);
@@ -73,7 +75,7 @@ public class UploadDocument extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getJsonSyntaxErrorMessage()
+                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
             );
         } catch (VersionUploadException e) {
             webScriptResponse.setStatus(HttpStatus.SC_FORBIDDEN);

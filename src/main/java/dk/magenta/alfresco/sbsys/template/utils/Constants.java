@@ -22,4 +22,7 @@ public class Constants {
     public static final String ODT = ".odt";
     public static final String XLSX = ".xlsx";
 
+    // Response messages
+    public static final String JSON_SYNTAX_ERROR_MSG = "Could not parse JSON";
+    public static final String TEMPLATE_SYNTAX_ERROR_MSG = "Kunne ikke flette sagens data ned i skabelonen. Kontrollér venligst syntaxen i skabelonen";
 }
