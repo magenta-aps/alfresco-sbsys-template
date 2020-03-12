@@ -1,9 +1,9 @@
 package dk.magenta.alfresco.sbsys.template.upload;
 
 import com.google.gson.JsonSyntaxException;
-import dk.magenta.alfresco.sbsys.template.Constants;
+import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
-import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
+import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
 import dk.magenta.alfresco.sbsys.template.json.Upload;

@@ -1,6 +1,7 @@
 package dk.magenta.alfresco.sbsys.template;
 
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
+import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import org.alfresco.service.cmr.model.FileFolderService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.apache.commons.logging.Log;

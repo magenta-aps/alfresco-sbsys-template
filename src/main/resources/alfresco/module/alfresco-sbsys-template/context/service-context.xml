@@ -48,7 +48,7 @@
         <property name="odtMergeStrategy" ref="OdtMergeStrategy" />
     </bean>
 
-    <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.NodeRefUtil">
+    <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil">
         <property name="contentService" ref="ContentService" />
         <property name="nodeService" ref="NodeService" />
         <property name="properties">

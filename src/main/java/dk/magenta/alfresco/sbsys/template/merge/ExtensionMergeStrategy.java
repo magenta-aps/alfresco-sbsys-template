@@ -2,8 +2,8 @@ package dk.magenta.alfresco.sbsys.template.merge;
 
 import org.alfresco.error.AlfrescoRuntimeException;
 
-import static dk.magenta.alfresco.sbsys.template.Constants.DOCX;
-import static dk.magenta.alfresco.sbsys.template.Constants.ODT;
+import static dk.magenta.alfresco.sbsys.template.utils.Constants.DOCX;
+import static dk.magenta.alfresco.sbsys.template.utils.Constants.ODT;
 
 public class ExtensionMergeStrategy implements MergeStrategy {
 

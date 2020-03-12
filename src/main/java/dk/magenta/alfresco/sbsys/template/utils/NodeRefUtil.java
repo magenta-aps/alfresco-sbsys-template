@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.utils;
 
 import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
 import org.alfresco.model.ContentModel;

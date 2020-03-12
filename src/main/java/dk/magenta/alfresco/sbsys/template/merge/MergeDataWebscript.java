@@ -1,12 +1,13 @@
 package dk.magenta.alfresco.sbsys.template.merge;
 
 import com.google.gson.JsonSyntaxException;
-import dk.magenta.alfresco.sbsys.template.*;
 import dk.magenta.alfresco.sbsys.template.edit.FileLocationProvider;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
+import dk.magenta.alfresco.sbsys.template.utils.Constants;
+import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;

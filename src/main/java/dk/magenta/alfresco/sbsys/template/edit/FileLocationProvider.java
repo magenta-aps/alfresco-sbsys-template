@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template.edit;
 
-import dk.magenta.alfresco.sbsys.template.Constants;
-import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
+import dk.magenta.alfresco.sbsys.template.utils.Constants;
+import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.Pair;
