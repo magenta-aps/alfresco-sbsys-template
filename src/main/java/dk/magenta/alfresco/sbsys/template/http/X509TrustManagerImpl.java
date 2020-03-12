@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.http;
 
 import javax.net.ssl.X509TrustManager;
 import java.security.cert.CertificateException;

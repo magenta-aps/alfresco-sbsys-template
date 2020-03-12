@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.http;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;

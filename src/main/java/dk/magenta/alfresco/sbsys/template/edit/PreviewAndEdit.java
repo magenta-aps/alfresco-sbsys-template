@@ -2,9 +2,9 @@ package dk.magenta.alfresco.sbsys.template.edit;
 
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.Constants;
-import dk.magenta.alfresco.sbsys.template.HttpHandler;
+import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
-import dk.magenta.alfresco.sbsys.template.RequestResponseHandler;
+import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
