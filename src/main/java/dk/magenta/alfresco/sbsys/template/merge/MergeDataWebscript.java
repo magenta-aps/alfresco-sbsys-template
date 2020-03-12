@@ -2,6 +2,8 @@ package dk.magenta.alfresco.sbsys.template.merge;
 
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.*;
+import dk.magenta.alfresco.sbsys.template.edit.FileLocationProvider;
+import dk.magenta.alfresco.sbsys.template.edit.PreviewAndEdit;
 import dk.magenta.alfresco.sbsys.template.json.Case;
 import dk.magenta.alfresco.sbsys.template.json.Merge;
 import org.alfresco.error.AlfrescoRuntimeException;
@@ -17,8 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
-import org.wickedsource.docxstamper.DocxStamper;
-import org.wickedsource.docxstamper.DocxStamperConfiguration;
 import org.wickedsource.docxstamper.api.DocxStamperException;
 
 import java.io.IOException;
@@ -32,10 +32,10 @@ public class MergeDataWebscript extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(MergeDataWebscript.class);
 
     private AttributeService attributeService;
+    private FileLocationProvider fileLocationProvider;
     private FileFolderService fileFolderService;
     private MergeStrategy mergeStrategy;
     private NodeRefUtil nodeRefUtil;
-    private PreviewAndEdit previewAndEdit;
     private Properties properties;
 
     private InputStream inputStream;
@@ -111,7 +111,7 @@ public class MergeDataWebscript extends AbstractWebScript {
 
             /////////////////////// Build response /////////////////////////
 
-            Map<String, String> resp = previewAndEdit.getEditingFileLocationData(
+            Map<String, String> resp = fileLocationProvider.getEditingFileLocationData(
                     mergedDoc.getNodeRef(),
                     preUploadFilename + mimetypeExtension.getSecond(),
                     Constants.EDIT);
@@ -156,6 +156,10 @@ public class MergeDataWebscript extends AbstractWebScript {
         return fileFolderService;
     }
 
+    public void setFileLocationProvider(FileLocationProvider fileLocationProvider) {
+        this.fileLocationProvider = fileLocationProvider;
+    }
+
     public void setFileFolderService(FileFolderService fileFolderService) {
         this.fileFolderService = fileFolderService;
     }
@@ -166,10 +170,6 @@ public class MergeDataWebscript extends AbstractWebScript {
 
     public void setNodeRefUtil(NodeRefUtil nodeRefUtil) {
         this.nodeRefUtil = nodeRefUtil;
-    }
-
-    public void setPreviewAndEdit(PreviewAndEdit previewAndEdit) {
-        this.previewAndEdit = previewAndEdit;
     }
 
     public void setProperties(Properties properties) {

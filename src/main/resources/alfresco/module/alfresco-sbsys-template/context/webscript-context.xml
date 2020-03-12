@@ -36,20 +36,21 @@
 		  class="dk.magenta.alfresco.sbsys.template.merge.MergeDataWebscript"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
+		<property name="fileLocationProvider" ref="FileLocationProvider" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="mergeStrategy" ref="ExtensionMergeStrategy" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
-		<property name="previewAndEdit" ref="webscript.magenta.sbsys-template.preview-and-edit.post" />
 		<property name="properties">
 			<ref bean="global-properties" />
 		</property>
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.preview-and-edit.post"
-		  class="dk.magenta.alfresco.sbsys.template.PreviewAndEdit"
+		  class="dk.magenta.alfresco.sbsys.template.edit.PreviewAndEdit"
 		  parent="webscript">
 		<property name="attributeService" ref="AttributeService" />
 		<property name="contentService" ref="ContentService" />
+		<property name="fileLocationProvider" ref="FileLocationProvider" />
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="mimetypeService" ref="MimetypeService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />

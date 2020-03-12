@@ -1,8 +1,11 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.edit;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.Constants;
+import dk.magenta.alfresco.sbsys.template.HttpHandler;
+import dk.magenta.alfresco.sbsys.template.NodeRefUtil;
+import dk.magenta.alfresco.sbsys.template.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
-import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;
@@ -10,9 +13,7 @@ import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.ContentService;
 import org.alfresco.service.cmr.repository.ContentWriter;
 import org.alfresco.service.cmr.repository.MimetypeService;
-import org.alfresco.service.cmr.repository.NodeRef;
 import org.alfresco.util.GUID;
-import org.alfresco.util.Pair;
 import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -23,10 +24,8 @@ import org.springframework.extensions.webscripts.WebScriptResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 public class PreviewAndEdit extends AbstractWebScript {
     private static Log logger = LogFactory.getLog(PreviewAndEdit.class);
@@ -34,9 +33,9 @@ public class PreviewAndEdit extends AbstractWebScript {
     private AttributeService attributeService;
     private ContentService contentService;
     private FileFolderService fileFolderService;
+    private FileLocationProvider fileLocationProvider;
     private MimetypeService mimetypeService;
     private NodeRefUtil nodeRefUtil;
-    private Properties properties;
 
     private static final String FILDOWNLOAD = "fildownload";
     private static final int STREAM_MARK_BUFFER = 1000;
@@ -110,7 +109,7 @@ public class PreviewAndEdit extends AbstractWebScript {
 
             // Make response
 
-            Map<String, String> resp = getEditingFileLocationData(
+            Map<String, String> resp = fileLocationProvider.getEditingFileLocationData(
                     previewDoc.getNodeRef(),
                     previewFilename,
                     operation
@@ -129,54 +128,7 @@ public class PreviewAndEdit extends AbstractWebScript {
         }
     }
 
-    public Map<String, String> getEditingFileLocationData(NodeRef nodeRef, String filename, String operation) {
-        Map<String, String> map = new HashMap<>();
-        map.put("preUploadId", nodeRef.toString());
-        map.put("preUploadFilename", filename);
-        map.put("url", getUrl(operation, nodeRef));
-        return map;
-    }
-
-    private String getUrl(String operation, NodeRef nodeRef) {
-
-        String url;
-        String commonUrl = String.format(
-            "%s://%s",
-            properties.getProperty("alfresco.protocol"),
-            properties.getProperty("alfresco.host")
-        );
-
-        if (operation.equals(Constants.PREVIEW)) {
-            url = String.format(
-                    "%s/share/page/iframe-preview?nodeRef=%s",
-                    commonUrl,
-                    nodeRef.toString()
-            );
-        } else if (operation.equals(Constants.EDIT)) {
-            Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(nodeRef.getId());
-            String extension = nodeRefUtil.getFileType(nodeRef.getId()).getSecond();
-            if (extension.equals(Constants.DOCX) || extension.equals(Constants.XLSX)) {
-                url = String.format(
-                    "%s/share/page/site/%s/onlyoffice-edit?nodeRef=%s&new=",
-                    commonUrl,
-                    properties.getProperty("sbsys.template.site"),
-                    nodeRef.toString()
-                );
-            } else if (extension.equals(Constants.ODT) || extension.equals(Constants.ODS)) {
-                url = String.format(
-                        "%s/opendesk/edit/libreOffice/%s",
-                        commonUrl,
-                        nodeRef.getId()
-                );
-            } else {
-                throw new AlfrescoRuntimeException("URL generation error. Unknown file extension: " + extension);
-            }
-        } else {
-            throw new AlfrescoRuntimeException("URL generation error. Unknown operation: " + operation);
-        }
-        logger.debug("url: " + url);
-        return url;
-    }
+    /////////////////////// Setters ////////////////////////////
 
     public void setAttributeService(AttributeService attributeService) {
         this.attributeService = attributeService;
@@ -184,6 +136,10 @@ public class PreviewAndEdit extends AbstractWebScript {
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
+    }
+
+    public void setFileLocationProvider(FileLocationProvider fileLocationProvider) {
+        this.fileLocationProvider = fileLocationProvider;
     }
 
     public void setFileFolderService(FileFolderService fileFolderService) {
@@ -198,7 +154,4 @@ public class PreviewAndEdit extends AbstractWebScript {
         this.nodeRefUtil = nodeRefUtil;
     }
 
-    public void setProperties(Properties properties) {
-        this.properties = properties;
-    }
 }

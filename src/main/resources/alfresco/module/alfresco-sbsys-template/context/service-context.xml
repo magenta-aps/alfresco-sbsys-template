@@ -74,4 +74,11 @@
         <property name="siteService" ref="SiteService" />
     </bean>
 
+    <bean id="FileLocationProvider" class="dk.magenta.alfresco.sbsys.template.edit.FileLocationProvider">
+        <property name="nodeRefUtil" ref="NodeRefUtil" />
+        <property name="properties">
+            <ref bean="global-properties" />
+        </property>
+    </bean>
+
 </beans>
