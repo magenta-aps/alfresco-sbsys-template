@@ -8,7 +8,6 @@ import org.alfresco.repo.domain.node.ContentDataWithId;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
-import org.alfresco.service.cmr.version.Version;
 import org.alfresco.service.namespace.QName;
 import org.alfresco.util.Pair;
 import org.apache.commons.logging.Log;
@@ -115,28 +114,6 @@ public class NodeRefUtil {
         Map<QName, Serializable> properties = new HashMap<>();
         properties.put(ContentModel.PROP_VERSION_LABEL, "1.0");
         nodeService.addAspect(nodeRef, ContentModel.ASPECT_VERSIONABLE, properties);
-    }
-
-    public boolean shouldDocumentBeUploaded(NodeRef nodeRef, Version version) {
-        logger.debug("Version = " + version.getVersionLabel());
-
-        if (!version.getVersionLabel().equals("1.1")) {
-            return false;
-        }
-
-        List<ChildAssociationRef> parentAssocs = nodeService.getParentAssocs(nodeRef);
-        if (parentAssocs.size() != 1) {
-            return false;
-        }
-
-        ChildAssociationRef parentAssoc = parentAssocs.get(0);
-        NodeRef parent = parentAssoc.getParentRef();
-        String name = (String) nodeService.getProperty(parent, ContentModel.PROP_NAME);
-        if (name.equals(Constants.PREUPLOAD_FOLDER)) {
-            return true;
-        }
-
-        return false;
     }
 
     /**

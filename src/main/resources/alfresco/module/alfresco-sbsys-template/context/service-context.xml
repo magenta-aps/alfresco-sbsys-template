@@ -74,14 +74,4 @@
         <property name="siteService" ref="SiteService" />
     </bean>
 
-    <!--
-    <bean id="dk.magenta.alfresco.sbsys.template.behavior.SbsysUploadBehavior"
-          class="dk.magenta.alfresco.sbsys.template.behavior.SbsysUploadBehavior"
-          init-method="init">
-        <property name="attributeService" ref="AttributeService" />
-        <property name="nodeRefUtil" ref="NodeRefUtil" />
-        <property name="policyComponent" ref="policyComponent" />
-    </bean>
-    -->
-
 </beans>
