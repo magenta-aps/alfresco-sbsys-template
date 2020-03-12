@@ -18,6 +18,8 @@ public class Constants {
 
     // File extensions
     public static final String DOCX = ".docx";
+    public static final String ODS = ".ods";
     public static final String ODT = ".odt";
+    public static final String XLSX = ".xlsx";
 
 }

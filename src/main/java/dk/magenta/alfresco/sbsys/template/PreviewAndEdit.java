@@ -155,24 +155,24 @@ public class PreviewAndEdit extends AbstractWebScript {
         } else if (operation.equals(Constants.EDIT)) {
             Pair<String, String> mimetypeExtension = nodeRefUtil.getFileType(nodeRef.getId());
             String extension = nodeRefUtil.getFileType(nodeRef.getId()).getSecond();
-            if (extension.equals(Constants.DOCX)) {
+            if (extension.equals(Constants.DOCX) || extension.equals(Constants.XLSX)) {
                 url = String.format(
                     "%s/share/page/site/%s/onlyoffice-edit?nodeRef=%s&new=",
                     commonUrl,
                     properties.getProperty("sbsys.template.site"),
                     nodeRef.toString()
                 );
-            } else if (extension.equals(Constants.ODT)) {
+            } else if (extension.equals(Constants.ODT) || extension.equals(Constants.ODS)) {
                 url = String.format(
                         "%s/opendesk/edit/libreOffice/%s",
                         commonUrl,
                         nodeRef.getId()
                 );
             } else {
-                throw new AlfrescoRuntimeException("URL generation error: unknown file extension");
+                throw new AlfrescoRuntimeException("URL generation error. Unknown file extension: " + extension);
             }
         } else {
-            throw new AlfrescoRuntimeException("URL generation error: unknown operation");
+            throw new AlfrescoRuntimeException("URL generation error. Unknown operation: " + operation);
         }
         logger.debug("url: " + url);
         return url;
