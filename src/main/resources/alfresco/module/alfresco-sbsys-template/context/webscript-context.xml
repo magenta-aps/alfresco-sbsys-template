@@ -20,11 +20,6 @@
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
-	<bean id="webscript.alfresco.tutorials.helloworld.get"
-		  class="dk.magenta.alfresco.sbsys.template.platformsample.HelloWorldWebScript"
-		  parent="webscript">
-	</bean>
-
 	<bean id="webscript.magenta.sbsys-template.template.get"
 		  class="dk.magenta.alfresco.sbsys.template.Template"
 		  parent="webscript">
