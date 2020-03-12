@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template;
+package dk.magenta.alfresco.sbsys.template.merge;
 
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class Template extends AbstractWebScript {
+public class TemplateWebscript extends AbstractWebScript {
 
-    private static Log logger = LogFactory.getLog(Template.class);
+    private static Log logger = LogFactory.getLog(TemplateWebscript.class);
 
     private FileFolderService fileFolderService;
     private NodeRefUtil nodeRefUtil;

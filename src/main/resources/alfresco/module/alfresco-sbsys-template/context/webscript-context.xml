@@ -21,7 +21,7 @@
           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
 	<bean id="webscript.magenta.sbsys-template.template.get"
-		  class="dk.magenta.alfresco.sbsys.template.Template"
+		  class="dk.magenta.alfresco.sbsys.template.merge.TemplateWebscript"
 		  parent="webscript">
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
