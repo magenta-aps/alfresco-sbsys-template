@@ -3,7 +3,7 @@ package dk.magenta.alfresco.sbsys.template.sandbox;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import dk.magenta.alfresco.sbsys.template.json.Merge;
+import dk.magenta.alfresco.sbsys.template.json.requests.Merge;
 
 import java.util.ArrayList;
 import java.util.HashMap;

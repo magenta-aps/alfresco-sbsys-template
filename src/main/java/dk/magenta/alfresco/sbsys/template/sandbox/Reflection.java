@@ -1,6 +1,6 @@
 package dk.magenta.alfresco.sbsys.template.sandbox;
 
-import dk.magenta.alfresco.sbsys.template.json.Case;
+import dk.magenta.alfresco.sbsys.template.json.model.Case;
 
 import java.lang.reflect.Field;
 

@@ -1,6 +1,6 @@
 package dk.magenta.alfresco.sbsys.template.http;
 
-import dk.magenta.alfresco.sbsys.template.json.MultipartRequest;
+import dk.magenta.alfresco.sbsys.template.json.requests.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

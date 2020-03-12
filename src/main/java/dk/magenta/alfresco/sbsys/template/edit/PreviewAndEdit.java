@@ -5,7 +5,7 @@ import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
-import dk.magenta.alfresco.sbsys.template.json.UrlsAndTokenRequest;
+import dk.magenta.alfresco.sbsys.template.json.requests.UrlsAndTokenRequest;
 import org.alfresco.model.ContentModel;
 import org.alfresco.service.cmr.attributes.AttributeService;
 import org.alfresco.service.cmr.model.FileFolderService;

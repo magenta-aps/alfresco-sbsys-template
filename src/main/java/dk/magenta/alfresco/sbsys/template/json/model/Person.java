@@ -1,6 +1,4 @@
-package dk.magenta.alfresco.sbsys.template.json;
-
-import java.util.Map;
+package dk.magenta.alfresco.sbsys.template.json.model;
 
 public class Person {
 

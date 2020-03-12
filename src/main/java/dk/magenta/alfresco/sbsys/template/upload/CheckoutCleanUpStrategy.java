@@ -1,7 +1,7 @@
 package dk.magenta.alfresco.sbsys.template.upload;
 
 import dk.magenta.alfresco.sbsys.template.utils.Constants;
-import dk.magenta.alfresco.sbsys.template.json.Upload;
+import dk.magenta.alfresco.sbsys.template.json.requests.Upload;
 import org.alfresco.service.cmr.attributes.AttributeService;
 
 public class CheckoutCleanUpStrategy implements CleanUpStrategy {

@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template.json;
+package dk.magenta.alfresco.sbsys.template.json.requests;
 
 import java.util.Map;
 

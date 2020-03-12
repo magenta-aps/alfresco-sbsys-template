@@ -2,7 +2,7 @@ package dk.magenta.alfresco.sbsys.template.upload;
 
 import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
-import dk.magenta.alfresco.sbsys.template.json.Upload;
+import dk.magenta.alfresco.sbsys.template.json.requests.Upload;
 import org.alfresco.service.cmr.attributes.AttributeService;
 
 import java.util.HashMap;
