@@ -5,7 +5,6 @@ import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
-import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
 import dk.magenta.alfresco.sbsys.template.json.requests.Upload;
 import dk.magenta.alfresco.sbsys.template.json.requests.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;

@@ -1,6 +1,6 @@
 package dk.magenta.alfresco.sbsys.template.utils;
 
-import dk.magenta.alfresco.sbsys.template.exceptions.VersionUploadException;
+import dk.magenta.alfresco.sbsys.template.upload.VersionUploadException;
 import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;

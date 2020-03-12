@@ -1,4 +1,4 @@
-package dk.magenta.alfresco.sbsys.template.exceptions;
+package dk.magenta.alfresco.sbsys.template.upload;
 
 public class VersionUploadException extends Exception {
 
