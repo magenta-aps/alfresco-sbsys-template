@@ -49,9 +49,6 @@
 		<property name="fileFolderService" ref="FileFolderService" />
 		<property name="mimetypeService" ref="MimetypeService" />
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
-		<property name="properties">
-			<ref bean="global-properties" />
-		</property>
 	</bean>
 
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"

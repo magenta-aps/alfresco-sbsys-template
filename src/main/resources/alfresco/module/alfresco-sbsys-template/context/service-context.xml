@@ -50,6 +50,7 @@
 
     <bean id="NodeRefUtil" class="dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil">
         <property name="contentService" ref="ContentService" />
+        <property name="lockService" ref="LockService" />
         <property name="nodeService" ref="NodeService" />
         <property name="properties">
             <ref bean="global-properties" />

@@ -5,6 +5,7 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.query.PagingRequest;
 import org.alfresco.query.PagingResults;
 import org.alfresco.repo.domain.node.ContentDataWithId;
+import org.alfresco.service.cmr.lock.LockService;
 import org.alfresco.service.cmr.model.FileInfo;
 import org.alfresco.service.cmr.repository.*;
 import org.alfresco.service.cmr.site.SiteService;
@@ -26,6 +27,7 @@ public class NodeRefUtil {
     private static Log logger = LogFactory.getLog(NodeRefUtil.class);
 
     private ContentService contentService;
+    private LockService lockService;
     private NodeService nodeService;
     private Properties properties;
     private SiteService siteService;
@@ -35,6 +37,7 @@ public class NodeRefUtil {
     private static final String CONTENT_STORE_PATH = "sbsys.template.contentstore";
 
     public void deleteNode(String nodeRef) {
+        lockService.unlock(new NodeRef(nodeRef));
         nodeService.deleteNode(new NodeRef(nodeRef));
     }
 
@@ -129,6 +132,10 @@ public class NodeRefUtil {
 
     public void setContentService(ContentService contentService) {
         this.contentService = contentService;
+    }
+
+    public void setLockService(LockService lockService) {
+        this.lockService = lockService;
     }
 
     public void setNodeService(NodeService nodeService) {
