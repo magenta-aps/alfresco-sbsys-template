@@ -2,7 +2,6 @@ package dk.magenta.alfresco.sbsys.template.edit;
 
 import com.google.gson.JsonSyntaxException;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
-import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
 import dk.magenta.alfresco.sbsys.template.json.requests.UrlsAndTokenRequest;
@@ -126,13 +125,13 @@ public class PreviewAndEdit extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
+                    RequestResponseHandler.getJsonMessage(JSON_SYNTAX_ERROR_MSG)
             );
         } catch (OperationException e) {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getErrorMessage(e.getMessage())
+                    RequestResponseHandler.getJsonMessage(e.getMessage())
             );
         }
     }

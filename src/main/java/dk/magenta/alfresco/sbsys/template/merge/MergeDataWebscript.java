@@ -128,7 +128,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
+                    RequestResponseHandler.getJsonMessage(JSON_SYNTAX_ERROR_MSG)
             );
         } catch (IOException e) {
             e.printStackTrace();
@@ -138,7 +138,7 @@ public class MergeDataWebscript extends AbstractWebScript {
             webScriptResponse.setStatus(HttpStatus.SC_INTERNAL_SERVER_ERROR);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getErrorMessage(Constants.TEMPLATE_SYNTAX_ERROR_MSG)
+                    RequestResponseHandler.getJsonMessage(Constants.TEMPLATE_SYNTAX_ERROR_MSG)
             );
         } finally {
             try {

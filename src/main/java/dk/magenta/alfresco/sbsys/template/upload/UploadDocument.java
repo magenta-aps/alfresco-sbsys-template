@@ -1,6 +1,7 @@
 package dk.magenta.alfresco.sbsys.template.upload;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.json.requests.Upload403;
 import dk.magenta.alfresco.sbsys.template.utils.Constants;
 import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
@@ -69,17 +70,23 @@ public class UploadDocument extends AbstractWebScript {
 
             attributeService.removeAttribute(req.getPreUploadId(), Constants.OPERATION);
 
-            RequestResponseHandler.writeWebscriptResponse(webScriptResponse, "{\"msg\":\"success\"}");
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.getJsonMessage("success")
+            );
 
         } catch (JsonSyntaxException e) {
             webScriptResponse.setStatus(HttpStatus.SC_BAD_REQUEST);
             RequestResponseHandler.writeWebscriptResponse(
                     webScriptResponse,
-                    RequestResponseHandler.getErrorMessage(JSON_SYNTAX_ERROR_MSG)
+                    RequestResponseHandler.getJsonMessage(JSON_SYNTAX_ERROR_MSG)
             );
         } catch (VersionUploadException e) {
             webScriptResponse.setStatus(HttpStatus.SC_FORBIDDEN);
-            RequestResponseHandler.writeWebscriptResponse(webScriptResponse, "{\"msg\":\"Document not yet saved\"}");
+            RequestResponseHandler.writeWebscriptResponse(
+                    webScriptResponse,
+                    RequestResponseHandler.serialize(new Upload403("Document not yet saved", 1))
+            );
         } catch (IOException e) {
             e.printStackTrace();
             throw new AlfrescoRuntimeException(e.getMessage());
