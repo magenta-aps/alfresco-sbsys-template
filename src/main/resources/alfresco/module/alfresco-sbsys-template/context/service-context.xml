@@ -63,6 +63,7 @@
         <property name="properties">
             <ref bean="global-properties" />
         </property>
+        <property name="loolService" ref="LOOLService" />
     </bean>
 
 </beans>
