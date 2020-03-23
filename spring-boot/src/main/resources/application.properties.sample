@@ -1,0 +1,4 @@
+server.port=8081
+
+### Logging ###
+logging.level.dk.magenta.sbsys.template.multipart.MultipartRequestController=INFO
