@@ -5,6 +5,8 @@ import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
 import org.alfresco.service.cmr.lock.UnableToReleaseLockException;
 import org.alfresco.service.cmr.repository.InvalidNodeRefException;
 import org.apache.commons.httpclient.HttpStatus;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.extensions.webscripts.AbstractWebScript;
 import org.springframework.extensions.webscripts.WebScriptRequest;
 import org.springframework.extensions.webscripts.WebScriptResponse;
@@ -15,19 +17,21 @@ import static dk.magenta.alfresco.sbsys.template.utils.Constants.COULD_NOT_DELET
 import static dk.magenta.alfresco.sbsys.template.utils.Constants.WORKSPACE_SPACESSTORE;
 
 public class DeleteWebscript extends AbstractWebScript {
-
+    private static Log logger = LogFactory.getLog(DeleteWebscript.class);
     private static final String NODE_ID = "nodeId";
 
     private NodeRefUtil nodeRefUtil;
 
     @Override
     public void execute(WebScriptRequest webScriptRequest, WebScriptResponse webScriptResponse) throws IOException {
+        logger.debug("DeleteWebscript called");
         String nodeId = webScriptRequest.getServiceMatch().getTemplateVars().get(NODE_ID);
 
         // Unlock and delete node
         try {
             nodeRefUtil.deleteNode(WORKSPACE_SPACESSTORE + nodeId);
             webScriptResponse.setStatus(HttpStatus.SC_NO_CONTENT);
+            logger.debug("Node deleted");
         } catch (InvalidNodeRefException e) {
             webScriptResponse.setStatus(HttpStatus.SC_NOT_FOUND);
             writeErrorResponse(webScriptResponse, e.getMessage());
