@@ -25,4 +25,5 @@ public class Constants {
     // Response messages
     public static final String JSON_SYNTAX_ERROR_MSG = "Could not parse JSON";
     public static final String TEMPLATE_SYNTAX_ERROR_MSG = "Kunne ikke flette sagens data ned i skabelonen. Kontrollér venligst syntaxen i skabelonen";
+    public static final String COULD_NOT_DELETE_NODE = "Could not delete node: ";
 }

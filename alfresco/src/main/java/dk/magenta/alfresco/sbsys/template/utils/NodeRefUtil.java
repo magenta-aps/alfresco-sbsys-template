@@ -36,9 +36,14 @@ public class NodeRefUtil {
     private static final String SITE_PROPERTY = "sbsys.template.site";
     private static final String CONTENT_STORE_PATH = "sbsys.template.contentstore";
 
-    public void deleteNode(String nodeRef) {
-        lockService.unlock(new NodeRef(nodeRef));
-        nodeService.deleteNode(new NodeRef(nodeRef));
+    public void deleteNode(String nodeRefStr) {
+        NodeRef nodeRef = new NodeRef(nodeRefStr);
+        deleteNode(nodeRef);
+    }
+
+    public void deleteNode(NodeRef nodeRef) {
+        lockService.unlock(nodeRef);
+        nodeService.deleteNode(nodeRef);
     }
 
     public String getNodeRefCreationDate(FileInfo fileInfo) {

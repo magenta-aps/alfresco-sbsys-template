@@ -51,6 +51,12 @@
 		<property name="nodeRefUtil" ref="NodeRefUtil" />
 	</bean>
 
+	<bean id="webscript.magenta.sbsys-template.delete-doc.delete"
+		  class="dk.magenta.alfresco.sbsys.template.delete.DeleteWebscript"
+		  parent="webscript">
+		<property name="nodeRefUtil" ref="NodeRefUtil" />
+	</bean>
+
 	<bean id="webscript.magenta.sbsys-template.uploaddoc.post"
 		  class="dk.magenta.alfresco.sbsys.template.upload.UploadDocument"
 		  parent="webscript">

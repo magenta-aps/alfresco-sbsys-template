@@ -5,6 +5,7 @@ solr.log*
 *.iml
 target
 __pycache__
+*.pyc
 
 utils/venv
 utils/headers.txt

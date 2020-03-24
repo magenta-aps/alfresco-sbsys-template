@@ -14,7 +14,7 @@ ALF_UPLOAD_URL = 'http://localhost:8080/alfresco/s/template/upload'
 # Get and select a template
 
 r = requests.get(ALF_GET_TEMPLATE_URL, auth=admin_basic_auth)
-template = [template for template in r.json() if template.get('filename') == 'skabelon4.odt'][0]
+template = [template for template in r.json() if template.get('filename') == 'skabelon3.docx'][0]
 
 print('GET ' + ALF_GET_TEMPLATE_URL)
 print(r.status_code)

@@ -1,0 +1,9 @@
+<webscript>
+    <shortname>Delete document</shortname>
+    <description>Unlock (if necessary) and delete document used for previewing or editing</description>
+    <url>/template/draft/delete/{nodeId}</url>
+    <authentication>user</authentication>
+    <format default="json"></format>
+    <transaction>required</transaction>
+    <!--lifecycle>sample</lifecycle-->
+</webscript>
