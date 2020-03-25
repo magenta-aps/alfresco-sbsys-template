@@ -59,6 +59,7 @@
     </bean>
 
     <bean id="FileLocationProvider" class="dk.magenta.alfresco.sbsys.template.edit.FileLocationProvider">
+        <property name="loolService" ref="LOOLService" />
         <property name="nodeRefUtil" ref="NodeRefUtil" />
         <property name="properties">
             <ref bean="global-properties" />
