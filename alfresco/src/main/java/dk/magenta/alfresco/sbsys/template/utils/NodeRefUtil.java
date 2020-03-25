@@ -45,11 +45,8 @@ public class NodeRefUtil {
     }
 
     public void deleteNode(NodeRef nodeRef) {
-        String extension = getFileType(nodeRef.getId()).getSecond();
-        if (!extension.equals(".odt")) {
-            if (lockService.isLocked(nodeRef)) {
-                lockService.unlock(nodeRef);
-            }
+        if (lockService.isLocked(nodeRef)) {
+            lockService.unlock(nodeRef);
         }
         nodeService.deleteNode(nodeRef);
     }
