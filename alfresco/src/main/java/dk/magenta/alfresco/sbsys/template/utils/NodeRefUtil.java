@@ -20,7 +20,10 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class NodeRefUtil {
 
@@ -42,7 +45,12 @@ public class NodeRefUtil {
     }
 
     public void deleteNode(NodeRef nodeRef) {
-        lockService.unlock(nodeRef);
+        String extension = getFileType(nodeRef.getId()).getSecond();
+        if (!extension.equals(".odt")) {
+            if (lockService.isLocked(nodeRef)) {
+                lockService.unlock(nodeRef);
+            }
+        }
         nodeService.deleteNode(nodeRef);
     }
 

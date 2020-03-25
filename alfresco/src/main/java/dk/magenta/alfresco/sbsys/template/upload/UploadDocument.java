@@ -1,13 +1,13 @@
 package dk.magenta.alfresco.sbsys.template.upload;
 
 import com.google.gson.JsonSyntaxException;
+import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
+import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
+import dk.magenta.alfresco.sbsys.template.json.requests.MultipartRequest;
+import dk.magenta.alfresco.sbsys.template.json.requests.Upload;
 import dk.magenta.alfresco.sbsys.template.json.requests.Upload403;
 import dk.magenta.alfresco.sbsys.template.utils.Constants;
-import dk.magenta.alfresco.sbsys.template.http.HttpHandler;
 import dk.magenta.alfresco.sbsys.template.utils.NodeRefUtil;
-import dk.magenta.alfresco.sbsys.template.http.RequestResponseHandler;
-import dk.magenta.alfresco.sbsys.template.json.requests.Upload;
-import dk.magenta.alfresco.sbsys.template.json.requests.MultipartRequest;
 import org.alfresco.error.AlfrescoRuntimeException;
 import org.alfresco.service.cmr.attributes.AttributeService;
 import org.apache.commons.httpclient.HttpStatus;

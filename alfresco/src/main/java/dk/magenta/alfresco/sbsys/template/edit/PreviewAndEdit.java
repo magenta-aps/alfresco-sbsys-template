@@ -46,6 +46,7 @@ public class PreviewAndEdit extends AbstractWebScript {
         logger.debug("Preview webscript called");
 
         String operation = webScriptRequest.getServiceMatch().getTemplateVars().get(OPERATION);
+        logger.debug("Operation: " + operation);
 
         try {
             // Check that the operation type is allowed (preview or edit)
