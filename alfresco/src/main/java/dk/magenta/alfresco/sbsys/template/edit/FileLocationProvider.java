@@ -34,8 +34,6 @@ public class FileLocationProvider {
 
     private String getUrl(String operation, NodeRef nodeRef) {
 
-        // TODO: refactor if this works for LOOL...
-
         String url;
         String commonUrl = String.format(
                 "%s://%s",
