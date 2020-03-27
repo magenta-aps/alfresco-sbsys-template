@@ -56,3 +56,59 @@ Note that the development environment will be hanging until the remote debugger
 is started from the IDE.
 
 Also see this: [https://docs.alfresco.com/5.2/tasks/sdk-debug-intellij.html](https://docs.alfresco.com/5.2/tasks/sdk-debug-intellij.html)
+
+## Set debug log levels
+
+In `tomcat/shared/classes/alfresco/extension/custom-log4j.properties`:
+```
+# Set root logger level to error
+log4j.rootLogger=error, Console, File
+
+###### Console appender definition #######
+
+# All outputs currently set to be a ConsoleAppender.
+log4j.appender.Console=org.apache.log4j.ConsoleAppender
+log4j.appender.Console.layout=org.apache.log4j.PatternLayout
+
+# use log4j NDC to replace %x with tenant domain / username
+log4j.appender.Console.layout.ConversionPattern=%d{ISO8601} %x %-5p [%c{3}] [%t] %m%n 
+#log4j.appender.Console.layout.ConversionPattern=%d{ABSOLUTE} %-5p [%c] %m%n
+
+###### File appender definition #######
+log4j.appender.File=org.apache.log4j.DailyRollingFileAppender
+log4j.appender.File.File=alfresco.log
+log4j.appender.File.Append=false
+log4j.appender.File.DatePattern='.'yyyy-MM-dd
+log4j.appender.File.layout=org.apache.log4j.PatternLayout
+log4j.appender.File.layout.ConversionPattern=%d{yyyy-MM-dd} %d{ABSOLUTE} %-5p [%c] [%t] %m%n
+
+###### Hibernate specific appender definition #######
+#log4j.appender.file=org.apache.log4j.FileAppender
+#log4j.appender.file.File=hibernate.log
+#log4j.appender.file.layout=org.apache.log4j.PatternLayout
+#log4j.appender.file.layout.ConversionPattern=%d{ABSOLUTE} %5p %c{1}:%L - %m%n
+
+### Magenta ###
+log4j.logger.dk.magenta.alfresco.sbsys.template=DEBUG
+log4j.logger.com.parashift.onlyoffice.CallBack=DEBUG
+#log4j.logger.org.alfresco.repo.transaction=DEBUG
+```
+
+## Things to note about deployment
+
+These things need to be done (at least in the POC) within the Tomcat eexploded WAR 
+folder for Alfresco, i.e. `tomcat/webapps/alfresco`:
+
+### CORS filter settings
+
+Make the appropriate CORS filter settings as described here: 
+[https://docs.alfresco.com/5.2/tasks/enable-cors.html](https://docs.alfresco.com/5.2/tasks/enable-cors.html)
+
+### Compile and copy in the OnlyOffice JAR
+Note that this repo should be moved to the Magenta GitHub organization...
+1. `git clone https://github.com/andreaskring/onlyoffice-alfresco.git`
+1. `git checkout origin/forcesave`
+1. `mvn clean package`
+1. Copy the JAR file from the `target` folder to `tomcat/webapps/alfresco/WEB-INF/lib`
+
+ 
