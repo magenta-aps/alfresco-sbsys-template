@@ -199,6 +199,13 @@
                             <type>amp</type>
                         </moduleDependency>
 
+                        <moduleDependency>
+                            <groupId>dk.magenta</groupId>
+                            <artifactId>libreoffice-online-repo</artifactId>
+                            <version>1.1.02</version>
+                            <type>amp</type>
+                        </moduleDependency>
+
                         <!-- Bring in this JAR project, need to be included here, otherwise resources from META-INF
                              will not be loaded, such as the test.html page
                         -->
