@@ -1,20 +1,15 @@
 # alfresco-sbsys-template
 
-Project for handeling document templates to be used with SBSYS. A number of document templates 
-are stored in Alfresco and SBSYS can (via REST) access a list of these templates. The SBSYS user 
-can select a template and send this back to Alfresco along with an SBSYS case id. Alfresco then 
-retreives case metadata from SBSYS and merges these data into the template. Finally, the 
-filled out template is send back to SBSYS.
-
-_NOTE: This is a proof-of-concept project, i.e. no test are written and proper error 
-handling (with respect to the HTTP communication between Alfresco and SBSYS) is missing 
-in the code base_.
-
-This project is (for historic) reasons made for Java 8 which means that HTTP/2 communication 
-cannot be handled. This is, however, required when communicating with SBSYS, so this project 
-makes use of the utils project found in here: [multipart-form-data-requester](https://github.com/magenta-aps/multipart-form-data-requester).
+This project is (for historic) reasons using Alfresco 5.2 and hence it is using Java 8, 
+which means that HTTP/2 communication cannot be handled. This is, however, required 
+when communicating with SBSIP, since there are a few endpoints that use HTTP/2 while 
+HTTP/1.1 is used the majority of places. Therefore, this project makes use of the utils 
+project [multipart-form-data-requester](../spring-boot/README.md) which is capable of making 
+the required HTTP/2 requests.
 
 # Development
+
+A few nice-to-know things regarding development.
 
 ## Hot reloading
 
@@ -94,21 +89,22 @@ log4j.logger.com.parashift.onlyoffice.CallBack=DEBUG
 #log4j.logger.org.alfresco.repo.transaction=DEBUG
 ```
 
-## Things to note about deployment
+# Deployment
 
-These things need to be done (at least in the POC) within the Tomcat eexploded WAR 
+Install Alfresco using the standard Magenta Alfresco Ansible project and deploy the 
+AMP build from this project.
+
+These things need to be done (at least in the POC) within the Tomcat exploded WAR 
 folder for Alfresco, i.e. `tomcat/webapps/alfresco`:
 
-### CORS filter settings
+## CORS filter settings
 
 Make the appropriate CORS filter settings as described here: 
 [https://docs.alfresco.com/5.2/tasks/enable-cors.html](https://docs.alfresco.com/5.2/tasks/enable-cors.html)
 
-### Compile and copy in the OnlyOffice JAR
+## Compile and copy in the OnlyOffice JAR
 Note that this repo should be moved to the Magenta GitHub organization...
 1. `git clone https://github.com/andreaskring/onlyoffice-alfresco.git`
 1. `git checkout origin/forcesave`
 1. `mvn clean package`
 1. Copy the JAR file from the `target` folder to `tomcat/webapps/alfresco/WEB-INF/lib`
-
- 
