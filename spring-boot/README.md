@@ -48,4 +48,4 @@ optimized a bit...
     [Install]
     WantedBy=multi-user.target
     ```
-1.  Enable and startthe service.
+1.  Enable and start the service.
