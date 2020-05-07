@@ -25,7 +25,7 @@ optimized a bit...
     ```
     #!/bin/bash
     
-    /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /opt/multipart-form-data-requester/multipart-form-data-requester-0.4.jar
+    /usr/lib/jvm/java-11-openjdk-amd64/bin/java -jar /opt/multipart-form-data-requester/multipart-form-data-requester-1.0.0.jar
     ```
 1.  Create a `systemd` service file `/etc/systemd/system/multipart-form-data-requester.service` with 
     this content:
